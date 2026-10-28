@@ -1,0 +1,608 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Market Heatmap - Zone Pro Trader</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="../css/heatmap.css">
+    <script>
+        tailwind.config = {
+          theme: {
+            extend: {
+              colors: {
+                'accent-main': '#4CAF50',
+                'accent-light': '#81C784',
+                'accent-dark': '#388E3C',
+                'sidebar-active': '#e8f5e9',
+                'text-heading': '#2c3e50',
+                'text-dark': '#34495e',
+                'text-muted': '#7f8c8d',
+              },
+              fontFamily: {
+                'inter': ['Inter', 'sans-serif'],
+                'montserrat': ['Montserrat', 'sans-serif'],
+              }
+            }
+          }
+        }
+    </script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+<link rel="stylesheet" href="../css/responsive.css">
+    <style id="gate-hide">html{visibility:hidden}</style>
+</head>
+<body class="has-sidebar bg-gray-50 h-screen flex overflow-hidden">
+    <!-- Sidebar Overlay -->
+    <div class="sidebar-overlay" id="sidebar-overlay"></div>
+
+    <!-- Mobile Top Bar -->
+    <div class="mobile-topbar" id="mobile-topbar">
+        <button class="hamburger-btn" id="hamburger-btn" aria-label="Open menu">
+            <svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="3" y1="6" x2="21" y2="6"/>
+                <line x1="3" y1="12" x2="21" y2="12"/>
+                <line x1="3" y1="18" x2="21" y2="18"/>
+            </svg>
+        </button>
+        <div class="topbar-logo">
+            <img src="../assets/images/logo-bg.png" alt="Zone Pro Trader">
+            <span class="topbar-title">ZONE <span>PRO TRADER</span></span>
+        </div>
+        <div class="topbar-avatar" id="topbar-avatar">ZP</div>
+    </div>
+
+
+    <!-- Sidebar -->
+    <aside class="w-72 bg-white border-r border-gray-100 flex flex-col hidden md:flex h-full shadow-sm z-10">
+        <!-- Sidebar Header -->
+        <div class="p-6 flex justify-between items-center">
+            <div class="flex items-center gap-3">
+                <img src="../assets/images/logo-bg.png" alt="Zone Pro Trader Bull" class="w-12 h-12 object-contain rounded-xl shadow-lg shadow-green-200 ml-1">
+                <div>
+                    <h1 class="font-montserrat font-bold text-gray-900 text-lg tracking-tight">ZONE PRO</h1>
+                    <p class="text-[10px] font-bold text-accent-main tracking-widest uppercase">TRADER</p>
+                </div>
+            </div>
+        
+            <button class="sidebar-close-btn" id="sidebar-close-btn" aria-label="Close menu">
+                <svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="18" y1="6" x2="6" y2="18"/>
+                    <line x1="6" y1="6" x2="18" y2="18"/>
+                </svg>
+            </button>
+        </div>
+
+        <!-- Navigation -->
+        <nav class="flex-1 overflow-y-auto py-2 space-y-1 pr-4">
+            <!-- Journal Feed -->
+            <a href="dashboard.html" class="flex items-center px-6 py-3.5 text-sm font-medium text-gray-500 hover:bg-gray-50 hover:text-gray-900 rounded-r-full transition-all group border-l-4 border-transparent hover:border-gray-200">
+                <div class="p-2 bg-gray-50 rounded-lg mr-3 group-hover:bg-gray-100 transition-colors">
+                    <i data-lucide="newspaper" class="w-5 h-5 text-gray-400 group-hover:text-gray-600"></i>
+                </div>
+                JOURNAL FEED
+            </a>
+
+            <!-- Journal Reporting -->
+            <a href="journal-reporting.html" class="flex items-center px-6 py-3.5 text-sm font-medium text-gray-500 hover:bg-gray-50 hover:text-gray-900 rounded-r-full transition-all group border-l-4 border-transparent hover:border-gray-200">
+                <div class="p-2 bg-gray-50 rounded-lg mr-3 group-hover:bg-gray-100 transition-colors">
+                    <i data-lucide="layout-dashboard" class="w-5 h-5 text-gray-400 group-hover:text-gray-600"></i>
+                </div>
+                JOURNAL REPORTING
+            </a>
+
+            <!-- Investment Screener -->
+            <a href="investment-screener.html" class="flex items-center px-6 py-3.5 text-sm font-medium text-gray-500 hover:bg-gray-50 hover:text-gray-900 rounded-r-full transition-all group border-l-4 border-transparent hover:border-gray-200">
+                <div class="p-2 bg-gray-50 rounded-lg mr-3 group-hover:bg-gray-100 transition-colors">
+                    <i data-lucide="search" class="w-5 h-5 text-gray-400 group-hover:text-gray-600"></i>
+                </div>
+                INVESTMENT SCREENER
+            </a>
+
+            <!-- Intraday -->
+            <a href="intraday.html" class="flex items-center px-6 py-3.5 text-sm font-medium text-gray-500 hover:bg-gray-50 hover:text-gray-900 rounded-r-full transition-all group border-l-4 border-transparent hover:border-gray-200">
+                <div class="p-2 bg-gray-50 rounded-lg mr-3 group-hover:bg-gray-100 transition-colors">
+                    <i data-lucide="clock" class="w-5 h-5 text-gray-400 group-hover:text-gray-600"></i>
+                </div>
+                INTRADAY
+            </a>
+
+            <!-- Heatmap (Active) -->
+            <a href="heatmap.html" class="flex items-center px-6 py-3.5 text-sm font-bold text-accent-dark bg-green-50 rounded-r-full border-l-4 border-accent-main transition-all group shadow-sm">
+                <div class="p-2 bg-green-100 rounded-lg mr-3 group-hover:bg-green-200 transition-colors">
+                    <i data-lucide="grid" class="w-5 h-5 text-accent-dark"></i>
+                </div>
+                HEATMAP
+            </a>
+
+            <!-- Options (F&O) -->
+            <a href="options.html" class="flex items-center px-6 py-3.5 text-sm font-medium text-gray-500 hover:bg-gray-50 hover:text-gray-900 rounded-r-full transition-all group border-l-4 border-transparent hover:border-gray-200">
+                <div class="p-2 bg-gray-50 rounded-lg mr-3 group-hover:bg-gray-100 transition-colors">
+                    <i data-lucide="trending-up" class="w-5 h-5 text-gray-400 group-hover:text-gray-600"></i>
+                </div>
+                OPTIONS (F&O)
+            </a>
+
+            <!-- Other Tools -->
+            <a href="other-tools.html" class="flex items-center px-6 py-3.5 text-sm font-medium text-gray-500 hover:bg-gray-50 hover:text-gray-900 rounded-r-full transition-all group border-l-4 border-transparent hover:border-gray-200">
+                <div class="p-2 bg-gray-50 rounded-lg mr-3 group-hover:bg-gray-100 transition-colors">
+                    <i data-lucide="wrench" class="w-5 h-5 text-gray-400 group-hover:text-gray-600"></i>
+                </div>
+                OTHER TOOLS
+            </a>
+
+            <!-- Announcements -->
+            <a href="announcements.html" class="flex items-center px-6 py-3.5 text-sm font-medium text-gray-500 hover:bg-gray-50 hover:text-gray-900 rounded-r-full transition-all group border-l-4 border-transparent hover:border-gray-200">
+                <div class="p-2 bg-gray-50 rounded-lg mr-3 group-hover:bg-gray-100 transition-colors">
+                    <i data-lucide="megaphone" class="w-5 h-5 text-gray-400 group-hover:text-gray-600"></i>
+                </div>
+                ANNOUNCEMENTS
+            </a>
+
+            <!-- Open a Demat Account -->
+            <a href="open-demat-account.html" class="flex items-center px-6 py-3.5 text-sm font-medium text-gray-500 hover:bg-gray-50 hover:text-gray-900 rounded-r-full transition-all group border-l-4 border-transparent hover:border-gray-200">
+                <div class="p-2 bg-gray-50 rounded-lg mr-3 group-hover:bg-gray-100 transition-colors">
+                    <i data-lucide="briefcase" class="w-5 h-5 text-gray-400 group-hover:text-gray-600"></i>
+                </div>
+                OPEN A DEMAT ACCOUNT
+            </a>
+
+            <!-- My Profile -->
+            <a href="my-profile.html" class="flex items-center px-6 py-3.5 text-sm font-medium text-gray-500 hover:bg-gray-50 hover:text-gray-900 rounded-r-full transition-all group border-l-4 border-transparent hover:border-gray-200">
+                <div class="p-2 bg-gray-50 rounded-lg mr-3 group-hover:bg-gray-100 transition-colors">
+                    <i data-lucide="user" class="w-5 h-5 text-gray-400 group-hover:text-gray-600"></i>
+                </div>
+                MY PROFILE
+            </a>
+        </nav>
+
+        <!-- Logout -->
+        <div class="p-6 border-t border-gray-100 mt-auto">
+            <a href="logout.html" class="flex items-center px-4 py-3 text-sm font-medium text-gray-500 hover:text-red-600 hover:bg-red-50 rounded-lg transition-all group">
+                <i data-lucide="log-out" class="w-5 h-5 mr-3 group-hover:text-red-600 transition-colors"></i>
+                LOGOUT
+            </a>
+        </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="flex-1 overflow-y-auto bg-gray-50 p-4 md:p-8 flex flex-col">
+        <!-- Header -->
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between mb-6 gap-4">
+            <div class="flex items-center gap-4">
+                <div class="p-3.5 bg-green-50 rounded-2xl shadow-sm border border-green-100">
+                    <i data-lucide="grid" class="w-7 h-7 text-accent-main"></i>
+                </div>
+                <div>
+                    <h1 class="text-2xl font-bold text-gray-900 tracking-tight flex items-center gap-2.5">
+                        <span>MARKET HEATMAP</span>
+                        <span class="text-xs font-bold px-2.5 py-0.5 rounded-full bg-green-100 text-green-700 border border-green-200">NIFTY 50</span>
+                    </h1>
+                    <p class="text-xs text-gray-500 mt-0.5">Live Sector-wise stock performance visualization</p>
+                </div>
+            </div>
+
+            <!-- Header Right Stats & Actions -->
+            <div class="flex items-center gap-3">
+                <div class="flex items-center gap-2 px-3 py-1.5 bg-white border border-gray-200 rounded-xl shadow-xs text-xs font-semibold text-gray-700">
+                    <span class="w-2.5 h-2.5 rounded-full bg-green-500 animate-pulse"></span>
+                    <span id="market-status">Live Market</span>
+                </div>
+                <button onclick="loadHeatmap()" id="refresh-btn" class="inline-flex items-center gap-1.5 px-3.5 py-1.5 bg-accent-main hover:bg-accent-dark text-white rounded-xl text-xs font-semibold shadow-xs transition active:scale-95">
+                    <i data-lucide="refresh-cw" class="w-3.5 h-3.5"></i>
+                    Refresh
+                </button>
+            </div>
+        </div>
+
+        <!-- Heatmap Container -->
+        <div id="heatmap" class="shadow-xl border border-gray-800 rounded-2xl flex-1 flex flex-col">
+            <!-- Heatmap Header -->
+            <div class="heatmap-header">
+                <div class="heatmap-title">
+                    <span>Heatmap</span>
+                    <i data-lucide="layout-grid" class="w-4 h-4 text-gray-400"></i>
+                </div>
+                <div class="flex items-center gap-3">
+                    <!-- Search Input -->
+                    <div class="relative">
+                        <input 
+                            type="text" 
+                            id="stock-search" 
+                            placeholder="Find symbol (e.g. RELIANCE)..." 
+                            oninput="filterAndRender()"
+                            class="bg-[#121927] border border-[#222d42] text-xs text-gray-200 placeholder-gray-500 rounded-lg pl-3 pr-8 py-1 focus:outline-none focus:border-blue-500 w-44 sm:w-56 transition"
+                        >
+                        <i data-lucide="search" class="w-3.5 h-3.5 text-gray-400 absolute right-2.5 top-1/2 transform -translate-y-1/2 pointer-events-none"></i>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Heatmap Root -->
+            <div id="heatmapContainer" class="heatmap-root relative">
+                <!-- Dynamic Tiles populated here -->
+            </div>
+
+            <!-- Heatmap Controls & Legend -->
+            <div class="heatmap-controls">
+                <div class="heatmap-filter-box">
+                    <label for="sectorFilter">Sector</label>
+                    <select id="sectorFilter" onchange="filterAndRender()">
+                        <option value="all">All Sectors</option>
+                    </select>
+
+                    <label for="changeFilter" class="ml-2">Performance</label>
+                    <select id="changeFilter" onchange="filterAndRender()">
+                        <option value="all">All Stocks</option>
+                        <option value="gainers">Gainers (> 0%)</option>
+                        <option value="losers">Losers (< 0%)</option>
+                        <option value="top-gainers">Top Gainers (> +1.5%)</option>
+                        <option value="top-losers">Top Losers (< -1.5%)</option>
+                    </select>
+                </div>
+
+                <div class="heatmap-legend">
+                    <span>-2%</span>
+                    <div class="legend-strip tile-red-strong"></div>
+                    <div class="legend-strip tile-red-medium"></div>
+                    <div class="legend-strip tile-red-light"></div>
+                    <div class="legend-strip tile-neutral"></div>
+                    <div class="legend-strip tile-green-light"></div>
+                    <div class="legend-strip tile-green-medium"></div>
+                    <div class="legend-strip tile-green-strong"></div>
+                    <span>+2%</span>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Stock Detail Tooltip Floating Element -->
+    <div id="stock-tooltip" class="fixed hidden z-50 bg-[#0f172a] border border-[#1e293b] text-white p-3 rounded-xl shadow-2xl text-xs pointer-events-none min-w-[180px]">
+        <div class="font-bold text-sm text-white mb-1 flex items-center justify-between">
+            <span id="tt-symbol">RELIANCE</span>
+            <span id="tt-change" class="font-mono text-xs font-bold">+1.5%</span>
+        </div>
+        <div id="tt-name" class="text-gray-400 text-[11px] mb-2 font-medium">Reliance Industries Ltd</div>
+        <div class="space-y-1 text-gray-300 border-t border-[#1e293b] pt-1.5">
+            <div class="flex justify-between">
+                <span class="text-gray-400">Price (LTP):</span>
+                <span id="tt-price" class="font-mono font-semibold">₹2,980.00</span>
+            </div>
+            <div class="flex justify-between">
+                <span class="text-gray-400">Sector:</span>
+                <span id="tt-sector" class="font-semibold text-blue-400">Energy Minerals</span>
+            </div>
+            <div class="flex justify-between">
+                <span class="text-gray-400">Day Range:</span>
+                <span id="tt-range" class="font-mono text-[11px]">₹2,940 - ₹3,010</span>
+            </div>
+            <div class="flex justify-between">
+                <span class="text-gray-400">Volume:</span>
+                <span id="tt-volume" class="font-mono">94.5 L</span>
+            </div>
+        </div>
+        <div class="text-[10px] text-gray-400 mt-2 text-center border-t border-[#1e293b] pt-1 italic">
+            Click tile to open Chartink Chart ↗
+        </div>
+    </div>
+
+    <script>
+        const API_HOST = (window.location.protocol === 'file:' || (window.location.port && window.location.port !== '8000'))
+            ? 'http://localhost:8000'
+            : (window.location.origin === 'null' ? 'http://localhost:8000' : window.location.origin);
+        let allStockData = [];
+
+        const NIFTY50_FALLBACK = [
+            { symbol: "HDFCBANK", name: "HDFC Bank Ltd", price: 1648.50, change: 1.25, weight: 13.5, volume: 18450200, high: 1658.00, low: 1632.10, sector: "Finance", domain: "hdfcbank.com" },
+            { symbol: "ICICIBANK", name: "ICICI Bank Ltd", price: 1224.75, change: 1.80, weight: 9.8, volume: 14230100, high: 1232.50, low: 1205.00, sector: "Finance", domain: "icicibank.com" },
+            { symbol: "SBIN", name: "State Bank of India", price: 845.50, change: 2.15, weight: 6.2, volume: 22150000, high: 852.00, low: 831.20, sector: "Finance", domain: "sbi.co.in" },
+            { symbol: "AXISBANK", name: "Axis Bank Ltd", price: 1180.20, change: -0.45, weight: 4.8, volume: 8940200, high: 1192.00, low: 1172.50, sector: "Finance", domain: "axisbank.com" },
+            { symbol: "KOTAKBANK", name: "Kotak Mahindra Bank", price: 1785.00, change: 0.65, weight: 4.5, volume: 4520100, high: 1798.00, low: 1765.00, sector: "Finance", domain: "kotak.com" },
+            { symbol: "BAJFINANCE", name: "Bajaj Finance Ltd", price: 7120.00, change: 2.85, weight: 3.9, volume: 2150300, high: 7180.00, low: 6980.00, sector: "Finance", domain: "bajajfinserv.com" },
+            { symbol: "TCS", name: "Tata Consultancy Services", price: 4215.00, change: -0.65, weight: 7.2, volume: 2840000, high: 4260.00, low: 4185.00, sector: "Technology Services", domain: "tcs.com" },
+            { symbol: "INFY", name: "Infosys Ltd", price: 1860.50, change: 0.95, weight: 6.8, volume: 7650000, high: 1878.00, low: 1840.00, sector: "Technology Services", domain: "infosys.com" },
+            { symbol: "HCLTECH", name: "HCL Technologies Ltd", price: 1740.00, change: 1.45, weight: 3.4, volume: 3420000, high: 1755.00, low: 1715.00, sector: "Technology Services", domain: "hcltech.com" },
+            { symbol: "WIPRO", name: "Wipro Ltd", price: 540.25, change: -1.10, weight: 1.8, volume: 5600000, high: 548.00, low: 535.50, sector: "Technology Services", domain: "wipro.com" },
+            { symbol: "RELIANCE", name: "Reliance Industries Ltd", price: 2980.00, change: 1.65, weight: 10.2, volume: 9450000, high: 3010.00, low: 2940.00, sector: "Energy Minerals", domain: "ril.com" },
+            { symbol: "ONGC", name: "Oil & Natural Gas Corp", price: 318.50, change: 2.40, weight: 2.2, volume: 18900000, high: 322.00, low: 312.00, sector: "Energy Minerals", domain: "ongcindia.com" },
+            { symbol: "ITC", name: "ITC Ltd", price: 495.20, change: 0.75, weight: 4.6, volume: 14200000, high: 501.00, low: 490.50, sector: "Consumer Non-Durables", domain: "itcportal.com" },
+            { symbol: "HINDUNILVR", name: "Hindustan Unilever Ltd", price: 2740.00, change: -0.40, weight: 3.8, volume: 2450000, high: 2765.00, low: 2720.00, sector: "Consumer Non-Durables", domain: "hul.co.in" },
+            { symbol: "MARUTI", name: "Maruti Suzuki India", price: 12450.00, change: 1.50, weight: 3.3, volume: 850000, high: 12580.00, low: 12300.00, sector: "Consumer Durables", domain: "marutisuzuki.com" },
+            { symbol: "TATAMOTORS", name: "Tata Motors Ltd", price: 1040.00, change: -1.85, weight: 3.1, volume: 16500000, high: 1065.00, low: 1032.00, sector: "Consumer Durables", domain: "tatamotors.com" },
+            { symbol: "TATASTEEL", name: "Tata Steel Ltd", price: 158.40, change: 1.95, weight: 2.4, volume: 34500000, high: 161.00, low: 154.50, sector: "Non Energy Minerals", domain: "tatasteel.com" },
+            { symbol: "SUNPHARMA", name: "Sun Pharmaceutical Inds", price: 1780.00, change: 2.10, weight: 3.2, volume: 3450000, high: 1798.00, low: 1745.00, sector: "Health Technology", domain: "sunpharma.com" },
+            { symbol: "NTPC", name: "NTPC Ltd", price: 415.00, change: 2.30, weight: 2.8, volume: 21500000, high: 421.00, low: 406.00, sector: "Utilities", domain: "ntpc.co.in" },
+            { symbol: "BHARTIARTL", name: "Bharti Airtel Ltd", price: 1485.00, change: 0.95, weight: 3.8, volume: 6800000, high: 1498.00, low: 1472.00, sector: "Communications", domain: "airtel.in" },
+            { symbol: "LT", name: "Larsen & Toubro Ltd", price: 3620.00, change: 1.15, weight: 4.2, volume: 2900000, high: 3655.00, low: 3590.00, sector: "Industrial Services", domain: "larsentoubro.com" }
+        ];
+
+        const sectorOrder = [
+            "Finance",
+            "Technology Services",
+            "Energy Minerals",
+            "Consumer Non-Durables",
+            "Consumer Durables",
+            "Non Energy Minerals",
+            "Health Technology",
+            "Utilities",
+            "Communications",
+            "Industrial Services",
+            "Retail & Others",
+            "Others"
+        ];
+
+        const sectorFlexMap = {
+            "Finance": "3 1 32%",
+            "Technology Services": "2.4 1 25%",
+            "Energy Minerals": "1.8 1 20%",
+            "Consumer Non-Durables": "1.6 1 18%",
+            "Consumer Durables": "2 1 22%",
+            "Non Energy Minerals": "1.8 1 20%",
+            "Health Technology": "1.6 1 18%",
+            "Utilities": "1.6 1 18%",
+            "Communications": "1.2 1 14%",
+            "Industrial Services": "1.6 1 18%",
+            "Retail & Others": "1 1 12%",
+            "Others": "1 1 12%"
+        };
+
+        function getTileColorClass(change) {
+            const c = Number(change) || 0;
+            if (c >= 2.0) return "tile-green-strong";
+            if (c >= 1.0) return "tile-green-medium";
+            if (c >= 0.2) return "tile-green-light";
+            if (c <= -2.0) return "tile-red-strong";
+            if (c <= -1.0) return "tile-red-medium";
+            if (c <= -0.2) return "tile-red-light";
+            return "tile-neutral";
+        }
+
+        function formatIndian(val) {
+            if (!val || isNaN(val)) return '0';
+            return Number(val).toLocaleString('en-IN', { maximumFractionDigits: 2 });
+        }
+
+        function populateSectorFilter(data) {
+            const sectorFilter = document.getElementById("sectorFilter");
+            if (!sectorFilter) return;
+
+            const currentValue = sectorFilter.value || "all";
+            const sectors = [...new Set(data.map(item => item.sector).filter(Boolean))].sort();
+
+            sectorFilter.innerHTML = `<option value="all">All Sectors</option>`;
+            sectors.forEach(sector => {
+                const option = document.createElement("option");
+                option.value = sector;
+                option.textContent = sector;
+                sectorFilter.appendChild(option);
+            });
+
+            sectorFilter.value = sectors.includes(currentValue) ? currentValue : "all";
+        }
+
+        async function loadHeatmap() {
+            const refreshBtn = document.getElementById("refresh-btn");
+            const container = document.getElementById("heatmapContainer");
+            
+            if (refreshBtn) refreshBtn.classList.add("opacity-75", "pointer-events-none");
+
+            try {
+                let res;
+                try {
+                    res = await fetch(`${API_HOST}/api/heatmap`);
+                } catch (e) {
+                    if (API_HOST !== 'http://localhost:8000') {
+                        res = await fetch('http://localhost:8000/api/heatmap');
+                    } else {
+                        throw e;
+                    }
+                }
+
+                if (!res.ok) {
+                    if (API_HOST !== 'http://localhost:8000') {
+                        res = await fetch('http://localhost:8000/api/heatmap');
+                    }
+                }
+
+                if (!res.ok) throw new Error('Failed to fetch live heatmap');
+
+                const json = await res.json();
+                allStockData = Array.isArray(json) ? json : (json.data || []);
+
+                populateSectorFilter(allStockData);
+                filterAndRender();
+
+            } catch (err) {
+                console.warn("Heatmap backend offline, using fallback dataset:", err);
+                allStockData = NIFTY50_FALLBACK;
+                populateSectorFilter(allStockData);
+                filterAndRender();
+            } finally {
+                if (refreshBtn) refreshBtn.classList.remove("opacity-75", "pointer-events-none");
+            }
+        }
+
+        function filterAndRender() {
+            const container = document.getElementById("heatmapContainer");
+            const selectedSector = document.getElementById("sectorFilter")?.value || "all";
+            const selectedChange = document.getElementById("changeFilter")?.value || "all";
+            const searchKeyword = (document.getElementById("stock-search")?.value || "").toLowerCase().trim();
+
+            const filteredData = allStockData.filter(stock => {
+                const sectorMatch = selectedSector === "all" || stock.sector === selectedSector;
+                
+                const c = Number(stock.change) || 0;
+                let changeMatch = true;
+                if (selectedChange === "gainers") changeMatch = c > 0;
+                else if (selectedChange === "losers") changeMatch = c < 0;
+                else if (selectedChange === "top-gainers") changeMatch = c >= 1.5;
+                else if (selectedChange === "top-losers") changeMatch = c <= -1.5;
+
+                const searchMatch = !searchKeyword || 
+                    stock.symbol.toLowerCase().includes(searchKeyword) || 
+                    (stock.name && stock.name.toLowerCase().includes(searchKeyword));
+
+                return sectorMatch && changeMatch && searchMatch;
+            });
+
+            container.innerHTML = "";
+
+            if (filteredData.length === 0) {
+                container.innerHTML = `
+                    <div class="flex flex-col items-center justify-center w-full h-64 text-gray-400">
+                        <i data-lucide="inbox" class="w-8 h-8 opacity-40 mb-2"></i>
+                        <p class="text-xs font-medium">No stocks matching selected filters.</p>
+                    </div>
+                `;
+                lucide.createIcons();
+                return;
+            }
+
+            const grouped = filteredData.reduce((acc, stock) => {
+                const sector = stock.sector || "Others";
+                if (!acc[sector]) acc[sector] = [];
+                acc[sector].push(stock);
+                return acc;
+            }, {});
+
+            sectorOrder.forEach(sector => {
+                const stocks = grouped[sector];
+                if (!stocks || !stocks.length) return;
+
+                const section = document.createElement("section");
+                section.className = "sector-block";
+                section.style.flex = sectorFlexMap[sector] || "1 1 18%";
+
+                const title = document.createElement("div");
+                title.className = "sector-title";
+                title.innerHTML = `
+                    <span>${sector}</span>
+                    <span class="text-[10px] text-gray-500 font-mono font-normal">${stocks.length} stocks</span>
+                `;
+
+                const inner = document.createElement("div");
+                inner.className = "sector-inner";
+
+                const totalWeight = stocks.reduce((sum, s) => sum + Number(s.weight || 1), 0);
+
+                stocks.forEach(stock => {
+                    const change = Number(stock.change) || 0;
+                    const weight = Number(stock.weight || 1);
+                    const share = (weight / totalWeight) * 100;
+                    const sign = change >= 0 ? "+" : "";
+
+                    const tile = document.createElement("div");
+                    tile.className = `stock-tile ${getTileColorClass(change)}`;
+                    tile.style.flex = `${Math.max(share, 12)} 1 0%`;
+                    tile.style.minHeight = share > 25 ? "105px" : share > 15 ? "85px" : "68px";
+
+                    tile.innerHTML = `
+                        <div class="stock-symbol">${stock.symbol}</div>
+                        <div class="stock-price">₹${formatIndian(stock.price)}</div>
+                        <div class="stock-change">${sign}${change.toFixed(2)}%</div>
+                    `;
+
+                    // Tooltip Events
+                    tile.addEventListener("mouseenter", (e) => showTooltip(e, stock));
+                    tile.addEventListener("mousemove", (e) => moveTooltip(e));
+                    tile.addEventListener("mouseleave", hideTooltip);
+
+                    // Click to open Chartink chart
+                    tile.addEventListener("click", () => {
+                        window.open(`https://chartink.com/stocks/${stock.symbol}.html`, "_blank");
+                    });
+
+                    inner.appendChild(tile);
+                });
+
+                section.appendChild(title);
+                section.appendChild(inner);
+                container.appendChild(section);
+            });
+
+            lucide.createIcons();
+        }
+
+        // Tooltip Functions
+        const tooltip = document.getElementById("stock-tooltip");
+
+        function showTooltip(e, stock) {
+            const change = Number(stock.change) || 0;
+            const sign = change >= 0 ? "+" : "";
+
+            document.getElementById("tt-symbol").textContent = stock.symbol;
+            const changeEl = document.getElementById("tt-change");
+            changeEl.textContent = `${sign}${change.toFixed(2)}%`;
+            changeEl.className = `font-mono text-xs font-bold ${change >= 0 ? 'text-green-400' : 'text-red-400'}`;
+
+            document.getElementById("tt-name").textContent = stock.name || stock.symbol;
+            document.getElementById("tt-price").textContent = `₹${formatIndian(stock.price)}`;
+            document.getElementById("tt-sector").textContent = stock.sector || "General";
+            
+            const high = stock.high ? `₹${formatIndian(stock.high)}` : '--';
+            const low = stock.low ? `₹${formatIndian(stock.low)}` : '--';
+            document.getElementById("tt-range").textContent = `${low} - ${high}`;
+
+            const vol = stock.volume ? (stock.volume > 100000 ? (stock.volume / 100000).toFixed(1) + ' L' : formatIndian(stock.volume)) : '--';
+            document.getElementById("tt-volume").textContent = vol;
+
+            tooltip.classList.remove("hidden");
+            moveTooltip(e);
+        }
+
+        function moveTooltip(e) {
+            const x = e.clientX + 15;
+            const y = e.clientY + 15;
+            const w = tooltip.offsetWidth;
+            const h = tooltip.offsetHeight;
+
+            const posX = (x + w > window.innerWidth) ? (e.clientX - w - 10) : x;
+            const posY = (y + h > window.innerHeight) ? (e.clientY - h - 10) : y;
+
+            tooltip.style.left = `${posX}px`;
+            tooltip.style.top = `${posY}px`;
+        }
+
+        function hideTooltip() {
+            tooltip.classList.add("hidden");
+        }
+
+        document.addEventListener("DOMContentLoaded", () => {
+            loadHeatmap();
+            lucide.createIcons();
+            // Auto refresh every 30 seconds
+            setInterval(loadHeatmap, 30000);
+        });
+    </script>
+
+    <script>
+    /* ── Mobile Sidebar Toggle ── */
+    (function(){
+        var aside = document.querySelector('aside');
+        var overlay = document.getElementById('sidebar-overlay');
+        var openBtn = document.getElementById('hamburger-btn');
+        var closeBtn = document.getElementById('sidebar-close-btn');
+        var uid = localStorage.getItem('zp_uid') || '';
+        var av = document.getElementById('topbar-avatar');
+        if(av && uid){ av.textContent = uid.substring(0,2).toUpperCase(); }
+        function openSidebar(){
+            aside && aside.classList.add('sidebar-open');
+            overlay && overlay.classList.add('active');
+            document.body.style.overflow='hidden';
+        }
+        function closeSidebar(){
+            aside && aside.classList.remove('sidebar-open');
+            overlay && overlay.classList.remove('active');
+            document.body.style.overflow='';
+        }
+        openBtn && openBtn.addEventListener('click', openSidebar);
+        closeBtn && closeBtn.addEventListener('click', closeSidebar);
+        overlay && overlay.addEventListener('click', closeSidebar);
+        aside && aside.querySelectorAll('a').forEach(function(a){
+            a.addEventListener('click', function(){ if(window.innerWidth<768) closeSidebar(); });
+        });
+    })();
+    </script>
+    <script type="module" src="../js/gate.js"></script>
+</body>
+</html>

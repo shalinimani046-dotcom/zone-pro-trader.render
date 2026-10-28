@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Compound Interest Calculator | Zone Pro Trader</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Montserrat:wght@700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../css/style.css">
+    <script src="https://unpkg.com/lucide@latest"></script>
+<link rel="stylesheet" href="../css/responsive.css">
+</head>
+<body class="has-sidebar bg-[#F9FAFB] font-inter">
+    <!-- Sidebar Overlay -->
+    <div class="sidebar-overlay" id="sidebar-overlay"></div>
+
+    <!-- Mobile Top Bar -->
+    <div class="mobile-topbar" id="mobile-topbar">
+        <button class="hamburger-btn" id="hamburger-btn" aria-label="Open menu">
+            <svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="3" y1="6" x2="21" y2="6"/>
+                <line x1="3" y1="12" x2="21" y2="12"/>
+                <line x1="3" y1="18" x2="21" y2="18"/>
+            </svg>
+        </button>
+        <div class="topbar-logo">
+            <img src="../assets/images/logo-bg.png" alt="Zone Pro Trader">
+            <span class="topbar-title">ZONE <span>PRO TRADER</span></span>
+        </div>
+        <div class="topbar-avatar" id="topbar-avatar">ZP</div>
+    </div>
+
+    <!-- Navbar (Simplified for tools) -->
+    <nav class="bg-white border-b border-gray-100 py-4 px-6 sticky top-0 z-50 shadow-sm">
+        <div class="max-w-7xl mx-auto flex justify-between items-center">
+            <a href="../index.html" class="flex items-center gap-3">
+                <img src="../assets/images/logo-bg.png" alt="Zone Pro Trader" class="site-logo w-12 h-12">
+                <span class="text-xl font-montserrat font-extrabold text-gray-900">ZONE <span class="text-accent-main">PRO TRADER</span></span>
+            </a>
+            <div class="flex items-center gap-6">
+                <a href="../index.html" class="text-gray-600 hover:text-accent-main font-medium transition-colors">Home</a>
+            </div>
+        </div>
+    </nav>
+
+    <main class="max-w-6xl mx-auto px-4 py-12">
+        <div class="text-center mb-12">
+            <h1 class="text-3xl md:text-4xl font-montserrat font-bold text-gray-900 mb-4">Compound Interest Calculator</h1>
+            <p class="text-gray-500 max-w-2xl mx-auto">Discover the incredible power of compound interest and watch your savings and investment account balances grow over time.</p>
+        </div>
+
+        <div class="grid md:grid-cols-2 gap-8 items-start">
+            <!-- Input Card -->
+            <div class="bg-[#EFEFEF] p-8 rounded-xl shadow-sm border border-gray-200">
+                <h3 class="text-lg font-semibold text-gray-800 mb-6">Investment details:</h3>
+                
+                <div class="grid grid-cols-2 gap-6 mb-6">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-600 mb-2">Initial investment</label>
+                        <div class="relative">
+                            <span class="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500">₹</span>
+                            <input type="number" id="initial_investment" value="5000" class="w-full bg-[#E5E5E5] border border-gray-300 rounded-lg py-3 pl-8 pr-4 focus:outline-none focus:ring-2 focus:ring-accent-main/20 text-gray-900 font-medium">
+                        </div>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-600 mb-2">Interest rate</label>
+                        <div class="relative">
+                            <span class="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500">%</span>
+                            <input type="number" id="interest_rate" value="10" class="w-full bg-[#E5E5E5] border border-gray-300 rounded-lg py-3 pl-8 pr-4 focus:outline-none focus:ring-2 focus:ring-accent-main/20 text-gray-900 font-medium">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-2 gap-6 mb-8">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-600 mb-2">Time (Years)</label>
+                        <input type="number" id="years" value="2" class="w-full bg-[#E5E5E5] border border-gray-300 rounded-lg py-3 px-4 focus:outline-none focus:ring-2 focus:ring-accent-main/20 text-gray-900 font-medium">
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-600 mb-2">Calculation Frequency</label>
+                        <select id="frequency" class="w-full bg-[#E5E5E5] border border-gray-300 rounded-lg py-3 px-4 focus:outline-none focus:ring-2 focus:ring-accent-main/20 text-gray-900 font-medium appearance-none">
+                            <option value="12">Monthly</option>
+                            <option value="1">Annually</option>
+                            <option value="4">Quarterly</option>
+                        </select>
+                    </div>
+                </div>
+
+                <button onclick="calculateCompoundInterest()" class="w-full bg-[#111] hover:bg-black text-white font-bold py-4 rounded-lg transition-all shadow-lg hover:shadow-xl transform hover:-translate-y-1">
+                    Calculate
+                </button>
+            </div>
+
+            <!-- Result Card -->
+            <div class="bg-white p-8 rounded-xl shadow-sm border border-gray-100 min-h-[400px] flex flex-col items-center text-center">
+                <div id="result_initial" class="space-y-4 my-auto">
+                    <p class="text-gray-600 text-lg leading-relaxed">Calculate and understand the mechanics of compound interest through a detailed table breakdown.</p>
+                </div>
+                
+                <div id="result_output" class="hidden w-full">
+                    <!-- Summary Grid -->
+                    <div class="grid grid-cols-2 gap-y-8 gap-x-12 mb-10">
+                        <div>
+                            <p class="text-gray-500 text-sm mb-1">Total balance</p>
+                            <h2 class="text-2xl font-bold text-emerald-600" id="total_balance">₹0</h2>
+                        </div>
+                        <div>
+                            <p class="text-gray-500 text-sm mb-1">Total interest</p>
+                            <h2 class="text-2xl font-bold text-emerald-600" id="total_interest">₹0</h2>
+                        </div>
+                        <div>
+                            <p class="text-gray-500 text-sm mb-1">Initial investment</p>
+                            <h2 class="text-2xl font-bold text-emerald-600" id="summary_principal">₹0</h2>
+                        </div>
+                        <div>
+                            <p class="text-gray-500 text-sm mb-1">Percentage returns</p>
+                            <h2 class="text-2xl font-bold text-emerald-600" id="summary_returns">0 %</h2>
+                        </div>
+                        <div>
+                            <p class="text-gray-500 text-sm mb-1">Interest rate</p>
+                            <h2 class="text-2xl font-bold text-emerald-600" id="summary_rate">0 % monthly</h2>
+                        </div>
+                        <div>
+                            <p class="text-gray-500 text-sm mb-1">Duration</p>
+                            <h2 class="text-2xl font-bold text-emerald-600" id="summary_duration">0 Years</h2>
+                        </div>
+                    </div>
+
+                    <!-- Table Breakdown -->
+                    <div class="overflow-x-auto border border-gray-100 rounded-lg">
+                        <table class="w-full text-sm text-left">
+                            <thead class="bg-gray-50 text-gray-600 uppercase text-[10px] tracking-widest font-bold">
+                                <tr>
+                                    <th class="px-4 py-4 border-b border-gray-100">Month</th>
+                                    <th class="px-4 py-4 border-b border-gray-100">Interest</th>
+                                    <th class="px-4 py-4 border-b border-gray-100 text-center">Accrued Interest</th>
+                                    <th class="px-4 py-4 border-b border-gray-100 text-right">Balance</th>
+                                </tr>
+                            </thead>
+                            <tbody id="breakdown_body" class="text-gray-700 font-medium">
+                                <!-- Rows injected via JS -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Information Section -->
+        <div class="border-t border-gray-100 pt-16 mb-16">
+            <h2 class="text-2xl font-montserrat font-bold text-gray-900 mb-6">What is a Compound Interest Calculator?</h2>
+            <div class="space-y-6 text-gray-600 leading-relaxed text-lg">
+                <p>
+                    A Compound Interest Calculator is a sophisticated financial instrument designed to help savers and investors project the future growth of their capital. Unlike simple interest, which is calculated only on the principal, this tool accounts for the "interest on interest" effect, where your earnings are reinvested to generate even more returns over time.
+                </p>
+                <p>
+                    By allowing you to customize key factors such as your starting principal, expected rate of return, and the frequency of compounding (whether monthly, quarterly, or annually), the calculator provides a comprehensive view of your investment's trajectory. It delivers a detailed breakdown of both your original contribution and the wealth accumulated through compounding, making it an essential companion for long-term financial planning and wealth creation.
+                </p>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        function calculateCompoundInterest() {
+            const P = parseFloat(document.getElementById('initial_investment').value);
+            const rPercent = parseFloat(document.getElementById('interest_rate').value);
+            const ratePerPeriod = rPercent / 100;
+            const t = parseFloat(document.getElementById('years').value);
+            const n = parseInt(document.getElementById('frequency').value);
+
+            if (isNaN(P) || isNaN(rPercent) || isNaN(t)) {
+                alert("Please enter valid numbers");
+                return;
+            }
+
+            // Correct Compound Interest Logic based on Period Rate
+            // Formula: A = P * (1 + r)^n_periods
+            const totalPeriods = n * t;
+            const A = P * Math.pow((1 + ratePerPeriod), totalPeriods);
+            const totalInterest = A - P;
+            const returnsPercent = (totalInterest / P) * 100;
+
+            // Show results
+            document.getElementById('result_initial').classList.add('hidden');
+            document.getElementById('result_output').classList.remove('hidden');
+
+            // Update Summary
+            document.getElementById('total_balance').innerText = "₹" + Math.round(A).toLocaleString('en-IN');
+            document.getElementById('total_interest').innerText = "₹" + Math.round(totalInterest).toLocaleString('en-IN');
+            document.getElementById('summary_principal').innerText = "₹" + P.toLocaleString('en-IN');
+            document.getElementById('summary_returns').innerText = returnsPercent.toFixed(2) + " %";
+            
+            const freqText = document.getElementById('frequency').options[document.getElementById('frequency').selectedIndex].text.toLowerCase();
+            document.getElementById('summary_rate').innerText = rPercent + " % " + (freqText === "monthly" ? "monthly" : (freqText === "annually" ? "annually" : "quarterly"));
+            document.getElementById('summary_duration').innerText = t + " Years";
+
+            // Generate Breakdown
+            const breakdownBody = document.getElementById('breakdown_body');
+            breakdownBody.innerHTML = '';
+            
+            let currentBalance = P;
+            let totalAccruedInterest = 0;
+
+            for (let i = 1; i <= totalPeriods; i++) {
+                const interestForThisPeriod = currentBalance * ratePerPeriod;
+                totalAccruedInterest += interestForThisPeriod;
+                currentBalance += interestForThisPeriod;
+
+                const row = document.createElement('tr');
+                row.className = "hover:bg-gray-50 border-b border-gray-50 transition-colors";
+                row.innerHTML = `
+                    <td class="px-4 py-4 text-gray-500">${i}</td>
+                    <td class="px-4 py-4">₹${Math.round(interestForThisPeriod).toLocaleString('en-IN')}</td>
+                    <td class="px-4 py-4 text-center">₹${Math.round(totalAccruedInterest).toLocaleString('en-IN')}</td>
+                    <td class="px-4 py-4 text-right">₹${Math.round(currentBalance).toLocaleString('en-IN')}</td>
+                `;
+                breakdownBody.appendChild(row);
+                
+                if (i >= 36) { // Increased cap to 36 periods for better visibility
+                    const capRow = document.createElement('tr');
+                    capRow.innerHTML = `<td colspan="4" class="px-4 py-4 text-center text-gray-400 italic">Showing first 36 periods of breakdown...</td>`;
+                    breakdownBody.appendChild(capRow);
+                    break;
+                }
+            }
+        }
+    </script>
+</body>
+</html>

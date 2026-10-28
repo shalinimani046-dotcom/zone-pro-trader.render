@@ -1,0 +1,10 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // ALL Firestore access goes through the backend (Admin SDK bypasses these rules).
+    // Browsers get nothing, so nobody can read users/payments or grant themselves a plan.
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}

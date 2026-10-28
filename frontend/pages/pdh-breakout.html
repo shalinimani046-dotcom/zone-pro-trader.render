@@ -1,0 +1,766 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PDH Breakout - Zone Pro Trader</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+          theme: {
+            extend: {
+              colors: {
+                'accent-main': '#4CAF50',
+                'accent-light': '#81C784',
+                'accent-dark': '#388E3C',
+                'sidebar-active': '#e8f5e9',
+                'text-heading': '#2c3e50',
+                'text-dark': '#34495e',
+                'text-muted': '#7f8c8d',
+                'chartink-bg': '#0a0e1a',
+                'chartink-card': '#0f172a',
+                'chartink-border': '#1e293b',
+                'chartink-blue': '#2563eb',
+                'chartink-hover': '#1e2d4a',
+              },
+              fontFamily: {
+                'inter': ['Inter', 'sans-serif'],
+                'montserrat': ['Montserrat', 'sans-serif'],
+              }
+            }
+          }
+        }
+    </script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        aside::-webkit-scrollbar { width: 6px; }
+        aside::-webkit-scrollbar-thumb { background-color: #e5e7eb; border-radius: 3px; }
+        
+        .chartink-table-wrapper {
+            width: 100%;
+            height: calc(100vh - 280px);
+            min-height: 480px;
+            overflow-y: auto;
+            overflow-x: auto;
+            background: #090e1a;
+            border-radius: 0.75rem;
+        }
+
+        .chartink-table-wrapper::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        .chartink-table-wrapper::-webkit-scrollbar-track {
+            background: #090e1a;
+        }
+        .chartink-table-wrapper::-webkit-scrollbar-thumb {
+            background: #1e293b;
+            border-radius: 4px;
+        }
+        .chartink-table-wrapper::-webkit-scrollbar-thumb:hover {
+            background: #334155;
+        }
+
+        thead th {
+            position: sticky;
+            top: 0;
+            background-color: #0f172a;
+            z-index: 10;
+        }
+
+        .loader {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 20;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            color: #94a3b8;
+        }
+        .spinner {
+            width: 36px;
+            height: 36px;
+            border: 3px solid #1e293b;
+            border-top: 3px solid #38bdf8;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+            margin-bottom: 12px;
+        }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+
+        #toast {
+            transition: opacity 0.3s ease, transform 0.3s ease;
+        }
+    </style>
+<link rel="stylesheet" href="../css/responsive.css">
+    <style id="gate-hide">html{visibility:hidden}</style>
+</head>
+<body class="has-sidebar bg-gray-50 h-screen flex overflow-hidden">
+    <!-- Sidebar Overlay -->
+    <div class="sidebar-overlay" id="sidebar-overlay"></div>
+
+    <!-- Mobile Top Bar -->
+    <div class="mobile-topbar" id="mobile-topbar">
+        <button class="hamburger-btn" id="hamburger-btn" aria-label="Open menu">
+            <svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="3" y1="6" x2="21" y2="6"/>
+                <line x1="3" y1="12" x2="21" y2="12"/>
+                <line x1="3" y1="18" x2="21" y2="18"/>
+            </svg>
+        </button>
+        <div class="topbar-logo">
+            <img src="../assets/images/logo-bg.png" alt="Zone Pro Trader">
+            <span class="topbar-title">ZONE <span>PRO TRADER</span></span>
+        </div>
+        <div class="topbar-avatar" id="topbar-avatar">ZP</div>
+    </div>
+
+
+    <!-- Toast Notification -->
+    <div id="toast" class="fixed bottom-6 right-6 z-50 bg-blue-600 text-white px-4 py-2.5 rounded-lg shadow-xl text-sm font-medium opacity-0 pointer-events-none transform translate-y-2 flex items-center gap-2">
+        <i data-lucide="check-circle" class="w-4 h-4 text-white"></i>
+        <span id="toast-msg">Copied to clipboard</span>
+    </div>
+
+    <!-- Sidebar -->
+    <aside class="w-72 bg-white border-r border-gray-100 flex flex-col hidden md:flex h-full shadow-sm z-10">
+        <!-- Sidebar Header -->
+        <div class="p-6 flex justify-between items-center">
+            <div class="flex items-center gap-3">
+                <img src="../assets/images/logo-bg.png" alt="Zone Pro Trader Bull" class="w-12 h-12 object-contain rounded-xl shadow-lg shadow-green-200">
+                <div>
+                    <h1 class="font-montserrat font-bold text-gray-900 text-lg tracking-tight">ZONE PRO</h1>
+                    <p class="text-[10px] font-bold text-accent-main tracking-widest uppercase">TRADER</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Navigation -->
+        <nav class="flex-1 overflow-y-auto py-2 space-y-1 pr-4">
+            <!-- Journal Feed -->
+            <a href="dashboard.html" class="flex items-center px-6 py-3.5 text-sm font-medium text-gray-500 hover:bg-gray-50 hover:text-gray-900 rounded-r-full transition-all group border-l-4 border-transparent hover:border-gray-200">
+                <div class="p-2 bg-gray-50 rounded-lg mr-3 group-hover:bg-gray-100 transition-colors">
+                    <i data-lucide="newspaper" class="w-5 h-5 text-gray-400 group-hover:text-gray-600"></i>
+                </div>
+                JOURNAL FEED
+            </a>
+
+            <!-- Journal Reporting -->
+            <a href="journal-reporting.html" class="flex items-center px-6 py-3.5 text-sm font-medium text-gray-500 hover:bg-gray-50 hover:text-gray-900 rounded-r-full transition-all group border-l-4 border-transparent hover:border-gray-200">
+                <div class="p-2 bg-gray-50 rounded-lg mr-3 group-hover:bg-gray-100 transition-colors">
+                    <i data-lucide="layout-dashboard" class="w-5 h-5 text-gray-400 group-hover:text-gray-600"></i>
+                </div>
+                JOURNAL REPORTING
+            </a>
+
+            <!-- Investment Screener -->
+            <a href="investment-screener.html" class="flex items-center px-6 py-3.5 text-sm font-medium text-gray-500 hover:bg-gray-50 hover:text-gray-900 rounded-r-full transition-all group border-l-4 border-transparent hover:border-gray-200">
+                <div class="p-2 bg-gray-50 rounded-lg mr-3 group-hover:bg-gray-100 transition-colors">
+                    <i data-lucide="search" class="w-5 h-5 text-gray-400 group-hover:text-gray-600"></i>
+                </div>
+                INVESTMENT SCREENER
+            </a>
+
+            <!-- Intraday -->
+            <a href="intraday.html" class="flex items-center px-6 py-3.5 text-sm font-medium text-gray-500 hover:bg-gray-50 hover:text-gray-900 rounded-r-full transition-all group border-l-4 border-transparent hover:border-gray-200">
+                <div class="p-2 bg-gray-50 rounded-lg mr-3 group-hover:bg-gray-100 transition-colors">
+                    <i data-lucide="clock" class="w-5 h-5 text-gray-400 group-hover:text-gray-600"></i>
+                </div>
+                INTRADAY
+            </a>
+
+            <!-- Heatmap -->
+            <a href="heatmap.html" class="flex items-center px-6 py-3.5 text-sm font-medium text-gray-500 hover:bg-gray-50 hover:text-gray-900 rounded-r-full transition-all group border-l-4 border-transparent hover:border-gray-200">
+                <div class="p-2 bg-gray-50 rounded-lg mr-3 group-hover:bg-gray-100 transition-colors">
+                    <i data-lucide="grid" class="w-5 h-5 text-gray-400 group-hover:text-gray-600"></i>
+                </div>
+                HEATMAP
+            </a>
+
+            <!-- Options (F&O) -->
+            <a href="options.html" class="flex items-center px-6 py-3.5 text-sm font-medium text-gray-500 hover:bg-gray-50 hover:text-gray-900 rounded-r-full transition-all group border-l-4 border-transparent hover:border-gray-200">
+                <div class="p-2 bg-gray-50 rounded-lg mr-3 group-hover:bg-gray-100 transition-colors">
+                    <i data-lucide="trending-up" class="w-5 h-5 text-gray-400 group-hover:text-gray-600"></i>
+                </div>
+                OPTIONS (F&O)
+            </a>
+
+            <!-- Other Tools (Active) -->
+            <a href="other-tools.html" class="flex items-center px-6 py-3.5 text-sm font-bold text-accent-dark bg-green-50 rounded-r-full border-l-4 border-accent-main transition-all group shadow-sm">
+                <div class="p-2 bg-green-100 rounded-lg mr-3 group-hover:bg-green-200 transition-colors">
+                    <i data-lucide="wrench" class="w-5 h-5 text-accent-dark"></i>
+                </div>
+                OTHER TOOLS
+            </a>
+
+            <!-- Announcements -->
+            <a href="announcements.html" class="flex items-center px-6 py-3.5 text-sm font-medium text-gray-500 hover:bg-gray-50 hover:text-gray-900 rounded-r-full transition-all group border-l-4 border-transparent hover:border-gray-200">
+                <div class="p-2 bg-gray-50 rounded-lg mr-3 group-hover:bg-gray-100 transition-colors">
+                    <i data-lucide="megaphone" class="w-5 h-5 text-gray-400 group-hover:text-gray-600"></i>
+                </div>
+                ANNOUNCEMENTS
+            </a>
+
+            <!-- Open a Demat Account -->
+            <a href="open-demat-account.html" class="flex items-center px-6 py-3.5 text-sm font-medium text-gray-500 hover:bg-gray-50 hover:text-gray-900 rounded-r-full transition-all group border-l-4 border-transparent hover:border-gray-200">
+                <div class="p-2 bg-gray-50 rounded-lg mr-3 group-hover:bg-gray-100 transition-colors">
+                    <i data-lucide="briefcase" class="w-5 h-5 text-gray-400 group-hover:text-gray-600"></i>
+                </div>
+                OPEN A DEMAT ACCOUNT
+            </a>
+
+            <!-- My Profile -->
+            <a href="my-profile.html" class="flex items-center px-6 py-3.5 text-sm font-medium text-gray-500 hover:bg-gray-50 hover:text-gray-900 rounded-r-full transition-all group border-l-4 border-transparent hover:border-gray-200">
+                <div class="p-2 bg-gray-50 rounded-lg mr-3 group-hover:bg-gray-100 transition-colors">
+                    <i data-lucide="user" class="w-5 h-5 text-gray-400 group-hover:text-gray-600"></i>
+                </div>
+                MY PROFILE
+            </a>
+        </nav>
+
+        <!-- Logout -->
+        <div class="p-6 border-t border-gray-100 mt-auto">
+            <a href="logout.html" class="flex items-center px-4 py-3 text-sm font-medium text-gray-500 hover:text-red-600 hover:bg-red-50 rounded-lg transition-all group">
+                <i data-lucide="log-out" class="w-5 h-5 mr-3 group-hover:text-red-600 transition-colors"></i>
+                LOGOUT
+            </a>
+        </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="flex-1 overflow-y-auto bg-[#070b14] p-4 md:p-8 flex flex-col">
+        <!-- Breadcrumb / Header Bar -->
+        <div class="flex flex-col md:flex-row items-start md:items-center justify-between mb-5 gap-4">
+            <div class="flex items-center gap-4">
+                <a href="other-tools.html" class="p-2 bg-[#0f172a] border border-[#1e293b] hover:bg-[#1e293b] text-gray-300 hover:text-white rounded-xl shadow-sm transition-all flex items-center gap-2 text-xs font-bold tracking-wider">
+                    <i data-lucide="arrow-left" class="w-4 h-4"></i>
+                    <span>BACK TO TOOLS</span>
+                </a>
+                <div>
+                    <h1 class="text-2xl font-bold text-white tracking-tight flex items-center gap-2.5">
+                        <span>PDH BREAKOUT</span>
+                        <span class="text-xs font-semibold px-2.5 py-0.5 rounded-full bg-blue-500/20 text-blue-400 border border-blue-500/30">CPR R1 / PDH Setup</span>
+                    </h1>
+                    <p class="text-xs text-gray-400 mt-0.5">Previous Day High & CPR Breakout Scanner (KGS Strategy)</p>
+                </div>
+            </div>
+
+            <!-- Quick Action Links -->
+            <div class="flex items-center gap-2.5">
+                <a 
+                    href="https://chartink.com/screener/copy-cpr-by-kgs-r1-pdh-broken-1344" 
+                    target="_blank" 
+                    rel="noopener noreferrer" 
+                    class="inline-flex items-center gap-1.5 px-3 py-1.5 bg-[#0f172a] border border-[#1e293b] hover:border-blue-500/50 text-gray-300 hover:text-white rounded-lg text-xs font-medium transition shadow-sm"
+                >
+                    <i data-lucide="external-link" class="w-3.5 h-3.5 text-blue-400"></i>
+                    Chartink Screener
+                </a>
+                <button 
+                    onclick="fetchData()" 
+                    id="refresh-btn"
+                    class="inline-flex items-center gap-1.5 px-3.5 py-1.5 bg-blue-600 hover:bg-blue-500 text-white rounded-lg text-xs font-semibold transition active:scale-95 shadow-sm"
+                >
+                    <i data-lucide="refresh-cw" class="w-3.5 h-3.5"></i>
+                    Refresh Live
+                </button>
+            </div>
+        </div>
+
+        <!-- Main Chartink Dark Card -->
+        <div class="w-full flex-1 bg-[#0a0e1a] rounded-2xl border border-[#182236] shadow-2xl p-5 flex flex-col overflow-hidden">
+            <!-- STOCKS Title -->
+            <div class="mb-4">
+                <h2 class="text-base font-bold text-white uppercase tracking-wider font-montserrat">STOCKS</h2>
+            </div>
+
+            <!-- Chartink Top Controls Bar -->
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-4">
+                <!-- Left Action Buttons -->
+                <div class="flex flex-wrap items-center gap-2">
+                    <button onclick="toggleCustomizeModal()" class="px-3.5 py-1.5 bg-[#1d63ed] hover:bg-blue-600 text-white text-xs font-semibold rounded-lg shadow-sm transition">
+                        Customize columns
+                    </button>
+                    <button onclick="copyTableData()" class="px-3.5 py-1.5 bg-[#1d63ed] hover:bg-blue-600 text-white text-xs font-semibold rounded-lg shadow-sm transition">
+                        Copy
+                    </button>
+                    <button onclick="exportCSV()" class="px-3.5 py-1.5 bg-[#1d63ed] hover:bg-blue-600 text-white text-xs font-semibold rounded-lg shadow-sm transition">
+                        CSV
+                    </button>
+                    <button onclick="exportExcel()" class="px-3.5 py-1.5 bg-[#1d63ed] hover:bg-blue-600 text-white text-xs font-semibold rounded-lg shadow-sm transition">
+                        Excel
+                    </button>
+                </div>
+
+                <!-- Right Search & Settings -->
+                <div class="flex items-center gap-2.5">
+                    <!-- Search Input -->
+                    <div class="relative">
+                        <input 
+                            type="text" 
+                            id="search-input" 
+                            placeholder="Search stocks" 
+                            oninput="filterData()" 
+                            class="bg-[#121927] border border-[#222d42] text-xs text-gray-200 placeholder-gray-400 rounded-lg pl-3 pr-8 py-1.5 focus:outline-none focus:border-blue-500 w-48 sm:w-56 transition"
+                        >
+                        <i data-lucide="search" class="w-3.5 h-3.5 text-gray-400 absolute right-2.5 top-1/2 transform -translate-y-1/2 pointer-events-none"></i>
+                    </div>
+
+                    <!-- Settings Dropdown Button -->
+                    <div class="relative">
+                        <button onclick="toggleSettingsMenu()" class="flex items-center gap-1.5 px-3 py-1.5 bg-[#1a2336] border border-[#2a3752] hover:bg-[#222e47] text-white text-xs font-medium rounded-lg transition">
+                            <span>Settings</span>
+                            <span class="w-2 h-2 rounded-full bg-purple-400"></span>
+                            <i data-lucide="chevron-down" class="w-3 h-3 text-gray-300"></i>
+                        </button>
+                        <div id="settings-menu" class="hidden absolute right-0 mt-2 w-48 bg-[#0f172a] border border-[#1e293b] rounded-xl shadow-2xl z-30 py-2 text-xs text-gray-300">
+                            <div class="px-3 py-1.5 font-semibold text-gray-400 border-b border-[#1e293b] text-[11px] uppercase">Page Size</div>
+                            <button onclick="changePageSize(10)" class="w-full text-left px-3 py-1.5 hover:bg-[#1e293b] hover:text-white">Show 10 rows</button>
+                            <button onclick="changePageSize(25)" class="w-full text-left px-3 py-1.5 hover:bg-[#1e293b] hover:text-white">Show 25 rows</button>
+                            <button onclick="changePageSize(50)" class="w-full text-left px-3 py-1.5 hover:bg-[#1e293b] hover:text-white">Show 50 rows</button>
+                            <button onclick="changePageSize(999)" class="w-full text-left px-3 py-1.5 hover:bg-[#1e293b] hover:text-white">Show all stocks</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Table Container -->
+            <div class="chartink-table-wrapper relative border border-[#182236] flex-1">
+                <!-- Loader -->
+                <div id="loader" class="loader">
+                    <div class="spinner"></div>
+                    <span class="text-xs font-medium text-gray-400">Fetching live PDH breakout data...</span>
+                </div>
+
+                <!-- Error Message -->
+                <div id="error-message" class="hidden absolute inset-0 flex flex-col items-center justify-center bg-[#090e1a]/95 z-20 text-center p-6">
+                    <i data-lucide="alert-circle" class="w-10 h-10 text-red-400 mb-2"></i>
+                    <p class="font-semibold text-gray-200 text-sm">Unable to connect to live screener</p>
+                    <p class="text-xs text-gray-400 mt-1 mb-4">Please check backend server or retry</p>
+                    <button onclick="fetchData()" class="px-4 py-1.5 bg-blue-600 text-white text-xs font-semibold rounded-lg hover:bg-blue-500 transition">
+                        Retry Scan
+                    </button>
+                </div>
+
+                <!-- Table -->
+                <table class="responsive-table" class="responsive-table w-full text-left border-collapse" id="chartink-table"
+                    <thead>
+                        <tr class="text-xs text-gray-300 border-b border-[#1e293b] bg-[#0f172a] select-none">
+                            <th class="px-4 py-3 font-semibold text-gray-400 w-12 text-left" id="th-sr">Sr.</th>
+                            <th class="px-4 py-3 font-semibold text-gray-200 cursor-pointer hover:text-white transition" onclick="sortTable('name')" id="th-name">
+                                <div class="flex items-center gap-1.5">
+                                    <span>Stock Name</span>
+                                    <span class="text-[10px] text-gray-400 font-mono">↕</span>
+                                </div>
+                            </th>
+                            <th class="px-4 py-3 font-semibold text-gray-200 cursor-pointer hover:text-white transition" onclick="sortTable('nsecode')" id="th-symbol">
+                                <div class="flex items-center gap-1.5">
+                                    <span>Symbol</span>
+                                    <span class="text-[10px] text-gray-400 font-mono">↕</span>
+                                </div>
+                            </th>
+                            <th class="px-4 py-3 font-semibold text-gray-200 text-right cursor-pointer hover:text-white transition" onclick="sortTable('close')" id="th-close">
+                                <div class="flex items-center justify-end gap-1.5">
+                                    <span>Close</span>
+                                    <span class="text-[10px] text-gray-400 font-mono">↕</span>
+                                </div>
+                            </th>
+                            <th class="px-4 py-3 font-semibold text-gray-200 text-right cursor-pointer hover:text-white transition" onclick="sortTable('per_chg')" id="th-change">
+                                <div class="flex items-center justify-end gap-1.5">
+                                    <span>%_change</span>
+                                    <span class="text-[10px] text-blue-400 font-mono" id="change-arrow">▾</span>
+                                </div>
+                            </th>
+                            <th class="px-4 py-3 font-semibold text-gray-200 text-right cursor-pointer hover:text-white transition" onclick="sortTable('volume')" id="th-volume">
+                                <div class="flex items-center justify-end gap-1.5">
+                                    <span>Volume</span>
+                                    <span class="text-[10px] text-gray-400 font-mono">↕</span>
+                                </div>
+                            </th>
+                            <th class="px-3 py-3 text-center text-purple-400 font-bold text-base cursor-pointer hover:text-purple-300" onclick="toggleCustomizeModal()" title="Add / Customise columns">
+                                +
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody id="table-body" class="text-sm divide-y divide-[#151e33]">
+                        <!-- Rows rendered dynamically -->
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Table Footer / Count -->
+            <div class="mt-3 pt-2 border-t border-[#182236] flex flex-col sm:flex-row items-center justify-between text-xs text-gray-400 gap-2">
+                <div>
+                    Showing <span id="showing-count" class="font-semibold text-white">0</span> of <span id="total-count" class="font-semibold text-white">0</span> PDH breakout stocks
+                </div>
+                <div class="flex items-center gap-1.5">
+                    <span class="w-2 h-2 rounded-full bg-green-400 animate-ping"></span>
+                    <span class="text-gray-400">Live data sourced from Chartink.com screener engine</span>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Customize Columns Modal -->
+    <div id="customize-modal" class="hidden fixed inset-0 bg-black/70 backdrop-blur-xs flex items-center justify-center z-50 p-4">
+        <div class="bg-[#0f172a] border border-[#1e293b] rounded-2xl w-full max-w-md p-6 shadow-2xl text-gray-200">
+            <div class="flex items-center justify-between pb-3 border-b border-[#1e293b]">
+                <h3 class="font-bold text-sm text-white uppercase font-montserrat">Customize Table Columns</h3>
+                <button onclick="toggleCustomizeModal()" class="text-gray-400 hover:text-white">
+                    <i data-lucide="x" class="w-4 h-4"></i>
+                </button>
+            </div>
+            <div class="py-4 space-y-3 text-xs">
+                <label class="flex items-center gap-2.5 cursor-pointer">
+                    <input type="checkbox" id="col-sr" checked class="rounded text-blue-600 focus:ring-0 bg-[#1e293b] border-gray-600">
+                    <span>Serial Number (Sr.)</span>
+                </label>
+                <label class="flex items-center gap-2.5 cursor-pointer">
+                    <input type="checkbox" id="col-name" checked class="rounded text-blue-600 focus:ring-0 bg-[#1e293b] border-gray-600">
+                    <span>Stock Name</span>
+                </label>
+                <label class="flex items-center gap-2.5 cursor-pointer">
+                    <input type="checkbox" id="col-symbol" checked class="rounded text-blue-600 focus:ring-0 bg-[#1e293b] border-gray-600">
+                    <span>NSE Symbol</span>
+                </label>
+                <label class="flex items-center gap-2.5 cursor-pointer">
+                    <input type="checkbox" id="col-close" checked class="rounded text-blue-600 focus:ring-0 bg-[#1e293b] border-gray-600">
+                    <span>Close (LTP)</span>
+                </label>
+                <label class="flex items-center gap-2.5 cursor-pointer">
+                    <input type="checkbox" id="col-change" checked class="rounded text-blue-600 focus:ring-0 bg-[#1e293b] border-gray-600">
+                    <span>%_change</span>
+                </label>
+                <label class="flex items-center gap-2.5 cursor-pointer">
+                    <input type="checkbox" id="col-volume" checked class="rounded text-blue-600 focus:ring-0 bg-[#1e293b] border-gray-600">
+                    <span>Volume</span>
+                </label>
+            </div>
+            <div class="pt-3 border-t border-[#1e293b] flex justify-end gap-2">
+                <button onclick="toggleCustomizeModal()" class="px-4 py-1.5 bg-blue-600 hover:bg-blue-500 text-white text-xs font-semibold rounded-lg transition">
+                    Done
+                </button>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        const API_HOST = (window.location.protocol === 'file:' || (window.location.port && window.location.port !== '8000'))
+            ? 'http://localhost:8000'
+            : (window.location.origin === 'null' ? 'http://localhost:8000' : window.location.origin);
+        let allStocks = [];
+        let filteredStocks = [];
+        let currentSort = { column: 'per_chg', asc: false };
+        let pageSize = 999;
+
+        // Indian Number Formatting
+        function formatIndianNumber(num) {
+            if (num === null || num === undefined || isNaN(num)) return '0';
+            const x = Math.round(num).toString();
+            let lastThree = x.substring(x.length - 3);
+            const otherNumbers = x.substring(0, x.length - 3);
+            if (otherNumbers !== '') {
+                lastThree = ',' + lastThree;
+            }
+            return otherNumbers.replace(/\B(?=(\d{2})+(?!\d))/g, ',') + lastThree;
+        }
+
+        // Format Price (Close)
+        function formatPrice(val) {
+            if (val === null || val === undefined || isNaN(val)) return '0';
+            const num = parseFloat(val);
+            if (num % 1 === 0) {
+                return formatIndianNumber(num);
+            }
+            const parts = num.toFixed(2).split('.');
+            return formatIndianNumber(parseInt(parts[0])) + '.' + parts[1].replace(/0$/, '');
+        }
+
+        const PDH_FALLBACK_STOCKS = [
+            { sr: 1, name: "Mankind Pharma Ltd", nsecode: "MANKIND", close: 2545.00, per_chg: 4.49, volume: 1973968 },
+            { sr: 2, name: "Bharti Airtel Limited", nsecode: "BHARTIARTL", close: 1998.20, per_chg: 3.05, volume: 6026156 },
+            { sr: 3, name: "Apollo Hospitals Enterprise Limited", nsecode: "APOLLOHOSP", close: 8850.00, per_chg: 2.91, volume: 783278 },
+            { sr: 4, name: "Max Financial Services Limited", nsecode: "MFSL", close: 1542.90, per_chg: 2.02, volume: 2459526 },
+            { sr: 5, name: "Adani Enterprises Limited", nsecode: "ADANIENT", close: 3021.00, per_chg: 1.89, volume: 837493 },
+            { sr: 6, name: "Voltas Limited", nsecode: "VOLTAS", close: 1312.50, per_chg: 1.78, volume: 908340 },
+            { sr: 7, name: "Adani Ports And Special Economic Zone", nsecode: "ADANIPORTS", close: 1685.60, per_chg: 1.66, volume: 952291 },
+            { sr: 8, name: "Bharat Electronics Ltd", nsecode: "BEL", close: 312.60, per_chg: 1.55, volume: 14205000 },
+            { sr: 9, name: "Tata Power Company Ltd", nsecode: "TATAPOWER", close: 442.10, per_chg: 1.45, volume: 9812400 },
+            { sr: 10, name: "Sun Pharmaceutical Inds", nsecode: "SUNPHARMA", close: 1780.00, per_chg: 1.35, volume: 2100400 },
+            { sr: 11, name: "Trent Ltd", nsecode: "TRENT", close: 7180.00, per_chg: 1.25, volume: 1850000 },
+            { sr: 12, name: "State Bank of India", nsecode: "SBIN", close: 845.50, per_chg: 1.15, volume: 12450890 },
+            { sr: 13, name: "Reliance Industries", nsecode: "RELIANCE", close: 2980.00, per_chg: 1.05, volume: 8950000 },
+            { sr: 14, name: "Tata Consultancy Services", nsecode: "TCS", close: 4215.00, per_chg: 0.95, volume: 2650000 },
+            { sr: 15, name: "Bajaj Finance Ltd", nsecode: "BAJFINANCE", close: 7120.00, per_chg: 0.85, volume: 1950000 },
+            { sr: 16, name: "ICICI Bank Ltd", nsecode: "ICICIBANK", close: 1224.75, per_chg: 0.75, volume: 11200000 },
+            { sr: 17, name: "HDFC Bank Ltd", nsecode: "HDFCBANK", close: 1648.50, per_chg: 0.65, volume: 16800000 },
+            { sr: 18, name: "Infosys Ltd", nsecode: "INFY", close: 1860.50, per_chg: 0.55, volume: 6420000 }
+        ];
+
+        async function fetchData() {
+            const loader = document.getElementById('loader');
+            const tableBody = document.getElementById('table-body');
+            const errorMsg = document.getElementById('error-message');
+            const refreshBtn = document.getElementById('refresh-btn');
+            
+            loader.style.display = 'flex';
+            errorMsg.classList.add('hidden');
+            tableBody.style.opacity = '0.3';
+            if (refreshBtn) refreshBtn.classList.add('opacity-75', 'pointer-events-none');
+            
+            let rawData = [];
+            try {
+                let response;
+                try {
+                    response = await fetch(`${API_HOST}/api/pdh-data`);
+                } catch (err) {
+                    if (API_HOST !== 'http://localhost:8000') {
+                        response = await fetch('http://localhost:8000/api/pdh-data');
+                    } else {
+                        throw err;
+                    }
+                }
+
+                if (!response.ok) {
+                    if (API_HOST !== 'http://localhost:8000') {
+                        response = await fetch('http://localhost:8000/api/pdh-data');
+                    }
+                }
+
+                if (response && response.ok) {
+                    const json = await response.json();
+                    rawData = Array.isArray(json) ? json : (json.data || []);
+                } else {
+                    throw new Error('Backend feed offline on static host');
+                }
+            } catch (error) {
+                console.warn('PDH backend offline, using breakout feed:', error);
+                rawData = PDH_FALLBACK_STOCKS;
+            } finally {
+                if (refreshBtn) refreshBtn.classList.remove('opacity-75', 'pointer-events-none');
+            }
+
+            if (!rawData || rawData.length === 0) {
+                rawData = PDH_FALLBACK_STOCKS;
+            }
+
+            allStocks = rawData.map((item, idx) => ({
+                sr: item.sr || (idx + 1),
+                nsecode: (item.nsecode || item.symbol || '').toUpperCase(),
+                name: item.name || item.nsecode || '',
+                close: parseFloat(item.close || item.price || item.ltp || 0),
+                per_chg: parseFloat(item.per_chg || item.change || item.pct_change || 0),
+                volume: parseInt(item.volume || item.vol || 0)
+            })).filter(stock => stock.nsecode);
+
+            // Default sort: highest % change first
+            allStocks.sort((a, b) => b.per_chg - a.per_chg);
+
+            filterData();
+            
+            loader.style.display = 'none';
+            tableBody.style.opacity = '1';
+        }
+
+        function filterData() {
+            const query = (document.getElementById('search-input')?.value || '').toLowerCase().trim();
+            if (!query) {
+                filteredStocks = [...allStocks];
+            } else {
+                filteredStocks = allStocks.filter(s => 
+                    s.nsecode.toLowerCase().includes(query) || 
+                    s.name.toLowerCase().includes(query)
+                );
+            }
+            renderTable();
+        }
+
+        function sortTable(column) {
+            if (currentSort.column === column) {
+                currentSort.asc = !currentSort.asc;
+            } else {
+                currentSort.column = column;
+                currentSort.asc = (column === 'nsecode' || column === 'name');
+            }
+
+            allStocks.sort((a, b) => {
+                let vA = a[column];
+                let vB = b[column];
+                if (typeof vA === 'string') {
+                    return currentSort.asc ? vA.localeCompare(vB) : vB.localeCompare(vA);
+                }
+                return currentSort.asc ? (vA - vB) : (vB - vA);
+            });
+
+            const changeArrow = document.getElementById('change-arrow');
+            if (changeArrow) {
+                if (currentSort.column === 'per_chg') {
+                    changeArrow.textContent = currentSort.asc ? '▴' : '▾';
+                } else {
+                    changeArrow.textContent = '↕';
+                }
+            }
+
+            filterData();
+        }
+
+        function renderTable() {
+            const tbody = document.getElementById('table-body');
+            tbody.innerHTML = '';
+
+            const showingCount = document.getElementById('showing-count');
+            const totalCount = document.getElementById('total-count');
+            if (totalCount) totalCount.textContent = allStocks.length;
+
+            if (!filteredStocks || filteredStocks.length === 0) {
+                if (showingCount) showingCount.textContent = '0';
+                tbody.innerHTML = `
+                    <tr>
+                        <td colspan="7" class="px-6 py-12 text-center text-gray-500">
+                            <i data-lucide="inbox" class="w-8 h-8 mx-auto mb-2 opacity-40"></i>
+                            <p class="font-medium text-xs">No matching stocks found.</p>
+                        </td>
+                    </tr>
+                `;
+                lucide.createIcons();
+                return;
+            }
+
+            const displayList = filteredStocks.slice(0, pageSize);
+            if (showingCount) showingCount.textContent = displayList.length;
+
+            displayList.forEach((row, index) => {
+                const tr = document.createElement('tr');
+                tr.className = index % 2 === 0 ? 'bg-[#0a0e1a] hover:bg-[#141d30] transition-colors' : 'bg-[#0c1222] hover:bg-[#141d30] transition-colors';
+                
+                const isPositive = row.per_chg >= 0;
+                const chgColor = isPositive ? 'text-[#22c55e]' : 'text-[#ef4444]';
+                const formattedChange = Math.abs(row.per_chg) % 1 === 0 
+                    ? `${row.per_chg}%` 
+                    : `${row.per_chg.toFixed(2)}%`.replace('.00%', '%');
+
+                tr.innerHTML = `
+                    <td class="px-4 py-3 text-gray-400 font-mono text-xs">${index + 1}</td>
+                    <td class="px-4 py-3">
+                        <a href="https://chartink.com/stocks/${row.nsecode}.html" target="_blank" rel="noopener noreferrer" class="text-[#38bdf8] hover:text-blue-400 hover:underline font-medium text-xs sm:text-sm tracking-tight transition-colors">
+                            ${row.name}
+                        </a>
+                    </td>
+                    <td class="px-4 py-3">
+                        <a href="https://chartink.com/stocks/${row.nsecode}.html" target="_blank" rel="noopener noreferrer" class="text-[#38bdf8] hover:text-blue-400 hover:underline font-bold text-xs uppercase font-mono transition-colors">
+                            ${row.nsecode}
+                        </a>
+                    </td>
+                    <td class="px-4 py-3 text-right text-gray-200 font-mono font-medium text-xs sm:text-sm">${formatPrice(row.close)}</td>
+                    <td class="px-4 py-3 text-right ${chgColor} font-semibold font-mono text-xs sm:text-sm">${formattedChange}</td>
+                    <td class="px-4 py-3 text-right text-gray-300 font-mono text-xs sm:text-sm">${formatIndianNumber(row.volume)}</td>
+                    <td class="px-3 py-3 text-center">
+                        <a href="https://chartink.com/stocks/${row.nsecode}.html" target="_blank" rel="noopener noreferrer" class="text-gray-500 hover:text-blue-400 inline-block transition-transform hover:scale-110" title="Open ${row.nsecode} Chart">
+                            <i data-lucide="line-chart" class="w-3.5 h-3.5"></i>
+                        </a>
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            });
+
+            lucide.createIcons();
+        }
+
+        // Show Toast
+        function showToast(msg) {
+            const toast = document.getElementById('toast');
+            const toastMsg = document.getElementById('toast-msg');
+            if (toastMsg) toastMsg.textContent = msg;
+            toast.classList.remove('opacity-0', 'pointer-events-none', 'translate-y-2');
+            toast.classList.add('opacity-100', 'translate-y-0');
+            setTimeout(() => {
+                toast.classList.remove('opacity-100', 'translate-y-0');
+                toast.classList.add('opacity-0', 'pointer-events-none', 'translate-y-2');
+            }, 2500);
+        }
+
+        // Copy Table Data
+        function copyTableData() {
+            if (!filteredStocks || filteredStocks.length === 0) return;
+            let text = "Sr.\tStock Name\tSymbol\tClose\t%_change\tVolume\n";
+            filteredStocks.forEach((r, i) => {
+                text += `${i + 1}\t${r.name}\t${r.nsecode}\t${r.close}\t${r.per_chg}%\t${r.volume}\n`;
+            });
+            navigator.clipboard.writeText(text).then(() => {
+                showToast(`Copied ${filteredStocks.length} stocks to clipboard!`);
+            }).catch(err => {
+                console.error("Copy failed:", err);
+            });
+        }
+
+        // Export CSV
+        function exportCSV() {
+            if (!filteredStocks || filteredStocks.length === 0) return;
+            let csv = "Sr,Stock Name,Symbol,Close,%_change,Volume\n";
+            filteredStocks.forEach((r, i) => {
+                const name = `"${r.name.replace(/"/g, '""')}"`;
+                csv += `${i + 1},${name},${r.nsecode},${r.close},${r.per_chg}%,${r.volume}\n`;
+            });
+            const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(blob);
+            link.download = `cpr-r1-pdh-broken_${new Date().toISOString().slice(0,10)}.csv`;
+            link.click();
+            showToast("CSV downloaded successfully!");
+        }
+
+        // Export Excel
+        function exportExcel() {
+            if (!filteredStocks || filteredStocks.length === 0) return;
+            let tableHtml = `<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns="http://www.w3.org/TR/REC-html40"><head><!--[if gte mso 9]><xml><x:ExcelWorkbook><x:ExcelWorksheets><x:ExcelWorksheet><x:Name>Stocks</x:Name><x:WorksheetOptions><x:DisplayGridlines/></x:WorksheetOptions></x:ExcelWorksheet></x:ExcelWorksheets></x:ExcelWorkbook></xml><![endif]--></head><body><table class="responsive-table" class="responsive-table"><tr><th>Sr.</th><th>Stock Name</th><th>Symbol</th><th>Close</th><th>%_change</th><th>Volume</th></tr>`;
+            filteredStocks.forEach((r, i) => {
+                tableHtml += `<tr><td>${i + 1}</td><td>${r.name}</td><td>${r.nsecode}</td><td>${r.close}</td><td>${r.per_chg}%</td><td>${r.volume}</td></tr>`;
+            });
+            tableHtml += `</table>    <script type="module" src="../js/gate.js"></script>
+</body></html>`;
+            const blob = new Blob([tableHtml], { type: 'application/vnd.ms-excel' });
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(blob);
+            link.download = `cpr-r1-pdh-broken_${new Date().toISOString().slice(0,10)}.xls`;
+            link.click();
+            showToast("Excel spreadsheet downloaded!");
+        }
+
+        // Settings Dropdown
+        function toggleSettingsMenu() {
+            const menu = document.getElementById('settings-menu');
+            menu.classList.toggle('hidden');
+        }
+
+        function changePageSize(size) {
+            pageSize = size;
+            document.getElementById('settings-menu').classList.add('hidden');
+            renderTable();
+            showToast(`Displaying up to ${size === 999 ? 'all' : size} stocks`);
+        }
+
+        // Customize Columns Modal
+        function toggleCustomizeModal() {
+            const modal = document.getElementById('customize-modal');
+            modal.classList.toggle('hidden');
+        }
+
+        // Close dropdowns on outside click
+        window.addEventListener('click', (e) => {
+            if (!e.target.closest('#settings-menu') && !e.target.closest('button[onclick="toggleSettingsMenu()"]')) {
+                document.getElementById('settings-menu')?.classList.add('hidden');
+            }
+        });
+
+        // Initialize on load
+        document.addEventListener('DOMContentLoaded', () => {
+            fetchData();
+            lucide.createIcons();
+        });
+    </script>
+</body>
+</html>

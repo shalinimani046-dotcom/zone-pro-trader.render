@@ -1,0 +1,18 @@
+# Render "Blueprint": one web service that serves the API *and* the website.
+services:
+  - type: web
+    name: zone-pro-trader
+    runtime: node
+    rootDir: backend
+    buildCommand: npm install
+    startCommand: npm start
+    healthCheckPath: /health
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: FIREBASE_SERVICE_ACCOUNT_BASE64
+        sync: false
+      - key: PAYMENTS_ENABLED
+        value: "false"
+      - key: ADMIN_EMAILS
+        sync: false

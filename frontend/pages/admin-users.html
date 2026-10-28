@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manage Users - Zone Pro Trader</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>body { font-family: 'Inter', sans-serif; }</style>
+</head>
+<body class="bg-gray-50 text-gray-800 min-h-screen">
+<div class="max-w-6xl mx-auto px-4 sm:px-6 py-8">
+
+    <div class="flex items-center justify-between mb-8">
+        <div>
+            <h1 class="text-2xl font-bold text-gray-900">Manage Users</h1>
+            <p class="text-sm text-gray-500">Only the people listed here can log in. Everyone else is blocked.</p>
+        </div>
+        <a href="dashboard.html" class="text-sm font-medium text-gray-500 hover:text-gray-900">&larr; Back to dashboard</a>
+    </div>
+
+    <!-- Add user -->
+    <form id="add-form" class="bg-white rounded-xl border border-gray-200 shadow-sm p-5 mb-6 grid grid-cols-1 md:grid-cols-5 gap-3 items-end">
+        <div class="md:col-span-2">
+            <label class="block text-xs font-semibold text-gray-600 mb-1 uppercase tracking-wider">Email *</label>
+            <input id="f-email" type="email" required placeholder="trader@example.com" class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-green-500">
+        </div>
+        <div>
+            <label class="block text-xs font-semibold text-gray-600 mb-1 uppercase tracking-wider">Name</label>
+            <input id="f-name" type="text" maxlength="100" placeholder="Full name" class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-green-500">
+        </div>
+        <div>
+            <label class="block text-xs font-semibold text-gray-600 mb-1 uppercase tracking-wider">Password (optional)</label>
+            <input id="f-password" type="text" minlength="8" autocomplete="off" placeholder="min 8 chars" class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-green-500">
+        </div>
+        <div>
+            <label class="block text-xs font-semibold text-gray-600 mb-1 uppercase tracking-wider">Access until (optional)</label>
+            <input id="f-until" type="date" class="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-green-500">
+        </div>
+        <div class="md:col-span-5 flex items-center justify-between gap-4">
+            <p class="text-xs text-gray-500">Leave the password empty to get a link the person uses to choose their own password. People can also sign in with Google using this email.</p>
+            <button id="add-btn" type="submit" class="shrink-0 bg-green-600 text-white font-bold px-5 py-2 rounded-lg hover:bg-green-700 text-sm">Add user</button>
+        </div>
+    </form>
+
+    <div id="msg" class="hidden mb-6 p-4 rounded-xl border text-sm"></div>
+
+    <!-- List -->
+    <div class="bg-white rounded-xl border border-gray-200 shadow-sm overflow-x-auto">
+        <table class="w-full text-sm">
+            <thead class="bg-gray-50 text-left text-xs uppercase tracking-wider text-gray-500">
+                <tr><th class="px-4 py-3">User</th><th class="px-4 py-3">Status</th><th class="px-4 py-3">Access until</th><th class="px-4 py-3">Added</th><th class="px-4 py-3 text-right">Actions</th></tr>
+            </thead>
+            <tbody id="rows"><tr><td colspan="5" class="px-4 py-8 text-center text-gray-400">Loading...</td></tr></tbody>
+        </table>
+    </div>
+</div>
+
+<script type="module">
+    import { auth } from "../js/api-auth.js";
+
+    const $ = (id) => document.getElementById(id);
+    const fmt = (ms) => ms ? new Date(ms).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' }) : '-';
+
+    function show(text, kind, linkText) {
+        const el = $('msg');
+        el.textContent = '';
+        el.className = 'mb-6 p-4 rounded-xl border text-sm ' + (kind === 'ok' ? 'bg-green-50 border-green-200 text-green-800' : 'bg-red-50 border-red-200 text-red-700');
+        const p = document.createElement('p'); p.textContent = text; el.appendChild(p);
+        if (linkText) {
+            const box = document.createElement('input');
+            box.readOnly = true; box.value = linkText; box.className = 'mt-2 w-full border border-gray-300 rounded px-2 py-1 text-xs bg-white text-gray-700';
+            box.addEventListener('focus', () => box.select());
+            const b = document.createElement('button');
+            b.textContent = 'Copy link'; b.className = 'mt-2 text-xs font-bold underline';
+            b.onclick = () => navigator.clipboard.writeText(linkText).then(() => { b.textContent = 'Copied!'; });
+            el.append(box, b);
+        }
+    }
+
+    async function api(method, url, body) {
+        const r = await fetch(url, { method, headers: { 'Content-Type': 'application/json' }, body: body ? JSON.stringify(body) : undefined });
+        const j = await r.json().catch(() => ({}));
+        if (!r.ok) throw new Error(j.message || (j.details && 'Please check the details you entered.') || 'Request failed (' + r.status + ')');
+        return j;
+    }
+
+    function btn(label, onClick, cls) {
+        const b = document.createElement('button');
+        b.textContent = label; b.className = 'px-2.5 py-1 rounded-md text-xs font-semibold border ' + (cls || 'border-gray-300 text-gray-700 hover:bg-gray-50');
+        b.onclick = onClick; return b;
+    }
+
+    async function load() {
+        const { users } = await api('GET', '/api/admin/users');
+        const tbody = $('rows'); tbody.textContent = '';
+        if (!users.length) { tbody.innerHTML = '<tr><td colspan="5" class="px-4 py-8 text-center text-gray-400">No users yet. Add the first one above.</td></tr>'; return; }
+        for (const u of users) {
+            const expired = u.accessUntil && u.accessUntil < Date.now();
+            const tr = document.createElement('tr'); tr.className = 'border-t border-gray-100';
+
+            const c1 = document.createElement('td'); c1.className = 'px-4 py-3';
+            const n = document.createElement('div'); n.className = 'font-semibold text-gray-900'; n.textContent = (u.name || u.email.split('@')[0]) + (u.isAdmin ? '  (admin)' : '');
+            const e = document.createElement('div'); e.className = 'text-xs text-gray-500'; e.textContent = u.email;
+            c1.append(n, e);
+
+            const c2 = document.createElement('td'); c2.className = 'px-4 py-3';
+            const badge = document.createElement('span');
+            const state = !u.active ? ['Disabled', 'bg-red-100 text-red-700'] : expired ? ['Expired', 'bg-amber-100 text-amber-800'] : ['Active', 'bg-green-100 text-green-700'];
+            badge.textContent = state[0]; badge.className = 'px-2 py-0.5 rounded-full text-xs font-bold ' + state[1];
+            c2.appendChild(badge);
+
+            const c3 = document.createElement('td'); c3.className = 'px-4 py-3 text-gray-600'; c3.textContent = u.accessUntil ? fmt(u.accessUntil) : 'No expiry';
+            const c4 = document.createElement('td'); c4.className = 'px-4 py-3 text-gray-600'; c4.textContent = fmt(u.createdAt);
+
+            const c5 = document.createElement('td'); c5.className = 'px-4 py-3';
+            const wrap = document.createElement('div'); wrap.className = 'flex flex-wrap gap-1.5 justify-end';
+            const enc = encodeURIComponent(u.email);
+            if (!u.isAdmin) {
+                wrap.appendChild(btn(u.active ? 'Disable' : 'Enable', async () => {
+                    try { await api('PATCH', '/api/admin/users/' + enc, { active: !u.active }); show(u.email + (u.active ? ' can no longer log in.' : ' can log in again.'), 'ok'); load(); } catch (x) { show(x.message, 'err'); }
+                }, u.active ? 'border-red-200 text-red-600 hover:bg-red-50' : 'border-green-300 text-green-700 hover:bg-green-50'));
+                wrap.appendChild(btn('Set expiry', async () => {
+                    const v = prompt('Access until (YYYY-MM-DD). Leave empty for no expiry:', u.accessUntil ? new Date(u.accessUntil).toISOString().slice(0, 10) : '');
+                    if (v === null) return;
+                    try { await api('PATCH', '/api/admin/users/' + enc, { accessUntil: v.trim() || null }); show('Expiry updated for ' + u.email + '.', 'ok'); load(); } catch (x) { show(x.message, 'err'); }
+                }));
+            }
+            wrap.appendChild(btn('Password link', async () => {
+                try { const r = await api('POST', '/api/admin/users/' + enc + '/reset-link'); show('Send this link to ' + u.email + ' so they can set a password:', 'ok', r.resetLink); } catch (x) { show(x.message, 'err'); }
+            }));
+            if (!u.isAdmin) {
+                wrap.appendChild(btn('Delete', async () => {
+                    if (!confirm('Delete ' + u.email + '? They will lose access permanently.')) return;
+                    try { await api('DELETE', '/api/admin/users/' + enc); show(u.email + ' was deleted.', 'ok'); load(); } catch (x) { show(x.message, 'err'); }
+                }, 'border-red-200 text-red-600 hover:bg-red-50'));
+            }
+            c5.appendChild(wrap);
+            tr.append(c1, c2, c3, c4, c5); tbody.appendChild(tr);
+        }
+    }
+
+    $('add-form').addEventListener('submit', async (ev) => {
+        ev.preventDefault();
+        const b = $('add-btn'); b.disabled = true;
+        try {
+            const body = { email: $('f-email').value.trim(), name: $('f-name').value.trim() };
+            if ($('f-password').value) body.password = $('f-password').value;
+            if ($('f-until').value) body.accessUntil = $('f-until').value;
+            const r = await api('POST', '/api/admin/users', body);
+            show(r.resetLink ? r.user.email + ' added. Send them this link to set their password (or they can use Google sign-in):' : r.user.email + ' added. They can log in now.', 'ok', r.resetLink);
+            ev.target.reset(); load();
+        } catch (x) { show(x.message, 'err'); }
+        b.disabled = false;
+    });
+
+    (async () => { await auth.authStateReady(); load().catch((x) => show(x.message, 'err')); })();
+</script>
+</body>
+</html>

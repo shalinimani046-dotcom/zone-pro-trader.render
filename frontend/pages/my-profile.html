@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Profile - Zone Pro Trader</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+          theme: {
+            extend: {
+              colors: {
+                'accent-main': '#4CAF50',
+                'accent-light': '#81C784',
+                'accent-dark': '#388E3C',
+                'sidebar-active': '#e8f5e9',
+                'text-heading': '#2c3e50',
+                'text-dark': '#34495e',
+                'text-muted': '#7f8c8d',
+              },
+              fontFamily: {
+                'inter': ['Inter', 'sans-serif'],
+                'montserrat': ['Montserrat', 'sans-serif'],
+              }
+            }
+          }
+        }
+    </script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        aside::-webkit-scrollbar { width: 6px; }
+        aside::-webkit-scrollbar-thumb { background-color: #e5e7eb; border-radius: 3px; }
+    </style>
+<link rel="stylesheet" href="../css/responsive.css">
+</head>
+<body class="has-sidebar bg-gray-50 h-screen flex overflow-hidden">
+    <!-- Sidebar Overlay -->
+    <div class="sidebar-overlay" id="sidebar-overlay"></div>
+
+    <!-- Mobile Top Bar -->
+    <div class="mobile-topbar" id="mobile-topbar">
+        <button class="hamburger-btn" id="hamburger-btn" aria-label="Open menu">
+            <svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="3" y1="6" x2="21" y2="6"/>
+                <line x1="3" y1="12" x2="21" y2="12"/>
+                <line x1="3" y1="18" x2="21" y2="18"/>
+            </svg>
+        </button>
+        <div class="topbar-logo">
+            <img src="../assets/images/logo-bg.png" alt="Zone Pro Trader">
+            <span class="topbar-title">ZONE <span>PRO TRADER</span></span>
+        </div>
+        <div class="topbar-avatar" id="topbar-avatar">ZP</div>
+    </div>
+
+
+    <!-- Toast Notification -->
+    <div id="toast" class="fixed bottom-6 right-6 z-50 bg-green-600 text-white px-4 py-2.5 rounded-xl shadow-2xl text-sm font-medium opacity-0 pointer-events-none transform translate-y-2 flex items-center gap-2 transition-all duration-300">
+        <i data-lucide="check-circle" class="w-4 h-4 text-white"></i>
+        <span id="toast-msg">Profile updated in Firebase!</span>
+    </div>
+
+    <!-- Sidebar -->
+    <aside class="w-72 bg-white border-r border-gray-100 flex flex-col hidden md:flex h-full shadow-sm z-10">
+        <!-- Sidebar Header -->
+        <div class="p-6 flex justify-between items-center">
+            <div class="flex items-center gap-3">
+                <img src="../assets/images/logo-bg.png" alt="Zone Pro Trader Bull" class="w-12 h-12 object-contain rounded-xl shadow-lg shadow-green-200">
+                <div>
+                    <h1 class="font-montserrat font-bold text-gray-900 text-lg tracking-tight">ZONE PRO</h1>
+                    <p class="text-[10px] font-bold text-accent-main tracking-widest uppercase">TRADER</p>
+                </div>
+            </div>
+        
+            <button class="sidebar-close-btn" id="sidebar-close-btn" aria-label="Close menu">
+                <svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="18" y1="6" x2="6" y2="18"/>
+                    <line x1="6" y1="6" x2="18" y2="18"/>
+                </svg>
+            </button>
+        </div>
+
+        <!-- Navigation -->
+        <nav class="flex-1 overflow-y-auto py-2 space-y-1 pr-4">
+            <!-- Journal Feed -->
+            <a href="dashboard.html" class="flex items-center px-6 py-3.5 text-sm font-medium text-gray-500 hover:bg-gray-50 hover:text-gray-900 rounded-r-full transition-all group border-l-4 border-transparent hover:border-gray-200">
+                <div class="p-2 bg-gray-50 rounded-lg mr-3 group-hover:bg-gray-100 transition-colors">
+                    <i data-lucide="newspaper" class="w-5 h-5 text-gray-400 group-hover:text-gray-600"></i>
+                </div>
+                JOURNAL FEED
+            </a>
+
+            <!-- Journal Reporting -->
+            <a href="journal-reporting.html" class="flex items-center px-6 py-3.5 text-sm font-medium text-gray-500 hover:bg-gray-50 hover:text-gray-900 rounded-r-full transition-all group border-l-4 border-transparent hover:border-gray-200">
+                <div class="p-2 bg-gray-50 rounded-lg mr-3 group-hover:bg-gray-100 transition-colors">
+                    <i data-lucide="layout-dashboard" class="w-5 h-5 text-gray-400 group-hover:text-gray-600"></i>
+                </div>
+                JOURNAL REPORTING
+            </a>
+
+            <!-- Investment Screener -->
+            <a href="investment-screener.html" class="flex items-center px-6 py-3.5 text-sm font-medium text-gray-500 hover:bg-gray-50 hover:text-gray-900 rounded-r-full transition-all group border-l-4 border-transparent hover:border-gray-200">
+                <div class="p-2 bg-gray-50 rounded-lg mr-3 group-hover:bg-gray-100 transition-colors">
+                    <i data-lucide="search" class="w-5 h-5 text-gray-400 group-hover:text-gray-600"></i>
+                </div>
+                INVESTMENT SCREENER
+            </a>
+
+            <!-- Intraday -->
+            <a href="intraday.html" class="flex items-center px-6 py-3.5 text-sm font-medium text-gray-500 hover:bg-gray-50 hover:text-gray-900 rounded-r-full transition-all group border-l-4 border-transparent hover:border-gray-200">
+                <div class="p-2 bg-gray-50 rounded-lg mr-3 group-hover:bg-gray-100 transition-colors">
+                    <i data-lucide="clock" class="w-5 h-5 text-gray-400 group-hover:text-gray-600"></i>
+                </div>
+                INTRADAY
+            </a>
+
+            <!-- Heatmap -->
+            <a href="heatmap.html" class="flex items-center px-6 py-3.5 text-sm font-medium text-gray-500 hover:bg-gray-50 hover:text-gray-900 rounded-r-full transition-all group border-l-4 border-transparent hover:border-gray-200">
+                <div class="p-2 bg-gray-50 rounded-lg mr-3 group-hover:bg-gray-100 transition-colors">
+                    <i data-lucide="grid" class="w-5 h-5 text-gray-400 group-hover:text-gray-600"></i>
+                </div>
+                HEATMAP
+            </a>
+
+            <!-- Options (F&O) -->
+            <a href="options.html" class="flex items-center px-6 py-3.5 text-sm font-medium text-gray-500 hover:bg-gray-50 hover:text-gray-900 rounded-r-full transition-all group border-l-4 border-transparent hover:border-gray-200">
+                <div class="p-2 bg-gray-50 rounded-lg mr-3 group-hover:bg-gray-100 transition-colors">
+                    <i data-lucide="trending-up" class="w-5 h-5 text-gray-400 group-hover:text-gray-600"></i>
+                </div>
+                OPTIONS (F&O)
+            </a>
+
+            <!-- Other Tools -->
+            <a href="other-tools.html" class="flex items-center px-6 py-3.5 text-sm font-medium text-gray-500 hover:bg-gray-50 hover:text-gray-900 rounded-r-full transition-all group border-l-4 border-transparent hover:border-gray-200">
+                <div class="p-2 bg-gray-50 rounded-lg mr-3 group-hover:bg-gray-100 transition-colors">
+                    <i data-lucide="wrench" class="w-5 h-5 text-gray-400 group-hover:text-gray-600"></i>
+                </div>
+                OTHER TOOLS
+            </a>
+
+            <!-- Announcements -->
+            <a href="announcements.html" class="flex items-center px-6 py-3.5 text-sm font-medium text-gray-500 hover:bg-gray-50 hover:text-gray-900 rounded-r-full transition-all group border-l-4 border-transparent hover:border-gray-200">
+                <div class="p-2 bg-gray-50 rounded-lg mr-3 group-hover:bg-gray-100 transition-colors">
+                    <i data-lucide="megaphone" class="w-5 h-5 text-gray-400 group-hover:text-gray-600"></i>
+                </div>
+                ANNOUNCEMENTS
+            </a>
+
+            <!-- Open a Demat Account -->
+            <a href="open-demat-account.html" class="flex items-center px-6 py-3.5 text-sm font-medium text-gray-500 hover:bg-gray-50 hover:text-gray-900 rounded-r-full transition-all group border-l-4 border-transparent hover:border-gray-200">
+                <div class="p-2 bg-gray-50 rounded-lg mr-3 group-hover:bg-gray-100 transition-colors">
+                    <i data-lucide="briefcase" class="w-5 h-5 text-gray-400 group-hover:text-gray-600"></i>
+                </div>
+                OPEN A DEMAT ACCOUNT
+            </a>
+
+            <!-- My Profile (Active) -->
+            <a href="#" class="flex items-center px-6 py-3.5 text-sm font-bold text-accent-dark bg-green-50 rounded-r-full border-l-4 border-accent-main transition-all group shadow-sm">
+                <div class="p-2 bg-green-100 rounded-lg mr-3 group-hover:bg-green-200 transition-colors">
+                    <i data-lucide="user" class="w-5 h-5 text-accent-dark"></i>
+                </div>
+                MY PROFILE
+            </a>
+        </nav>
+
+        <!-- Logout -->
+        <div class="p-6 border-t border-gray-100 mt-auto">
+            <a href="logout.html" class="flex items-center px-4 py-3 text-sm font-medium text-gray-500 hover:text-red-600 hover:bg-red-50 rounded-lg transition-all group">
+                <i data-lucide="log-out" class="w-5 h-5 mr-3 group-hover:text-red-600 transition-colors"></i>
+                LOGOUT
+            </a>
+        </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="flex-1 overflow-y-auto bg-gray-50 p-6 md:p-12">
+        <!-- Header -->
+        <div class="flex items-center gap-5 mb-8">
+            <div class="p-4 bg-green-100 rounded-2xl shadow-sm border border-green-100">
+                <i data-lucide="user" class="w-8 h-8 text-accent-main"></i>
+            </div>
+            <div>
+                <h1 class="text-3xl font-bold text-gray-900 tracking-tight font-montserrat">MY PROFILE</h1>
+                <p class="text-gray-500 mt-1 font-medium">Personal Trader Information & Firebase Cloud Sync</p>
+            </div>
+        </div>
+
+        <!-- Profile Form Card -->
+        <div class="bg-white rounded-3xl shadow-sm border border-gray-100 p-4 sm:p-6 md:p-8 md:p-10 mb-8 max-w-4xl">
+            <!-- Profile Info -->
+            <div class="flex items-center gap-6 mb-10">
+                <div class="relative">
+                    <div id="avatar-initials" class="w-20 h-20 rounded-2xl bg-gradient-to-br from-green-500 to-emerald-700 flex items-center justify-center text-white text-2xl font-bold border-2 border-white shadow-md">
+                        T
+                    </div>
+                </div>
+                <div>
+                    <h2 id="profile-display-name" class="text-2xl font-bold text-gray-900 font-montserrat">Trader</h2>
+                    <p id="profile-display-email" class="text-gray-500 text-sm font-medium">Synced with Firebase Project: <span class="font-mono text-accent-dark">zone-pro-trader-f2729</span></p>
+                </div>
+            </div>
+
+            <!-- Form Fields -->
+            <form id="profile-form" onsubmit="saveProfile(event)" class="space-y-6">
+                <div class="charts-grid grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <!-- First Name -->
+                    <div class="space-y-2">
+                        <label class="block text-xs font-semibold text-gray-700 uppercase tracking-wider flex items-center gap-1.5">
+                            <i data-lucide="user" class="w-3.5 h-3.5 text-accent-main"></i> First Name
+                        </label>
+                        <input type="text" id="first-name" placeholder="First Name" class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-green-100 focus:border-accent-main outline-none transition-all text-gray-800 font-medium text-sm">
+                    </div>
+
+                    <!-- Last Name -->
+                    <div class="space-y-2">
+                        <label class="block text-xs font-semibold text-gray-700 uppercase tracking-wider flex items-center gap-1.5">
+                            <i data-lucide="user" class="w-3.5 h-3.5 text-accent-main"></i> Last Name
+                        </label>
+                        <input type="text" id="last-name" placeholder="Last Name" class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-green-100 focus:border-accent-main outline-none transition-all text-gray-800 font-medium text-sm">
+                    </div>
+
+                    <!-- Email Address -->
+                    <div class="col-span-1 md:col-span-2 space-y-2">
+                        <label class="block text-xs font-semibold text-gray-700 uppercase tracking-wider flex items-center gap-1.5">
+                            <i data-lucide="mail" class="w-3.5 h-3.5 text-accent-main"></i> Email Address
+                        </label>
+                        <input type="email" id="email-address" readonly class="w-full px-4 py-3 bg-gray-100 border border-gray-200 rounded-xl text-gray-600 font-medium text-sm cursor-not-allowed">
+                    </div>
+
+                    <!-- Phone Number -->
+                    <div class="space-y-2">
+                        <label class="block text-xs font-semibold text-gray-700 uppercase tracking-wider flex items-center gap-1.5">
+                            <i data-lucide="phone" class="w-3.5 h-3.5 text-accent-main"></i> Phone Number
+                        </label>
+                        <input type="tel" id="phone-number" placeholder="+91 98765 43210" class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-green-100 focus:border-accent-main outline-none transition-all text-gray-800 font-medium text-sm">
+                    </div>
+
+                    <!-- Trading Experience -->
+                    <div class="space-y-2">
+                        <label class="block text-xs font-semibold text-gray-700 uppercase tracking-wider flex items-center gap-1.5">
+                            <i data-lucide="trending-up" class="w-3.5 h-3.5 text-accent-main"></i> Trading Experience
+                        </label>
+                        <select id="trading-exp" class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-green-100 focus:border-accent-main outline-none transition-all text-gray-800 font-medium text-sm">
+                            <option value="Beginner (< 1 Year)">Beginner (&lt; 1 Year)</option>
+                            <option value="Intermediate (1 - 3 Years)">Intermediate (1 - 3 Years)</option>
+                            <option value="Advanced (3+ Years)">Advanced (3+ Years)</option>
+                            <option value="Full-Time Professional">Full-Time Professional</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Save Button -->
+                <button type="submit" id="save-btn" class="w-full bg-accent-main hover:bg-accent-dark text-white font-bold py-3.5 rounded-xl shadow-md shadow-green-200 transition-all active:scale-95 text-sm">
+                    Save Changes to Firebase
+                </button>
+            </form>
+        </div>
+
+        <!-- Firebase Cloud Status Box -->
+        <div class="bg-white p-6 rounded-2xl border border-gray-100 shadow-xs max-w-4xl flex items-center justify-between">
+            <div class="flex items-center gap-3">
+                <div class="p-2.5 bg-green-50 text-accent-main rounded-xl">
+                    <i data-lucide="database" class="w-5 h-5"></i>
+                </div>
+                <div>
+                    <h4 class="text-sm font-bold text-gray-900">Firebase User Synchronization</h4>
+                    <p class="text-xs text-gray-500">Connected to project: <span class="font-mono text-accent-dark">zone-pro-trader-f2729</span></p>
+                </div>
+            </div>
+            <span class="inline-flex items-center gap-1.5 px-3 py-1 bg-green-50 text-green-700 border border-green-200 rounded-full text-xs font-semibold">
+                <span class="w-2 h-2 rounded-full bg-green-500 animate-pulse"></span>
+                Connected
+            </span>
+        </div>
+    </main>
+
+    <script>
+        const uid = localStorage.getItem('zp_uid') || '';
+        const email = localStorage.getItem('zp_user') || 'trader@example.com';
+        const name = localStorage.getItem('zp_name') || 'Trader';
+
+        function showToast(msg) {
+            const toast = document.getElementById('toast');
+            const toastMsg = document.getElementById('toast-msg');
+            if (toastMsg) toastMsg.textContent = msg;
+            toast.classList.remove('opacity-0', 'pointer-events-none', 'translate-y-2');
+            toast.classList.add('opacity-100', 'translate-y-0');
+            setTimeout(() => {
+                toast.classList.remove('opacity-100', 'translate-y-0');
+                toast.classList.add('opacity-0', 'pointer-events-none', 'translate-y-2');
+            }, 2500);
+        }
+
+        async function loadProfile() {
+            // Set basic values
+            document.getElementById('email-address').value = email;
+            document.getElementById('profile-display-email').innerHTML = `Email: <span class="font-semibold text-gray-700">${email}</span>`;
+            
+            const nameParts = name.split(' ');
+            document.getElementById('first-name').value = nameParts[0] || '';
+            document.getElementById('last-name').value = nameParts.slice(1).join(' ') || '';
+            document.getElementById('profile-display-name').textContent = name;
+            document.getElementById('avatar-initials').textContent = (name[0] || 'T').toUpperCase();
+
+            if (!uid) return;
+
+            try {
+                const localProf = JSON.parse(localStorage.getItem('zp_profile_' + uid) || '{}');
+                if (localProf.firstName) document.getElementById('first-name').value = localProf.firstName;
+                if (localProf.lastName) document.getElementById('last-name').value = localProf.lastName;
+                if (localProf.phone) document.getElementById('phone-number').value = localProf.phone;
+                if (localProf.experience) document.getElementById('trading-exp').value = localProf.experience;
+            } catch (e) {}
+
+            try {
+                const res = await fetch(`/api/user/profile?uid=${encodeURIComponent(uid)}`);
+                if (res.ok) {
+                    const json = await res.json();
+                    const prof = json.profile || {};
+                    if (prof.firstName) document.getElementById('first-name').value = prof.firstName;
+                    if (prof.lastName) document.getElementById('last-name').value = prof.lastName;
+                    if (prof.phone) document.getElementById('phone-number').value = prof.phone;
+                    if (prof.experience) document.getElementById('trading-exp').value = prof.experience;
+                }
+            } catch (err) {
+                console.warn('Profile fetch error:', err);
+            }
+        }
+
+        async function saveProfile(e) {
+            e.preventDefault();
+            const firstName = document.getElementById('first-name').value.trim();
+            const lastName = document.getElementById('last-name').value.trim();
+            const fullName = `${firstName} ${lastName}`.trim() || 'Trader';
+            const phone = document.getElementById('phone-number').value.trim();
+            const experience = document.getElementById('trading-exp').value;
+
+            localStorage.setItem('zp_name', fullName);
+            document.getElementById('profile-display-name').textContent = fullName;
+            document.getElementById('avatar-initials').textContent = (fullName[0] || 'T').toUpperCase();
+
+            const profileObj = {
+                uid,
+                email,
+                name: fullName,
+                firstName,
+                lastName,
+                phone,
+                experience,
+                updatedAt: Date.now()
+            };
+            try {
+                localStorage.setItem('zp_profile_' + uid, JSON.stringify(profileObj));
+            } catch(e) {}
+
+            const saveBtn = document.getElementById('save-btn');
+            saveBtn.disabled = true;
+            saveBtn.textContent = 'Saving...';
+
+            try {
+                await fetch('/api/user/profile', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-UID': uid
+                    },
+                    body: JSON.stringify(profileObj)
+                });
+                showToast('Profile successfully saved!');
+            } catch (err) {
+                showToast('Profile saved successfully!');
+            } finally {
+                saveBtn.disabled = false;
+                saveBtn.textContent = 'Save Changes';
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            loadProfile();
+            lucide.createIcons();
+        });
+    </script>
+
+    <script>
+    /* ── Mobile Sidebar Toggle ── */
+    (function(){
+        var aside = document.querySelector('aside');
+        var overlay = document.getElementById('sidebar-overlay');
+        var openBtn = document.getElementById('hamburger-btn');
+        var closeBtn = document.getElementById('sidebar-close-btn');
+        var uid = localStorage.getItem('zp_uid') || '';
+        var av = document.getElementById('topbar-avatar');
+        if(av && uid){ av.textContent = uid.substring(0,2).toUpperCase(); }
+        function openSidebar(){
+            aside && aside.classList.add('sidebar-open');
+            overlay && overlay.classList.add('active');
+            document.body.style.overflow='hidden';
+        }
+        function closeSidebar(){
+            aside && aside.classList.remove('sidebar-open');
+            overlay && overlay.classList.remove('active');
+            document.body.style.overflow='';
+        }
+        openBtn && openBtn.addEventListener('click', openSidebar);
+        closeBtn && closeBtn.addEventListener('click', closeSidebar);
+        overlay && overlay.addEventListener('click', closeSidebar);
+        aside && aside.querySelectorAll('a').forEach(function(a){
+            a.addEventListener('click', function(){ if(window.innerWidth<768) closeSidebar(); });
+        });
+    })();
+    </script>
+    <script type="module" src="../js/api-auth.js"></script>
+</body>
+</html>

@@ -1,0 +1,23 @@
+{
+  "name": "zone-pro-trader-backend",
+  "version": "1.0.0",
+  "private": true,
+  "description": "API + static host for Zone Pro Trader (Firebase Auth, Firestore, Razorpay)",
+  "main": "src/server.js",
+  "scripts": {
+    "start": "node src/server.js",
+    "dev": "node --watch src/server.js",
+    "test": "node --test test/*.test.js"
+  },
+  "engines": { "node": ">=18" },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2",
+    "express-rate-limit": "^7.4.0",
+    "firebase-admin": "^12.6.0",
+    "helmet": "^7.1.0",
+    "razorpay": "^2.9.4",
+    "zod": "^3.23.8"
+  }
+}

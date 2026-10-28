@@ -1,0 +1,311 @@
+/* Custom Tailwind Configuration (Attractive Light Theme Palette) */
+:root {
+    /* Backgrounds & Base Colors */
+    --primary-bg: #fffefe; 
+    --section-bg: #ffffff; 
+    --card-bg: #ffffff; 
+    --border-light: #e0e0e0; 
+    
+    /* Text Colors */
+    --text-heading: #2c3e50; 
+    --text-dark: #34495e; 
+    --text-muted: #7f8c8d; 
+    --text-light: #eff1f1; 
+    
+    /* Accent Colors */
+    --accent-main: #4CAF50; 
+    --accent-light: #81C784; 
+    --accent-dark: #388E3C; 
+    
+    /* Overlays */
+    --dark-overlay: #1e272e; 
+}
+
+/* Custom Styles for Background and Shadows */
+body {
+    font-family: 'Inter', sans-serif;
+    background-color: var(--primary-bg);
+    color: var(--text-dark);
+    overflow-x: hidden;
+}
+
+/* Utility Classes based on new variables */
+.bg-primary-bg { background-color: var(--primary-bg); }
+.bg-section-bg { background-color: var(--section-bg); }
+.bg-card-bg { background-color: var(--card-bg); }
+.border-border-light { border-color: var(--border-light); }
+
+.text-text-dark { color: var(--text-dark); }
+.text-text-heading { color: var(--text-heading); }
+.text-text-muted { color: var(--text-muted); }
+.text-text-light { color: var(--text-light); }
+.text-accent-main { color: var(--accent-main); }
+.text-accent-light { color: var(--accent-light); }
+
+/* Background Utilities */
+.bg-accent-main { background-color: var(--accent-main); }
+.bg-accent-light { background-color: var(--accent-light); }
+.bg-accent-dark { background-color: var(--accent-dark); }
+.hover\:bg-accent-dark:hover { background-color: var(--accent-dark); }
+
+/* Hero and CTA Backgrounds */
+.hero-bg {
+    background-image: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('../assets/images/bg-image.jpg');
+    background-size: cover;
+    background-position: center;
+}
+
+.cta-bg {
+    width: 100%;
+    margin: 0;
+    padding: 60px 0; 
+    background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.7)), url('../assets/images/dark-2-bg.jpg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+/* Card Hover Effect */
+.card-hover:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 25px rgba(0, 137, 123, 0.25); 
+    transition: all 0.3s ease-in-out;
+}
+
+.unique-bg {
+    background-image: linear-gradient(rgba(30, 30, 30, 0.8), rgba(30, 30, 30, 0.8)), url('../assets/images/prim-bg.avif');
+    background-size: cover;
+    background-position: center;
+    background-color: #1e1e1e; 
+}
+.faq-bg {
+    background-image: linear-gradient(rgba(30, 30, 30, 0.8), rgba(30, 30, 30, 0.8)), url('../assets/images/bg-js-2.jpg');
+    background-size: cover;
+    background-position: center;
+    background-color: #1e1e1e; 
+}
+.courses-bg {
+    background-image: linear-gradient(rgba(30, 30, 30, 0.8), rgba(30, 30, 30, 0.8)), url('../assets/images/bg-js3.jpg');
+    background-size: cover;
+    background-position: center;
+    background-color: #1e1e1e; 
+}
+
+/* WHATSAPP BUTTON - PULSE EFFECT & RESPONSIVE */
+.whatsapp-float {
+    position: fixed;
+    bottom: 30px;
+    left: 30px;
+    width: 180px; 
+    height: 65px; 
+    background: #388E3C; 
+    color: #ffffff; 
+    border-radius: 30px; 
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 6px 20px rgba(0, 255, 127, 0.5);
+    z-index: 999;
+    transition: all 0.3s ease-in-out; 
+    animation: pulse-green 2s infinite;
+    text-decoration: none;
+    font-family: 'Inter', sans-serif;
+    font-weight: 700;
+    font-size: 18px; 
+    padding: 0 15px;
+}
+
+/* Mobile specific style for Whatsapp Button (Just icon, no text) */
+@media (max-width: 768px) {
+    .whatsapp-float {
+        width: 60px;
+        height: 60px;
+        border-radius: 50%;
+        padding: 0;
+        bottom: 20px;
+        left: 20px;
+    }
+    .whatsapp-float span {
+        display: none !important; /* Hide text on mobile */
+    }
+    .whatsapp-float svg {
+        margin-right: 0 !important;
+        width: 32px !important;
+        height: 32px !important;
+    }
+}
+
+@keyframes pulse-green {
+    0% { box-shadow: 0 0 0 0 rgba(0, 255, 127, 0.4); }
+    70% { box-shadow: 0 0 0 20px rgba(0, 255, 127, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(0, 255, 127, 0); }
+}
+
+.whatsapp-float:hover {
+    transform: scale(1.05);
+    animation: none;
+}
+
+.whatsapp-float svg {
+    width: 28px; 
+    height: 28px; 
+    fill: #ffffff; 
+    margin-right: 10px; 
+}
+
+.whatsapp-float span {
+    display: inline;
+}
+
+/* REVIEWS SECTION */
+.reviews-section {
+    padding: 60px 20px;
+    background-color: #ffffff;
+    text-align: center;
+    font-family: 'Montserrat', sans-serif;
+}
+
+.reviews-header h2 {
+    font-size: 2.5rem;
+    font-weight: 700;
+    margin-bottom: 10px;
+    color: #1a1a1a;
+}
+@media (max-width: 768px) {
+    .reviews-header h2 {
+        font-size: 1.8rem; /* Smaller font on mobile */
+    }
+}
+
+.reviews-header span {
+    color: #388E3C; 
+}
+
+.reviews-header p {
+    color: #6b7280;
+    margin-bottom: 40px;
+}
+
+/* Scroll Viewport */
+.scroll-grid-viewport {
+    height: 600px; 
+    max-width: 1200px;
+    margin: 0 auto;
+    overflow: hidden; 
+    position: relative;
+    background-color: rgb(151, 193, 169);
+    border-radius: 16px;
+    border: 1px solid #e5e7eb;
+    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
+}
+
+@media (max-width: 768px) {
+    .scroll-grid-viewport {
+        height: 400px; /* Shorter viewport on mobile */
+    }
+}
+
+.fade-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 2;
+    pointer-events: none; 
+    background: linear-gradient(to bottom, 
+        rgba(255,255,255, 1) 0%, 
+        rgba(255,255,255, 0) 15%, 
+        rgba(255,255,255, 0) 85%, 
+        rgba(255,255,255, 1) 100%
+    );
+}
+
+/* Grid Layout */
+.reviews-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr); 
+    gap: 24px;
+    padding: 20px;
+    height: 100%;
+}
+
+@media (max-width: 768px) {
+    .reviews-grid {
+        grid-template-columns: 1fr; /* Single column on mobile */
+    }
+    /* Hide columns 2 and 3 on mobile handled in HTML classes now too */
+}
+
+.scroll-column {
+    position: relative;
+    height: 100%;
+    overflow: hidden;
+}
+
+.scroll-content img {
+    display: block;
+    width: 100%;
+    border-radius: 12px;
+    margin-bottom: 24px; 
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    border: 1px solid #f3f4f6;
+}
+
+.move-up { animation: scroll-up 40s linear infinite; }
+.move-down { animation: scroll-down 45s linear infinite; }
+
+.scroll-content:hover {
+    animation-play-state: paused;
+}
+
+@keyframes scroll-up {
+    0% { transform: translateY(0); }
+    100% { transform: translateY(-50%); }
+}
+
+@keyframes scroll-down {
+    0% { transform: translateY(-50%); }
+    100% { transform: translateY(0); }
+}
+
+@keyframes scroll {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
+}
+
+.animate-scroll {
+    display: flex;
+    width: max-content; 
+    animation: scroll 30s linear infinite; 
+}
+
+.animate-scroll:hover {
+    animation-play-state: paused;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+@keyframes ticker {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-50%); } 
+}
+
+.animate-ticker {
+    display: inline-flex;
+    white-space: nowrap;
+    animation: ticker 25s linear infinite; 
+}
+
+.animate-ticker:hover {
+    animation-play-state: paused;
+}
+.slide-in-top {
+    animation: slide-in-top 0.3s cubic-bezier(0.250, 0.460, 0.450, 0.940) both;
+}
+@keyframes slide-in-top {
+    0% { transform: translateY(-10px); opacity: 0; }
+    100% { transform: translateY(0); opacity: 1; }
+}

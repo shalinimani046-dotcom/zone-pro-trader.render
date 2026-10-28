@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Subscription Plan - Zone Pro Trader</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+          theme: {
+            extend: {
+              colors: {
+                'accent-main': '#4CAF50',
+                'accent-light': '#81C784',
+                'accent-dark': '#388E3C',
+              }
+            }
+          }
+        }
+    </script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        .custom-shadow { box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06); }
+        .selected-plan { border-color: #22c55e !important; background-color: #f0fdf4 !important; border-width: 2px !important; }
+        .selected-payment { border-color: #22c55e !important; background-color: #f0fdf4 !important; border-width: 2px !important; }
+        .plan-card, .payment-card { transition: all 0.2s ease-in-out; }
+        .plan-card:hover, .payment-card:hover { transform: translateY(-2px); box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1); }
+    </style>
+<link rel="stylesheet" href="../css/responsive.css">
+</head>
+<body class="has-sidebar bg-gray-50 text-gray-800 min-h-screen">
+    <!-- Sidebar Overlay -->
+    <div class="sidebar-overlay" id="sidebar-overlay"></div>
+
+    <!-- Mobile Top Bar -->
+    <div class="mobile-topbar" id="mobile-topbar">
+        <button class="hamburger-btn" id="hamburger-btn" aria-label="Open menu">
+            <svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="3" y1="6" x2="21" y2="6"/>
+                <line x1="3" y1="12" x2="21" y2="12"/>
+                <line x1="3" y1="18" x2="21" y2="18"/>
+            </svg>
+        </button>
+        <div class="topbar-logo">
+            <img src="../assets/images/logo-bg.png" alt="Zone Pro Trader">
+            <span class="topbar-title">ZONE <span>PRO TRADER</span></span>
+        </div>
+        <div class="topbar-avatar" id="topbar-avatar">ZP</div>
+    </div>
+
+
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
+        
+        <!-- Header -->
+        <div class="mb-10 flex items-center gap-4">
+            <div class="bg-orange-100 p-4 rounded-full flex items-center justify-center w-16 h-16">
+                <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="#f97316" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-package"><path d="m7.5 4.27 9 5.15"/><path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z"/><path d="m3.3 7 8.7 5 8.7-5"/><path d="M12 22v-9"/></svg>
+            </div>
+            <div>
+                <h1 class="text-3xl font-bold text-gray-900">Subscription Plan</h1>
+                <p class="text-gray-500 mt-1">Unlock instant access to all existing products and daily new releases.</p>
+            </div>
+        </div>
+
+        <div id="status-banner" class="hidden mb-8 p-4 rounded-xl border text-sm font-medium"></div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-10">
+            
+            <!-- Left Column: Choose Plan -->
+            <div class="space-y-6">
+                <div class="flex justify-between items-center mb-4">
+                    <h2 class="text-xl font-bold">Choose Plan</h2>
+                    <div class="bg-gray-100 p-1 rounded-lg flex text-sm font-medium">
+                        <button id="btn-quarterly" onclick="setTerm('quarterly')" class="bg-white shadow-sm px-4 py-1.5 rounded-md text-gray-900 transition-all">Quarterly</button>
+                        <button id="btn-yearly" onclick="setTerm('yearly')" class="px-4 py-1.5 rounded-md text-gray-500 hover:text-gray-700 transition-all">Yearly</button>
+                    </div>
+                </div>
+
+                <!-- Pro Plan -->
+                <div id="plan-pro" onclick="selectPlan('pro')" class="plan-card bg-white p-6 rounded-xl border border-gray-200 cursor-pointer">
+                    <div class="flex items-start justify-between">
+                        <div class="flex items-center gap-4">
+                            <div id="radio-pro" class="w-6 h-6 rounded-full border-2 border-gray-300 bg-white transition-colors"></div>
+                            <div>
+                                <h3 class="font-bold text-lg">Pro Plan</h3>
+                                <p class="text-gray-500 text-sm">Crafted for Individuals</p>
+                            </div>
+                        </div>
+                        <div class="text-right">
+                            <div class="font-bold text-xl price-display" data-plan="pro">...</div>
+                            <div class="text-xs text-gray-500 term-display">1 User / Quarterly</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Team Plan -->
+                <div id="plan-team" onclick="selectPlan('team')" class="plan-card bg-white p-6 rounded-xl border border-gray-200 cursor-pointer">
+                    <div class="flex items-start justify-between mb-4">
+                        <div class="flex items-center gap-4">
+                            <div id="radio-team" class="w-6 h-6 rounded-full border-2 border-gray-300 bg-white transition-colors"></div>
+                            <div>
+                                <h3 class="font-bold text-lg">Team Plan</h3>
+                                <p class="text-gray-500 text-sm">Crafted for small teams or business</p>
+                            </div>
+                        </div>
+                        <div class="text-right">
+                            <div class="font-bold text-xl price-display" data-plan="team">...</div>
+                            <div class="text-xs text-gray-500 term-display">5 User / Quarterly</div>
+                        </div>
+                    </div>
+
+                    <div class="space-y-3 ml-10 mb-6">
+                        <div class="flex items-center gap-2 text-sm text-gray-600">
+                            <svg class="w-4 h-4 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                            <span>50 downloads per day</span>
+                        </div>
+                        <div class="flex items-center gap-2 text-sm text-gray-600">
+                            <svg class="w-4 h-4 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                            <span>Access to all products or bundles.</span>
+                        </div>
+                        <div class="flex items-center gap-2 text-sm text-gray-600">
+                            <svg class="w-4 h-4 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                            <span>Early access to new/beta release features.</span>
+                        </div>
+                    </div>
+
+                    <div class="bg-gray-50 p-4 rounded-lg flex justify-between items-center ml-10" onclick="event.stopPropagation()">
+                        <div>
+                            <div class="font-semibold text-sm">Team accounts</div>
+                            <div class="text-xs text-gray-500">Starting at 5 users</div>
+                        </div>
+                        <div class="bg-white border border-gray-200 rounded-md flex items-center">
+                            <button onclick="updateQuantity(-1)" class="px-3 py-1 text-gray-500 hover:bg-gray-50 hover:text-green-600 font-bold">-</button>
+                            <span id="team-quantity" class="px-2 font-medium">5</span>
+                            <button onclick="updateQuantity(1)" class="px-3 py-1 text-gray-500 hover:bg-gray-50 hover:text-green-600 font-bold">+</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Business Pro -->
+                <div id="plan-business" onclick="selectPlan('business')" class="plan-card bg-white p-6 rounded-xl border border-gray-200 cursor-pointer">
+                    <div class="flex items-start justify-between">
+                        <div class="flex items-center gap-4">
+                            <div id="radio-business" class="w-6 h-6 rounded-full border-2 border-gray-300 bg-white transition-colors"></div>
+                            <div>
+                                <h3 class="font-bold text-lg">Business Pro</h3>
+                                <p class="text-gray-500 text-sm">For Big Teams</p>
+                            </div>
+                        </div>
+                        <div class="text-right">
+                            <div class="font-bold text-xl price-display" data-plan="business">...</div>
+                            <div class="text-xs text-gray-500 term-display">20 User / Quarterly</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Column: Payment Plan -->
+            <div class="space-y-6">
+                <div class="flex justify-between items-center mb-4">
+                    <h2 class="text-xl font-bold">Payment</h2>
+                </div>
+
+                <!-- Secure checkout (Razorpay). Card details are entered in Razorpay's own pop-up, never on this page. -->
+                <div class="bg-white p-6 rounded-xl border border-gray-200 shadow-sm">
+                    <div class="flex items-center gap-3 mb-3">
+                        <div class="bg-green-100 text-green-700 w-10 h-10 rounded-full flex items-center justify-center font-bold">&#128274;</div>
+                        <div>
+                            <p class="font-semibold text-gray-900">Secure checkout by Razorpay</p>
+                            <p class="text-xs text-gray-500">UPI, Credit/Debit Cards, Net Banking and Wallets</p>
+                        </div>
+                    </div>
+                    <p class="text-sm text-gray-600">When you click <b>Pay &amp; Subscribe</b> a secure Razorpay window opens. Your plan is activated automatically as soon as the payment succeeds.</p>
+                    <p class="text-xs text-gray-400 mt-3">By paying you agree to our <a class="underline" href="terms.html">Terms</a>, <a class="underline" href="privacy.html">Privacy Policy</a> and <a class="underline" href="refund.html">Refund Policy</a>.</p>
+                </div>
+
+                <!-- Discount Code -->
+                <div class="mt-8 bg-gray-50 p-6 rounded-xl border border-gray-100">
+                    <h3 class="font-bold mb-3">Discount Code</h3>
+                    <div class="flex gap-2">
+                        <input id="discount-input" type="text" placeholder="Enter code" class="flex-1 border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-green-500 bg-white uppercase">
+                        <button onclick="applyDiscount()" class="bg-white border border-gray-300 px-6 py-2 rounded-lg font-medium hover:bg-gray-50 hover:text-green-600 transition-colors">Apply</button>
+                    </div>
+                    <p id="discount-message" class="text-sm mt-2 hidden"></p>
+
+                    <div class="mt-6 pt-6 border-t border-gray-200 space-y-3">
+                        <div class="flex justify-between text-sm">
+                            <span id="summary-plan-name" class="font-medium text-gray-900">No Plan Selected</span>
+                            <span id="summary-plan-price" class="font-bold">$0.00</span>
+                        </div>
+                        <div class="flex justify-between text-xs text-gray-500">
+                            <span id="summary-plan-detail">Please select a plan</span>
+                        </div>
+                        <div id="summary-discount-row" class="flex justify-between text-sm text-green-600 font-medium hidden">
+                            <span>Discount</span>
+                            <span id="summary-discount-amount">-$0.00</span>
+                        </div>
+                        <div class="flex justify-between text-lg font-bold text-gray-900 pt-2 border-t border-gray-200 mt-2">
+                            <span>Total</span>
+                            <span id="summary-total">$0.00</span>
+                        </div>
+                    </div>
+                    
+                    <button id="pay-btn" onclick="confirmSubscription()" class="w-full mt-6 bg-green-600 text-white py-3 rounded-lg font-bold hover:bg-green-700 transition-all shadow-lg shadow-green-200 active:scale-95">
+                        <span id="pay-btn-label">Pay &amp; Subscribe</span>
+                    </button>
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="mt-12 text-center">
+            <a href="../index.html" class="text-gray-500 hover:text-gray-900 font-medium flex items-center justify-center gap-2 transition-colors">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-arrow-left"><path d="m12 19-7-7 7-7"/><path d="M19 12H5"/></svg>
+                Back to Home
+            </a>
+        </div>
+
+    </div>
+
+    <script type="module">
+        import { auth } from "../js/api-auth.js";
+        lucide.createIcons();
+
+        const params = new URLSearchParams(location.search);
+        const state = { catalog: null, plan: null, term: 'quarterly', teamQuantity: 5, couponCode: '', couponPercent: 0, busy: false };
+        const $ = (id) => document.getElementById(id);
+        const money = (rupees) => '\u20B9' + Number(rupees).toLocaleString('en-IN', { maximumFractionDigits: 0 });
+        const cap = (t) => t.charAt(0).toUpperCase() + t.slice(1);
+
+        function baseRupees(planId) {
+            const p = state.catalog.plans[planId];
+            let total = p.price[state.term];
+            if (planId === 'team') total += (state.teamQuantity - p.baseSeats) * p.extraSeat[state.term];
+            return total;
+        }
+        function seatsOf(planId) {
+            const p = state.catalog.plans[planId];
+            return planId === 'team' ? state.teamQuantity : p.seats;
+        }
+
+        function renderCards() {
+            if (!state.catalog) return;
+            document.querySelectorAll('.price-display').forEach((el) => { el.textContent = money(baseRupees(el.dataset.plan)); });
+            ['pro', 'team', 'business'].forEach((id) => {
+                const t = document.querySelector('#plan-' + id + ' .term-display');
+                if (t) t.textContent = seatsOf(id) + (seatsOf(id) === 1 ? ' User / ' : ' Users / ') + cap(state.term);
+            });
+        }
+
+        window.setTerm = function (term) {
+            state.term = term;
+            const on = 'bg-white shadow-sm px-4 py-1.5 rounded-md text-gray-900 transition-all';
+            const off = 'px-4 py-1.5 rounded-md text-gray-500 hover:text-gray-700 transition-all';
+            $('btn-quarterly').className = term === 'quarterly' ? on : off;
+            $('btn-yearly').className = term === 'yearly' ? on : off;
+            renderCards(); updateSummary();
+        };
+
+        window.selectPlan = function (planId) {
+            state.plan = planId;
+            ['pro', 'team', 'business'].forEach((p) => {
+                $('plan-' + p).classList.toggle('selected-plan', p === planId);
+                const r = $('radio-' + p);
+                r.classList.toggle('border-[6px]', p === planId);
+                r.classList.toggle('border-green-500', p === planId);
+                r.classList.toggle('border-2', p !== planId);
+                r.classList.toggle('border-gray-300', p !== planId);
+            });
+            updateSummary();
+        };
+
+        window.updateQuantity = function (change) {
+            const max = state.catalog ? state.catalog.plans.team.maxSeats : 50;
+            state.teamQuantity = Math.min(max, Math.max(5, state.teamQuantity + change));
+            $('team-quantity').textContent = state.teamQuantity;
+            renderCards(); updateSummary();
+        };
+
+        // Coupons are checked by the server (the browser can't invent a discount)
+        window.applyDiscount = async function () {
+            const code = $('discount-input').value.trim().toUpperCase();
+            const msg = $('discount-message');
+            msg.classList.remove('hidden');
+            if (!code) { state.couponCode = ''; state.couponPercent = 0; msg.classList.add('hidden'); return updateSummary(); }
+            if (!auth.currentUser) { msg.textContent = 'Please log in to apply a code.'; msg.className = 'text-sm mt-2 text-red-500 block'; return; }
+            try {
+                const r = await fetch('/api/payments/coupon', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ code }) });
+                const j = await r.json();
+                if (j.valid) {
+                    state.couponCode = code; state.couponPercent = j.percent;
+                    msg.textContent = j.percent + '% discount code applied!'; msg.className = 'text-sm mt-2 text-green-600 block';
+                } else {
+                    state.couponCode = ''; state.couponPercent = 0;
+                    msg.textContent = 'Invalid discount code.'; msg.className = 'text-sm mt-2 text-red-500 block';
+                }
+            } catch (e) { msg.textContent = 'Could not check the code. Try again.'; msg.className = 'text-sm mt-2 text-red-500 block'; }
+            updateSummary();
+        };
+
+        function updateSummary() {
+            const row = $('summary-discount-row');
+            if (!state.catalog || !state.plan) {
+                $('summary-plan-name').textContent = 'No Plan Selected';
+                $('summary-plan-price').textContent = money(0);
+                $('summary-plan-detail').textContent = 'Please select a plan';
+                row.classList.add('hidden');
+                $('summary-total').textContent = money(0);
+                return;
+            }
+            const p = state.catalog.plans[state.plan];
+            const base = baseRupees(state.plan);
+            const discount = Math.round(base * state.couponPercent / 100);
+            $('summary-plan-name').textContent = p.name;
+            $('summary-plan-price').textContent = money(base);
+            $('summary-plan-detail').textContent = seatsOf(state.plan) + (seatsOf(state.plan) === 1 ? ' User / ' : ' Users / ') + cap(state.term);
+            if (discount > 0) {
+                row.classList.remove('hidden');
+                $('summary-discount-amount').textContent = '-' + money(discount);
+                row.querySelector('span:first-child').textContent = 'Discount (' + state.couponPercent + '%)';
+            } else { row.classList.add('hidden'); }
+            $('summary-total').textContent = money(base - discount); // display only; the server recomputes the real amount
+        }
+
+        function banner(text, kind) {
+            const el = $('status-banner');
+            el.textContent = text;
+            el.className = 'mb-8 p-4 rounded-xl border text-sm font-medium ' + (kind === 'ok'
+                ? 'bg-green-50 border-green-200 text-green-800' : 'bg-amber-50 border-amber-200 text-amber-800');
+        }
+        function setBusy(b, label) {
+            state.busy = b;
+            $('pay-btn').disabled = b;
+            $('pay-btn').classList.toggle('opacity-60', b);
+            $('pay-btn-label').textContent = label || 'Pay & Subscribe';
+        }
+
+        window.confirmSubscription = async function () {
+            if (state.busy) return;
+            if (!state.plan) return alert('Please select a subscription plan.');
+            if (!auth.currentUser) { location.href = 'login.html?next=subscription.html'; return; }
+            setBusy(true, 'Preparing checkout...');
+            try {
+                const r = await fetch('/api/payments/create-order', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        planId: state.plan, term: state.term,
+                        seats: state.plan === 'team' ? state.teamQuantity : undefined,
+                        couponCode: state.couponCode || undefined,
+                    }),
+                });
+                if (!r.ok) throw new Error('Could not start the payment. Please try again.');
+                const o = await r.json();
+
+                const rzp = new Razorpay({
+                    key: o.keyId, amount: o.amount, currency: o.currency, order_id: o.orderId,
+                    name: 'Zone Pro Trader', description: o.description, prefill: o.prefill,
+                    theme: { color: '#4CAF50' },
+                    modal: { ondismiss: () => setBusy(false) },
+                    handler: async (resp) => {
+                        setBusy(true, 'Confirming payment...');
+                        try {
+                            const v = await fetch('/api/payments/verify', {
+                                method: 'POST', headers: { 'Content-Type': 'application/json' },
+                                body: JSON.stringify({
+                                    razorpay_order_id: resp.razorpay_order_id,
+                                    razorpay_payment_id: resp.razorpay_payment_id,
+                                    razorpay_signature: resp.razorpay_signature,
+                                }),
+                            });
+                            if (!v.ok) throw new Error('verify failed');
+                            banner('Payment successful! Your subscription is now active. Redirecting...', 'ok');
+                            setTimeout(() => { location.href = params.get('next') || 'dashboard.html'; }, 1800);
+                        } catch (e) {
+                            banner('Your payment went through, but confirming it is taking longer than usual. Your plan will activate automatically within a few minutes. Payment ID: ' + resp.razorpay_payment_id, 'warn');
+                            setBusy(false);
+                        }
+                    },
+                });
+                rzp.on('payment.failed', (e) => {
+                    banner('Payment failed: ' + ((e.error && e.error.description) || 'please try again.'), 'warn');
+                    setBusy(false);
+                });
+                rzp.open();
+            } catch (e) {
+                alert(e.message || 'Something went wrong.');
+                setBusy(false);
+            }
+        };
+
+        async function init() {
+            try { state.catalog = await (await fetch('/api/plans')).json(); }
+            catch (e) { banner('Online subscription is not open right now. Access to Zone Pro Trader is provided by your administrator.', 'warn'); return; }
+            window.setTerm('quarterly');
+
+            await auth.authStateReady();
+            if (!auth.currentUser) {
+                banner('Please log in to subscribe.', 'warn');
+                $('status-banner').innerHTML = '';
+                const a = document.createElement('a');
+                a.href = 'login.html?next=subscription.html'; a.className = 'underline font-bold'; a.textContent = 'Log in or sign up to subscribe';
+                $('status-banner').appendChild(a);
+                return;
+            }
+            try {
+                const s = await (await fetch('/api/subscription/status')).json();
+                if (s.active) {
+                    const name = state.catalog.plans[s.planId] ? state.catalog.plans[s.planId].name : s.planId;
+                    banner('Active: ' + name + ' (' + cap(s.term) + ') \u2014 valid until ' + new Date(s.endAt).toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' }) + ' (' + s.daysLeft + ' days left). Paying again extends your plan.', 'ok');
+                    $('pay-btn-label').textContent = 'Renew / Extend';
+                } else if (params.get('required')) {
+                    banner('An active subscription is required to open that page. Choose a plan below.', 'warn');
+                }
+            } catch (e) { /* banner is optional */ }
+        }
+        init();
+    </script>
+
+</body>
+</html>

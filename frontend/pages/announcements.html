@@ -1,0 +1,872 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Announcements & Broadcasts - Zone Pro Trader</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+          theme: {
+            extend: {
+              colors: {
+                'accent-main': '#4CAF50',
+                'accent-light': '#81C784',
+                'accent-dark': '#388E3C',
+                'sidebar-active': '#e8f5e9',
+                'text-heading': '#2c3e50',
+                'text-dark': '#34495e',
+                'text-muted': '#7f8c8d',
+              },
+              fontFamily: {
+                'inter': ['Inter', 'sans-serif'],
+                'montserrat': ['Montserrat', 'sans-serif'],
+              }
+            }
+          }
+        }
+    </script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/responsive.css">
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        aside::-webkit-scrollbar { width: 6px; }
+        aside::-webkit-scrollbar-thumb { background-color: #e5e7eb; border-radius: 3px; }
+        .pulse-live {
+            box-shadow: 0 0 0 0 rgba(76, 175, 80, 0.7);
+            animation: pulse-green 2s infinite;
+        }
+        @keyframes pulse-green {
+            0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(76, 175, 80, 0.7); }
+            70% { transform: scale(1); box-shadow: 0 0 0 8px rgba(76, 175, 80, 0); }
+            100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(76, 175, 80, 0); }
+        }
+    </style>
+</head>
+<body class="has-sidebar bg-gray-50 h-screen flex overflow-hidden">
+    <!-- Sidebar Overlay -->
+    <div class="sidebar-overlay" id="sidebar-overlay" onclick="toggleMobileSidebar()"></div>
+
+    <!-- Mobile Top Bar -->
+    <div class="mobile-topbar" id="mobile-topbar">
+        <button class="hamburger-btn" id="hamburger-btn" onclick="toggleMobileSidebar()" aria-label="Open menu">
+            <svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="3" y1="6" x2="21" y2="6"/>
+                <line x1="3" y1="12" x2="21" y2="12"/>
+                <line x1="3" y1="18" x2="21" y2="18"/>
+            </svg>
+        </button>
+        <div class="topbar-logo">
+            <img src="../assets/images/logo-bg.png" alt="Zone Pro Trader">
+            <span class="topbar-title">ZONE <span>PRO TRADER</span></span>
+        </div>
+        <div class="topbar-avatar" id="topbar-avatar">ZP</div>
+    </div>
+
+    <!-- Sidebar -->
+    <aside class="w-72 bg-white border-r border-gray-100 flex flex-col hidden md:flex h-full shadow-sm z-10" id="main-sidebar">
+        <!-- Sidebar Header -->
+        <div class="p-6 flex justify-between items-center">
+            <div class="flex items-center gap-3">
+                <img src="../assets/images/logo-bg.png" alt="Zone Pro Trader" class="site-logo w-14 h-14">
+                <div>
+                    <h1 class="font-montserrat font-bold text-gray-900 text-lg tracking-tight">ZONE PRO</h1>
+                    <p class="text-[10px] font-bold text-accent-main tracking-widest uppercase">TRADER</p>
+                </div>
+            </div>
+            <!-- Mobile Close Button -->
+            <button onclick="toggleMobileSidebar()" class="md:hidden text-gray-400 hover:text-gray-600 transition-colors ml-auto p-1.5 rounded-lg hover:bg-gray-100">
+                <i data-lucide="x" class="w-6 h-6"></i>
+            </button>
+        </div>
+
+        <!-- Navigation -->
+        <nav class="flex-1 overflow-y-auto py-2 space-y-1 pr-4">
+            <!-- Journal Feed -->
+            <a href="dashboard.html" class="flex items-center px-6 py-3.5 text-sm font-medium text-gray-500 hover:bg-gray-50 hover:text-gray-900 rounded-r-full transition-all group border-l-4 border-transparent hover:border-gray-200">
+                <div class="p-2 bg-gray-50 rounded-lg mr-3 group-hover:bg-gray-100 transition-colors">
+                    <i data-lucide="newspaper" class="w-5 h-5 text-gray-400 group-hover:text-gray-600"></i>
+                </div>
+                JOURNAL FEED
+            </a>
+
+            <!-- Journal Reporting -->
+            <a href="journal-reporting.html" class="flex items-center px-6 py-3.5 text-sm font-medium text-gray-500 hover:bg-gray-50 hover:text-gray-900 rounded-r-full transition-all group border-l-4 border-transparent hover:border-gray-200">
+                <div class="p-2 bg-gray-50 rounded-lg mr-3 group-hover:bg-gray-100 transition-colors">
+                    <i data-lucide="layout-dashboard" class="w-5 h-5 text-gray-400 group-hover:text-gray-600"></i>
+                </div>
+                JOURNAL REPORTING
+            </a>
+
+            <!-- Investment Screener -->
+            <a href="investment-screener.html" class="flex items-center px-6 py-3.5 text-sm font-medium text-gray-500 hover:bg-gray-50 hover:text-gray-900 rounded-r-full transition-all group border-l-4 border-transparent hover:border-gray-200">
+                <div class="p-2 bg-gray-50 rounded-lg mr-3 group-hover:bg-gray-100 transition-colors">
+                    <i data-lucide="search" class="w-5 h-5 text-gray-400 group-hover:text-gray-600"></i>
+                </div>
+                INVESTMENT SCREENER
+            </a>
+
+            <!-- Intraday -->
+            <a href="intraday.html" class="flex items-center px-6 py-3.5 text-sm font-medium text-gray-500 hover:bg-gray-50 hover:text-gray-900 rounded-r-full transition-all group border-l-4 border-transparent hover:border-gray-200">
+                <div class="p-2 bg-gray-50 rounded-lg mr-3 group-hover:bg-gray-100 transition-colors">
+                    <i data-lucide="clock" class="w-5 h-5 text-gray-400 group-hover:text-gray-600"></i>
+                </div>
+                INTRADAY
+            </a>
+
+            <!-- Heatmap -->
+            <a href="heatmap.html" class="flex items-center px-6 py-3.5 text-sm font-medium text-gray-500 hover:bg-gray-50 hover:text-gray-900 rounded-r-full transition-all group border-l-4 border-transparent hover:border-gray-200">
+                <div class="p-2 bg-gray-50 rounded-lg mr-3 group-hover:bg-gray-100 transition-colors">
+                    <i data-lucide="grid" class="w-5 h-5 text-gray-400 group-hover:text-gray-600"></i>
+                </div>
+                HEATMAP
+            </a>
+
+            <!-- Options (F&O) -->
+            <a href="options.html" class="flex items-center px-6 py-3.5 text-sm font-medium text-gray-500 hover:bg-gray-50 hover:text-gray-900 rounded-r-full transition-all group border-l-4 border-transparent hover:border-gray-200">
+                <div class="p-2 bg-gray-50 rounded-lg mr-3 group-hover:bg-gray-100 transition-colors">
+                    <i data-lucide="trending-up" class="w-5 h-5 text-gray-400 group-hover:text-gray-600"></i>
+                </div>
+                OPTIONS (F&O)
+            </a>
+
+            <!-- Other Tools -->
+            <a href="other-tools.html" class="flex items-center px-6 py-3.5 text-sm font-medium text-gray-500 hover:bg-gray-50 hover:text-gray-900 rounded-r-full transition-all group border-l-4 border-transparent hover:border-gray-200">
+                <div class="p-2 bg-gray-50 rounded-lg mr-3 group-hover:bg-gray-100 transition-colors">
+                    <i data-lucide="wrench" class="w-5 h-5 text-gray-400 group-hover:text-gray-600"></i>
+                </div>
+                OTHER TOOLS
+            </a>
+
+            <!-- Announcements (Active) -->
+            <a href="announcements.html" class="flex items-center px-6 py-3.5 text-sm font-bold text-accent-dark bg-green-50 rounded-r-full border-l-4 border-accent-main transition-all group shadow-sm">
+                <div class="p-2 bg-green-100 rounded-lg mr-3 group-hover:bg-green-200 transition-colors">
+                    <i data-lucide="bell" class="w-5 h-5 text-accent-dark"></i>
+                </div>
+                ANNOUNCEMENTS
+            </a>
+
+            <!-- Open a Demat Account -->
+            <a href="open-demat-account.html" class="flex items-center px-6 py-3.5 text-sm font-medium text-gray-500 hover:bg-gray-50 hover:text-gray-900 rounded-r-full transition-all group border-l-4 border-transparent hover:border-gray-200">
+                <div class="p-2 bg-gray-50 rounded-lg mr-3 group-hover:bg-gray-100 transition-colors">
+                    <i data-lucide="briefcase" class="w-5 h-5 text-gray-400 group-hover:text-gray-600"></i>
+                </div>
+                OPEN A DEMAT ACCOUNT
+            </a>
+
+            <!-- My Profile -->
+            <a href="my-profile.html" class="flex items-center px-6 py-3.5 text-sm font-medium text-gray-500 hover:bg-gray-50 hover:text-gray-900 rounded-r-full transition-all group border-l-4 border-transparent hover:border-gray-200">
+                <div class="p-2 bg-gray-50 rounded-lg mr-3 group-hover:bg-gray-100 transition-colors">
+                    <i data-lucide="user" class="w-5 h-5 text-gray-400 group-hover:text-gray-600"></i>
+                </div>
+                MY PROFILE
+            </a>
+        </nav>
+
+        <!-- Logout -->
+        <div class="p-6 border-t border-gray-100 mt-auto">
+            <a href="logout.html" class="flex items-center px-4 py-3 text-sm font-medium text-gray-500 hover:text-red-600 hover:bg-red-50 rounded-lg transition-all group">
+                <i data-lucide="log-out" class="w-5 h-5 mr-3 group-hover:text-red-600 transition-colors"></i>
+                LOGOUT
+            </a>
+        </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="flex-1 overflow-y-auto bg-gray-50 p-4 sm:p-6 md:p-8 lg:p-10 flex flex-col">
+        <div class="max-w-4xl w-full mx-auto flex-1 flex flex-col">
+            <!-- Header Section -->
+            <div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 mb-6">
+                <div class="flex items-center gap-4">
+                    <a href="dashboard.html" class="p-2.5 bg-white border border-gray-200 hover:bg-gray-50 rounded-xl shadow-xs transition-all group flex items-center gap-2 text-xs font-bold text-gray-600 hover:text-accent-main">
+                        <i data-lucide="arrow-left" class="w-4 h-4 text-gray-500 group-hover:text-accent-main transition-colors"></i>
+                        <span class="hidden sm:inline">BACK TO DASHBOARD</span>
+                    </a>
+                    <div class="p-3 bg-green-50 rounded-2xl shadow-xs border border-green-100">
+                        <i data-lucide="bell" class="w-7 h-7 text-accent-main"></i>
+                    </div>
+                    <div>
+                        <div class="flex items-center gap-2.5">
+                            <h1 class="text-2xl sm:text-3xl font-bold text-gray-900 tracking-tight font-montserrat uppercase">Announcements</h1>
+                            <span class="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[11px] font-semibold bg-green-100 text-green-700 border border-green-200">
+                                <span class="w-2 h-2 rounded-full bg-green-500 pulse-live"></span>
+                                LIVE CHANNEL
+                            </span>
+                        </div>
+                        <p class="text-xs sm:text-sm text-gray-500 mt-0.5">Official broadcast stream from the Zone Pro Trader Team</p>
+                    </div>
+                </div>
+
+                <!-- Admin Status / Unlock Button -->
+                <div class="flex items-center gap-2 self-end md:self-auto">
+                    <button id="admin-toggle-btn" onclick="handleAdminToggle()" class="inline-flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-bold transition-all shadow-xs border bg-white text-gray-700 border-gray-200 hover:border-gray-300 hover:bg-gray-50">
+                        <i data-lucide="lock" class="w-4 h-4 text-gray-500" id="admin-lock-icon"></i>
+                        <span id="admin-btn-text">Admin Access</span>
+                    </button>
+                    <button onclick="refreshAnnouncements()" title="Refresh Feed" class="p-2 bg-white border border-gray-200 hover:bg-gray-50 text-gray-600 rounded-xl shadow-xs transition-all">
+                        <i data-lucide="refresh-cw" class="w-4 h-4" id="refresh-icon"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- ADMIN COMPOSE BOX (Visible ONLY to Verified Admins) -->
+            <div id="admin-chatbox" class="hidden mb-6 bg-gradient-to-r from-emerald-900 via-gray-900 to-slate-900 rounded-2xl p-5 sm:p-6 text-white shadow-xl border border-emerald-500/30 transition-all">
+                <div class="flex items-center justify-between pb-3 border-b border-gray-700/60 mb-4">
+                    <div class="flex items-center gap-2.5">
+                        <div class="p-2 bg-emerald-500/20 rounded-xl border border-emerald-500/40 text-emerald-400">
+                            <i data-lucide="send" class="w-5 h-5"></i>
+                        </div>
+                        <div>
+                            <div class="flex items-center gap-2">
+                                <h2 class="text-sm font-bold uppercase tracking-wider text-emerald-400 font-montserrat">Admin Broadcast Panel</h2>
+                                <span class="text-[10px] uppercase font-extrabold px-2 py-0.5 rounded bg-emerald-500 text-black">Active Admin</span>
+                            </div>
+                            <p class="text-xs text-gray-300">Your message will instantly appear on all members' screens in real-time</p>
+                        </div>
+                    </div>
+                    <button onclick="logoutAdmin()" class="text-xs text-gray-400 hover:text-red-400 flex items-center gap-1 transition">
+                        <i data-lucide="log-out" class="w-3.5 h-3.5"></i>
+                        <span class="hidden sm:inline">Exit Admin</span>
+                    </button>
+                </div>
+
+                <form id="broadcast-form" onsubmit="postAnnouncement(event)" class="space-y-4">
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                        <!-- Category Selector -->
+                        <div class="sm:col-span-1">
+                            <label class="block text-xs font-semibold text-gray-300 mb-1">Category / Tag</label>
+                            <select id="ann-type" class="w-full bg-gray-800/90 border border-gray-700 text-white rounded-xl px-3 py-2 text-xs focus:outline-none focus:border-emerald-400">
+                                <option value="general">📢 General Announcement</option>
+                                <option value="alert">⚡ Urgent Alert</option>
+                                <option value="signal">📈 Market Signal / Analysis</option>
+                                <option value="tip">💡 Pro Trading Tip</option>
+                                <option value="maintenance">⚙️ Maintenance / Notice</option>
+                            </select>
+                        </div>
+
+                        <!-- Title Input -->
+                        <div class="sm:col-span-2">
+                            <label class="block text-xs font-semibold text-gray-300 mb-1">Headline / Title *</label>
+                            <input 
+                                type="text" 
+                                id="ann-title" 
+                                required 
+                                placeholder="e.g. Nifty 50 Breakout: Key Levels to Watch Today" 
+                                class="w-full bg-gray-800/90 border border-gray-700 text-white rounded-xl px-3.5 py-2 text-xs focus:outline-none focus:border-emerald-400 placeholder-gray-500"
+                            >
+                        </div>
+                    </div>
+
+                    <!-- Message Body Textarea -->
+                    <div>
+                        <label class="block text-xs font-semibold text-gray-300 mb-1">Message Content *</label>
+                        <textarea 
+                            id="ann-message" 
+                            rows="3" 
+                            required 
+                            placeholder="Type your message, market insights, stock alerts, or important announcements here..." 
+                            class="w-full bg-gray-800/90 border border-gray-700 text-white rounded-xl p-3 text-xs focus:outline-none focus:border-emerald-400 placeholder-gray-500 resize-none leading-relaxed"
+                        ></textarea>
+                    </div>
+
+                    <!-- Form Controls -->
+                    <div class="flex flex-col sm:flex-row items-center justify-between gap-3 pt-1">
+                        <label class="flex items-center gap-2 text-xs text-gray-300 cursor-pointer select-none self-start sm:self-auto">
+                            <input type="checkbox" id="ann-pin" class="rounded bg-gray-800 border-gray-600 text-emerald-500 focus:ring-0">
+                            <span>Pin to Top of Channel 📌</span>
+                        </label>
+                        <div class="flex items-center gap-2 w-full sm:w-auto justify-end">
+                            <button 
+                                type="reset" 
+                                class="px-4 py-2 bg-gray-800 hover:bg-gray-700 text-gray-300 rounded-xl text-xs font-semibold transition"
+                            >
+                                Clear
+                            </button>
+                            <button 
+                                type="submit" 
+                                id="broadcast-submit-btn" 
+                                class="flex-1 sm:flex-none inline-flex items-center justify-center gap-2 px-6 py-2 bg-emerald-500 hover:bg-emerald-400 text-gray-950 font-bold rounded-xl text-xs transition shadow-lg shadow-emerald-500/20 active:scale-95"
+                            >
+                                <i data-lucide="send" class="w-4 h-4"></i>
+                                <span>Broadcast Now</span>
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+            <!-- PUBLIC READ-ONLY BANNER (Shown to regular members / non-admins) -->
+            <div id="viewer-banner" class="mb-5 bg-white border border-gray-200/80 rounded-2xl p-4 shadow-xs flex items-center justify-between gap-4">
+                <div class="flex items-center gap-3">
+                    <div class="p-2.5 bg-blue-50 text-blue-600 rounded-xl flex-shrink-0">
+                        <i data-lucide="shield-check" class="w-5 h-5"></i>
+                    </div>
+                    <div>
+                        <h3 class="text-xs font-bold text-gray-800 uppercase tracking-wider">Official Verified Broadcast Stream</h3>
+                        <p class="text-xs text-gray-500 mt-0.5">This channel is read-only for traders. Only Zone Pro Admins can post official market updates.</p>
+                    </div>
+                </div>
+                <button onclick="openAdminLoginModal()" class="flex-shrink-0 text-xs text-accent-main hover:text-accent-dark font-bold flex items-center gap-1 px-3 py-1.5 bg-green-50 hover:bg-green-100 rounded-lg border border-green-200/60 transition">
+                    <i data-lucide="key" class="w-3.5 h-3.5"></i>
+                    <span class="hidden sm:inline">Admin Login</span>
+                </button>
+            </div>
+
+            <!-- Filter Tabs -->
+            <div class="flex items-center gap-2 mb-4 overflow-x-auto pb-1 text-xs select-none">
+                <button onclick="filterAnnouncements('all')" id="tab-all" class="ann-tab px-3.5 py-1.5 rounded-xl font-bold bg-accent-main text-white shadow-xs transition">
+                    All Messages (<span id="count-all">0</span>)
+                </button>
+                <button onclick="filterAnnouncements('signal')" id="tab-signal" class="ann-tab px-3.5 py-1.5 rounded-xl font-semibold bg-white text-gray-600 hover:bg-gray-100 border border-gray-200 transition">
+                    📈 Market Signals
+                </button>
+                <button onclick="filterAnnouncements('alert')" id="tab-alert" class="ann-tab px-3.5 py-1.5 rounded-xl font-semibold bg-white text-gray-600 hover:bg-gray-100 border border-gray-200 transition">
+                    ⚡ Alerts
+                </button>
+                <button onclick="filterAnnouncements('tip')" id="tab-tip" class="ann-tab px-3.5 py-1.5 rounded-xl font-semibold bg-white text-gray-600 hover:bg-gray-100 border border-gray-200 transition">
+                    💡 Trading Tips
+                </button>
+                <button onclick="filterAnnouncements('maintenance')" id="tab-maintenance" class="ann-tab px-3.5 py-1.5 rounded-xl font-semibold bg-white text-gray-600 hover:bg-gray-100 border border-gray-200 transition">
+                    ⚙️ Notices
+                </button>
+            </div>
+
+            <!-- Feed Stream Container -->
+            <div id="feed-container" class="space-y-4 flex-1 pb-10">
+                <!-- Loader State -->
+                <div id="feed-loader" class="py-12 flex flex-col items-center justify-center text-gray-400">
+                    <div class="w-8 h-8 border-3 border-accent-main border-t-transparent rounded-full animate-spin mb-3"></div>
+                    <span class="text-xs font-semibold">Connecting to live announcement channel...</span>
+                </div>
+
+                <!-- Empty State -->
+                <div id="feed-empty" class="hidden bg-white border border-gray-200 rounded-2xl p-10 text-center">
+                    <div class="w-12 h-12 bg-gray-100 text-gray-400 rounded-full flex items-center justify-center mx-auto mb-3">
+                        <i data-lucide="inbox" class="w-6 h-6"></i>
+                    </div>
+                    <h4 class="text-sm font-bold text-gray-700">No Announcements Found</h4>
+                    <p class="text-xs text-gray-500 mt-1">Stay tuned! Admins will broadcast upcoming market updates here.</p>
+                </div>
+
+                <!-- Dynamic Announcements Rendered Here -->
+                <div id="announcements-list" class="space-y-4"></div>
+            </div>
+        </div>
+    </main>
+
+    <!-- ADMIN LOGIN MODAL -->
+    <div id="admin-modal" class="hidden fixed inset-0 bg-black/60 backdrop-blur-xs flex items-center justify-center z-50 p-4 transition-opacity">
+        <div class="bg-white rounded-2xl max-w-sm w-full p-6 shadow-2xl border border-gray-100 transform transition-all">
+            <div class="flex items-center justify-between pb-3 border-b border-gray-100">
+                <div class="flex items-center gap-2">
+                    <div class="p-2 bg-green-50 text-accent-main rounded-xl">
+                        <i data-lucide="shield-check" class="w-5 h-5"></i>
+                    </div>
+                    <div>
+                        <h3 class="font-bold text-sm text-gray-900 font-montserrat uppercase">Admin Authentication</h3>
+                        <p class="text-[11px] text-gray-500">Zone Pro Trader Control Access</p>
+                    </div>
+                </div>
+                <button onclick="closeAdminLoginModal()" class="text-gray-400 hover:text-gray-600 p-1">
+                    <i data-lucide="x" class="w-4 h-4"></i>
+                </button>
+            </div>
+
+            <form id="admin-login-form" onsubmit="verifyAdminLogin(event)" class="mt-4 space-y-4">
+                <div>
+                    <label class="block text-xs font-semibold text-gray-700 mb-1">Enter Admin Passkey / PIN</label>
+                    <div class="relative">
+                        <input 
+                            type="password" 
+                            id="admin-passkey-input" 
+                            required 
+                            placeholder="Enter admin password" 
+                            class="w-full bg-gray-50 border border-gray-200 rounded-xl px-3.5 py-2.5 text-xs text-gray-800 focus:outline-none focus:border-accent-main focus:bg-white transition"
+                        >
+                        <i data-lucide="key" class="w-4 h-4 text-gray-400 absolute right-3 top-1/2 -translate-y-1/2 pointer-events-none"></i>
+                    </div>
+                </div>
+
+                <div id="admin-error-text" class="hidden text-xs text-red-600 font-semibold bg-red-50 p-2.5 rounded-xl border border-red-100 flex items-center gap-1.5">
+                    <i data-lucide="alert-circle" class="w-4 h-4 text-red-500"></i>
+                    <span>Incorrect admin passkey. Please try again.</span>
+                </div>
+
+                <div class="flex justify-end gap-2 pt-2">
+                    <button 
+                        type="button" 
+                        onclick="closeAdminLoginModal()" 
+                        class="px-4 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 font-semibold rounded-xl text-xs transition"
+                    >
+                        Cancel
+                    </button>
+                    <button 
+                        type="submit" 
+                        class="px-5 py-2 bg-accent-main hover:bg-accent-dark text-white font-bold rounded-xl text-xs transition shadow-md shadow-green-500/20"
+                    >
+                        Unlock Admin
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- SCRIPT LOGIC -->
+    <script>
+        // Database & Configuration
+        const RTDB_URL = "https://zoneprotrader-90959-default-rtdb.firebaseio.com/announcements";
+        const LOCAL_STORAGE_KEY = "zp_announcements_cache";
+        const ADMIN_SESSION_KEY = "zp_admin_session_active";
+        
+        // Accepted Admin Passkeys
+        const VALID_PASSKEYS = ["zone@123"];
+
+        let announcements = [];
+        let currentFilter = "all";
+        let isAdminLoggedIn = false;
+
+        // Default Initial Announcements (displayed when DB is empty or offline)
+        const DEFAULT_ANNOUNCEMENTS = [
+            {
+                id: "def-1",
+                title: "New Feature: Live 20-Day Swing Breakout Scanner",
+                message: "We've added direct integration with Chartink's 20-Day High Breakout screener. Check out the Swing Scanner under 'Other Tools' to view real-time breakout setups!",
+                type: "general",
+                pinned: true,
+                author: "Zone Pro Admin",
+                timestamp: Date.now() - (2 * 60 * 60 * 1000) // 2 hours ago
+            },
+            {
+                id: "def-2",
+                title: "Market Open: High Momentum in Nifty Metals & Banking",
+                message: "Indian markets are trading strong today. Look out for breakout pullbacks near PDH levels. Good luck with your trades today and manage risk tightly.",
+                type: "signal",
+                pinned: false,
+                author: "Zone Pro Admin",
+                timestamp: Date.now() - (4 * 60 * 60 * 1000) // 4 hours ago
+            },
+            {
+                id: "def-3",
+                title: "Scheduled Maintenance: Sunday Server Optimization",
+                message: "Platform maintenance scheduled for Sunday 2 AM - 4 AM IST. Live screener caches will be refreshed. Some features may be briefly unavailable.",
+                type: "maintenance",
+                pinned: false,
+                author: "Zone Pro Admin",
+                timestamp: Date.now() - (24 * 60 * 60 * 1000) // 1 day ago
+            }
+        ];
+
+        // Format relative time helper
+        function formatTimeAgo(timestamp) {
+            if (!timestamp) return "Recently";
+            const diff = Date.now() - timestamp;
+            const minutes = Math.floor(diff / (1000 * 60));
+            const hours = Math.floor(diff / (1000 * 60 * 60));
+            const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+
+            if (minutes < 1) return "Just now";
+            if (minutes < 60) return `${minutes} min${minutes > 1 ? 's' : ''} ago`;
+            if (hours < 24) return `${hours} hour${hours > 1 ? 's' : ''} ago`;
+            if (days === 1) return "Yesterday";
+            if (days < 7) return `${days} days ago`;
+            return new Date(timestamp).toLocaleDateString('en-IN', { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' });
+        }
+
+        // Get Styling & Badge according to Category Type
+        function getTypeMetadata(type) {
+            switch(type) {
+                case 'alert':
+                    return {
+                        label: '⚡ URGENT ALERT',
+                        badgeClass: 'bg-red-50 text-red-700 border-red-200',
+                        icon: 'alert-triangle',
+                        iconBg: 'bg-red-50 text-red-600'
+                    };
+                case 'signal':
+                    return {
+                        label: '📈 MARKET SIGNAL',
+                        badgeClass: 'bg-blue-50 text-blue-700 border-blue-200',
+                        icon: 'trending-up',
+                        iconBg: 'bg-blue-50 text-blue-600'
+                    };
+                case 'tip':
+                    return {
+                        label: '💡 TRADING TIP',
+                        badgeClass: 'bg-purple-50 text-purple-700 border-purple-200',
+                        icon: 'zap',
+                        iconBg: 'bg-purple-50 text-purple-600'
+                    };
+                case 'maintenance':
+                    return {
+                        label: '⚙️ SYSTEM NOTICE',
+                        badgeClass: 'bg-amber-50 text-amber-700 border-amber-200',
+                        icon: 'tool',
+                        iconBg: 'bg-amber-50 text-amber-600'
+                    };
+                default:
+                    return {
+                        label: '📢 ANNOUNCEMENT',
+                        badgeClass: 'bg-emerald-50 text-emerald-700 border-emerald-200',
+                        icon: 'info',
+                        iconBg: 'bg-green-50 text-accent-main'
+                    };
+            }
+        }
+
+        // Initialize App
+        document.addEventListener('DOMContentLoaded', () => {
+            checkAdminSession();
+            loadAnnouncements();
+            // Realtime polling every 12 seconds
+            setInterval(fetchRemoteAnnouncements, 12000);
+        });
+
+        // Check whether Admin is logged in
+        function checkAdminSession() {
+            isAdminLoggedIn = sessionStorage.getItem(ADMIN_SESSION_KEY) === "true" || localStorage.getItem(ADMIN_SESSION_KEY) === "true";
+            updateAdminUI();
+        }
+
+        function updateAdminUI() {
+            const adminBox = document.getElementById('admin-chatbox');
+            const viewerBanner = document.getElementById('viewer-banner');
+            const adminBtn = document.getElementById('admin-toggle-btn');
+            const adminLockIcon = document.getElementById('admin-lock-icon');
+            const adminBtnText = document.getElementById('admin-btn-text');
+
+            if (isAdminLoggedIn) {
+                adminBox.classList.remove('hidden');
+                viewerBanner.classList.add('hidden');
+                adminBtn.className = "inline-flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-bold transition-all shadow-xs border bg-emerald-50 text-emerald-700 border-emerald-300 hover:bg-emerald-100";
+                adminLockIcon.setAttribute('data-lucide', 'unlock');
+                adminBtnText.textContent = "Admin Active";
+            } else {
+                adminBox.classList.add('hidden');
+                viewerBanner.classList.remove('hidden');
+                adminBtn.className = "inline-flex items-center gap-2 px-3.5 py-2 rounded-xl text-xs font-bold transition-all shadow-xs border bg-white text-gray-700 border-gray-200 hover:border-gray-300 hover:bg-gray-50";
+                adminLockIcon.setAttribute('data-lucide', 'lock');
+                adminBtnText.textContent = "Admin Access";
+            }
+            lucide.createIcons();
+            renderAnnouncements();
+        }
+
+        function handleAdminToggle() {
+            if (isAdminLoggedIn) {
+                if (confirm("Do you want to log out of Admin mode?")) {
+                    logoutAdmin();
+                }
+            } else {
+                openAdminLoginModal();
+            }
+        }
+
+        function openAdminLoginModal() {
+            document.getElementById('admin-modal').classList.remove('hidden');
+            document.getElementById('admin-error-text').classList.add('hidden');
+            setTimeout(() => document.getElementById('admin-passkey-input').focus(), 100);
+        }
+
+        function closeAdminLoginModal() {
+            document.getElementById('admin-modal').classList.add('hidden');
+            document.getElementById('admin-passkey-input').value = "";
+        }
+
+        function verifyAdminLogin(e) {
+            e.preventDefault();
+            const input = document.getElementById('admin-passkey-input').value.trim();
+            if (VALID_PASSKEYS.includes(input)) {
+                isAdminLoggedIn = true;
+                sessionStorage.setItem(ADMIN_SESSION_KEY, "true");
+                localStorage.setItem(ADMIN_SESSION_KEY, "true");
+                closeAdminLoginModal();
+                updateAdminUI();
+                alert("🎉 Admin Access Granted! You can now compose and broadcast live announcements.");
+            } else {
+                document.getElementById('admin-error-text').classList.remove('hidden');
+            }
+        }
+
+        function logoutAdmin() {
+            isAdminLoggedIn = false;
+            sessionStorage.removeItem(ADMIN_SESSION_KEY);
+            localStorage.removeItem(ADMIN_SESSION_KEY);
+            updateAdminUI();
+        }
+
+        // Load & Sync Announcements
+        async function loadAnnouncements() {
+            // 1. Load from cache immediately for fast render
+            try {
+                const cached = localStorage.getItem(LOCAL_STORAGE_KEY);
+                if (cached) {
+                    announcements = JSON.parse(cached);
+                    renderAnnouncements();
+                }
+            } catch(e) {
+                console.warn("Cache load error:", e);
+            }
+
+            // 2. Fetch remote live data from Firebase RTDB
+            await fetchRemoteAnnouncements();
+        }
+
+        async function fetchRemoteAnnouncements() {
+            const loader = document.getElementById('feed-loader');
+            try {
+                const res = await fetch(`${RTDB_URL}.json`);
+                if (res.ok) {
+                    const data = await res.json();
+                    if (data) {
+                        const remoteList = Object.keys(data).map(key => ({
+                            id: key,
+                            ...data[key]
+                        }));
+                        announcements = remoteList;
+                        localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(announcements));
+                    } else if (announcements.length === 0) {
+                        // Empty database, seed defaults
+                        announcements = [...DEFAULT_ANNOUNCEMENTS];
+                        localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(announcements));
+                    }
+                } else {
+                    if (announcements.length === 0) {
+                        announcements = [...DEFAULT_ANNOUNCEMENTS];
+                    }
+                }
+            } catch (err) {
+                console.warn("Firebase fetch failed, using cached/default announcements:", err);
+                if (announcements.length === 0) {
+                    announcements = [...DEFAULT_ANNOUNCEMENTS];
+                }
+            } finally {
+                if (loader) loader.style.display = 'none';
+                renderAnnouncements();
+            }
+        }
+
+        function refreshAnnouncements() {
+            const icon = document.getElementById('refresh-icon');
+            if (icon) icon.classList.add('animate-spin');
+            fetchRemoteAnnouncements().then(() => {
+                setTimeout(() => {
+                    if (icon) icon.classList.remove('animate-spin');
+                }, 500);
+            });
+        }
+
+        // Filter Announcements by category
+        function filterAnnouncements(type) {
+            currentFilter = type;
+            document.querySelectorAll('.ann-tab').forEach(btn => {
+                btn.className = "ann-tab px-3.5 py-1.5 rounded-xl font-semibold bg-white text-gray-600 hover:bg-gray-100 border border-gray-200 transition";
+            });
+            const activeTab = document.getElementById(`tab-${type}`);
+            if (activeTab) {
+                activeTab.className = "ann-tab px-3.5 py-1.5 rounded-xl font-bold bg-accent-main text-white shadow-xs transition";
+            }
+            renderAnnouncements();
+        }
+
+        // Render Announcements in UI
+        function renderAnnouncements() {
+            const container = document.getElementById('announcements-list');
+            const emptyState = document.getElementById('feed-empty');
+            const countAll = document.getElementById('count-all');
+            
+            if (!container) return;
+            container.innerHTML = '';
+
+            // Update total count
+            if (countAll) countAll.textContent = announcements.length;
+
+            let filtered = [...announcements];
+            if (currentFilter !== 'all') {
+                filtered = filtered.filter(a => a.type === currentFilter);
+            }
+
+            // Sort: Pinned first, then newest timestamp
+            filtered.sort((a, b) => {
+                if (a.pinned && !b.pinned) return -1;
+                if (!a.pinned && b.pinned) return 1;
+                return (b.timestamp || 0) - (a.timestamp || 0);
+            });
+
+            if (filtered.length === 0) {
+                if (emptyState) emptyState.classList.remove('hidden');
+                return;
+            } else {
+                if (emptyState) emptyState.classList.add('hidden');
+            }
+
+            filtered.forEach(ann => {
+                const meta = getTypeMetadata(ann.type);
+                const card = document.createElement('div');
+                card.className = `bg-white rounded-2xl shadow-xs border ${ann.pinned ? 'border-accent-main/40 ring-1 ring-accent-main/20' : 'border-gray-100'} p-5 sm:p-6 hover:shadow-md transition-all duration-200`;
+
+                card.innerHTML = `
+                    <div class="flex items-start gap-4">
+                        <div class="p-3 ${meta.iconBg} rounded-2xl flex-shrink-0 mt-0.5">
+                            <i data-lucide="${meta.icon}" class="w-5 h-5"></i>
+                        </div>
+                        <div class="flex-1 min-w-0">
+                            <!-- Top metadata bar -->
+                            <div class="flex flex-wrap items-center justify-between gap-2 mb-1.5">
+                                <div class="flex items-center gap-2 flex-wrap">
+                                    <span class="text-[10px] font-extrabold px-2.5 py-0.5 rounded-md border ${meta.badgeClass} uppercase tracking-wider">
+                                        ${meta.label}
+                                    </span>
+                                    ${ann.pinned ? `
+                                        <span class="text-[10px] font-bold px-2 py-0.5 rounded-md bg-amber-50 text-amber-700 border border-amber-200 flex items-center gap-1">
+                                            📌 PINNED
+                                        </span>
+                                    ` : ''}
+                                    <span class="text-xs text-gray-500 font-medium flex items-center gap-1">
+                                        <i data-lucide="shield-check" class="w-3.5 h-3.5 text-accent-main inline"></i>
+                                        <strong class="text-gray-700">${ann.author || 'Zone Pro Admin'}</strong>
+                                    </span>
+                                </div>
+
+                                <div class="flex items-center gap-3">
+                                    <span class="text-xs text-gray-400 flex items-center gap-1">
+                                        <i data-lucide="clock" class="w-3 h-3"></i>
+                                        ${formatTimeAgo(ann.timestamp)}
+                                    </span>
+                                    ${isAdminLoggedIn ? `
+                                        <button onclick="deleteAnnouncement('${ann.id}')" title="Delete Announcement (Admin Only)" class="text-gray-300 hover:text-red-500 transition p-1 rounded hover:bg-red-50">
+                                            <i data-lucide="trash-2" class="w-4 h-4"></i>
+                                        </button>
+                                    ` : ''}
+                                </div>
+                            </div>
+
+                            <!-- Title -->
+                            <h3 class="font-bold text-gray-900 text-base sm:text-lg tracking-tight mb-2">
+                                ${escapeHtml(ann.title)}
+                            </h3>
+
+                            <!-- Message Content -->
+                            <div class="text-xs sm:text-sm text-gray-600 leading-relaxed whitespace-pre-line">
+                                ${escapeHtml(ann.message)}
+                            </div>
+                        </div>
+                    </div>
+                `;
+
+                container.appendChild(card);
+            });
+
+            lucide.createIcons();
+        }
+
+        // Admin: Post New Announcement
+        async function postAnnouncement(e) {
+            e.preventDefault();
+            if (!isAdminLoggedIn) {
+                alert("Unauthorized: Only verified Admins can post announcements.");
+                return;
+            }
+
+            const title = document.getElementById('ann-title').value.trim();
+            const message = document.getElementById('ann-message').value.trim();
+            const type = document.getElementById('ann-type').value;
+            const pinned = document.getElementById('ann-pin').checked;
+            const submitBtn = document.getElementById('broadcast-submit-btn');
+
+            if (!title || !message) return;
+
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = `<div class="w-4 h-4 border-2 border-black border-t-transparent rounded-full animate-spin"></div> <span>Broadcasting...</span>`;
+
+            const newAnnouncement = {
+                title,
+                message,
+                type,
+                pinned,
+                author: "Zone Pro Admin",
+                timestamp: Date.now()
+            };
+
+            try {
+                // 1. POST to Firebase RTDB
+                const res = await fetch(`${RTDB_URL}.json`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(newAnnouncement)
+                });
+
+                let newId = 'local-' + Date.now();
+                if (res.ok) {
+                    const data = await res.json();
+                    if (data && data.name) newId = data.name;
+                }
+
+                // 2. Prepend to local state
+                announcements.unshift({ id: newId, ...newAnnouncement });
+                localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(announcements));
+
+                // 3. Reset form
+                document.getElementById('broadcast-form').reset();
+                renderAnnouncements();
+                alert("✅ Announcement successfully broadcasted to all users!");
+            } catch (err) {
+                console.error("Broadcast post failed:", err);
+                // Fallback to local storage
+                const fallbackId = 'local-' + Date.now();
+                announcements.unshift({ id: fallbackId, ...newAnnouncement });
+                localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(announcements));
+                renderAnnouncements();
+                document.getElementById('broadcast-form').reset();
+                alert("✅ Announcement saved locally & broadcasted!");
+            } finally {
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = `<i data-lucide="send" class="w-4 h-4"></i> <span>Broadcast Now</span>`;
+                lucide.createIcons();
+            }
+        }
+
+        // Admin: Delete Announcement
+        async function deleteAnnouncement(id) {
+            if (!isAdminLoggedIn) return;
+            if (!confirm("Are you sure you want to delete this announcement?")) return;
+
+            // Remove locally
+            announcements = announcements.filter(a => a.id !== id);
+            localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(announcements));
+            renderAnnouncements();
+
+            // Delete from Firebase if not local-only
+            if (!id.startsWith('def-') && !id.startsWith('local-')) {
+                try {
+                    await fetch(`${RTDB_URL}/${id}.json`, { method: 'DELETE' });
+                } catch(e) {
+                    console.warn("Delete error on remote DB:", e);
+                }
+            }
+        }
+
+        // Mobile Sidebar Toggle
+        function toggleMobileSidebar() {
+            const sidebar = document.getElementById('main-sidebar');
+            const overlay = document.getElementById('sidebar-overlay');
+            if (sidebar) sidebar.classList.toggle('sidebar-open');
+            if (overlay) overlay.classList.toggle('active');
+        }
+
+        // HTML Escape Helper
+        function escapeHtml(text) {
+            if (!text) return '';
+            const map = {
+                '&': '&amp;',
+                '<': '&lt;',
+                '>': '&gt;',
+                '"': '&quot;',
+                "'": '&#039;'
+            };
+            return text.replace(/[&<>"']/g, m => map[m]);
+        }
+    </script>
+</body>
+</html>

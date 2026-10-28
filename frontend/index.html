@@ -1,0 +1,835 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Zone Pro Trader Portal - Advanced Tools, Mentorship & Announcements</title>
+    
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+          theme: {
+            extend: {
+              colors: {
+                'primary-bg': '#fffefe',
+                'section-bg': '#ffffff',
+                'card-bg': '#ffffff',
+                'border-light': '#e0e0e0',
+                'text-heading': '#2c3e50',
+                'text-dark': '#34495e',
+                'text-muted': '#7f8c8d',
+                'text-light': '#eff1f1',
+                'accent-main': '#4CAF50',
+                'accent-light': '#81C784',
+                'accent-dark': '#388E3C',
+                'sidebar-active': '#e8f5e9',
+                'dark-overlay': '#1e272e',
+              },
+              fontFamily: {
+                'inter': ['Inter', 'sans-serif'],
+                'montserrat': ['Montserrat', 'sans-serif'],
+              }
+            }
+          }
+        }
+    </script>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Montserrat:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    
+    <!-- Lucide Icons CDN -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <!-- Complete Unified Stylesheet Inlined -->
+    <style>
+        :root {
+            --primary-bg: #fffefe;
+            --section-bg: #ffffff;
+            --card-bg: #ffffff;
+            --border-light: #e0e0e0;
+            --text-heading: #2c3e50;
+            --text-dark: #34495e;
+            --text-muted: #7f8c8d;
+            --text-light: #eff1f1;
+            --accent-main: #4CAF50;
+            --accent-light: #81C784;
+            --accent-dark: #388E3C;
+            --dark-overlay: #1e272e;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--primary-bg);
+            color: var(--text-dark);
+            overflow-x: hidden;
+            -webkit-tap-highlight-color: transparent;
+            padding-bottom: env(safe-area-inset-bottom);
+        }
+
+        /* Hero and Section Backgrounds */
+        .hero-bg {
+            background-image: linear-gradient(rgba(0,0,0,0.7),rgba(0,0,0,0.7)), url('assets/images/bg-image.jpg');
+            background-size: cover;
+            background-position: center;
+        }
+        .cta-bg {
+            width: 100%; margin: 0; padding: 60px 0;
+            background-image: linear-gradient(rgba(0,0,0,0.5),rgba(0,0,0,0.7)), url('assets/images/dark-2-bg.jpg');
+            background-size: cover; background-position: center; background-repeat: no-repeat;
+        }
+        .unique-bg {
+            background-image: linear-gradient(rgba(30,30,30,0.8),rgba(30,30,30,0.8)), url('assets/images/prim-bg.avif');
+            background-size: cover; background-position: center; background-color: #1e1e1e;
+        }
+        .faq-bg {
+            background-image: linear-gradient(rgba(30,30,30,0.8),rgba(30,30,30,0.8)), url('assets/images/bg-js-2.jpg');
+            background-size: cover; background-position: center; background-color: #1e1e1e;
+        }
+        .courses-bg {
+            background-image: linear-gradient(rgba(30,30,30,0.8),rgba(30,30,30,0.8)), url('assets/images/bg-js3.jpg');
+            background-size: cover; background-position: center; background-color: #1e1e1e;
+        }
+
+        /* Card Hover Effects */
+        .card-hover:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 12px 25px rgba(0,137,123,0.25);
+            transition: all 0.3s ease-in-out;
+        }
+
+        /* WhatsApp Floating Button */
+        .whatsapp-float {
+            position: fixed; bottom: 30px; left: 30px;
+            width: 180px; height: 65px;
+            background: #388E3C; color: #fff;
+            border-radius: 30px;
+            display: flex; align-items: center; justify-content: center;
+            box-shadow: 0 6px 20px rgba(0,255,127,0.5);
+            z-index: 999; transition: all 0.3s ease-in-out;
+            animation: pulse-green 2s infinite;
+            text-decoration: none;
+            font-family: 'Inter', sans-serif; font-weight: 700; font-size: 18px; padding: 0 15px;
+        }
+        @media (max-width: 768px) {
+            .whatsapp-float { width: 60px; height: 60px; border-radius: 50%; padding: 0; bottom: 20px; left: 20px; }
+            .whatsapp-float span { display: none !important; }
+            .whatsapp-float svg { margin-right: 0 !important; width: 32px !important; height: 32px !important; }
+        }
+        @keyframes pulse-green {
+            0%   { box-shadow: 0 0 0 0 rgba(0,255,127,0.4); }
+            70%  { box-shadow: 0 0 0 20px rgba(0,255,127,0); }
+            100% { box-shadow: 0 0 0 0 rgba(0,255,127,0); }
+        }
+        .whatsapp-float:hover { transform: scale(1.05); animation: none; }
+        .whatsapp-float svg { width: 28px; height: 28px; fill: #fff; margin-right: 10px; }
+        .whatsapp-float span { display: inline; }
+
+        /* Animated Reviews Viewport */
+        .reviews-section { padding: 60px 20px; background-color: #fff; text-align: center; font-family: 'Montserrat', sans-serif; }
+        .reviews-header h2 { font-size: 2.5rem; font-weight: 700; margin-bottom: 10px; color: #1a1a1a; }
+        @media (max-width: 768px) { .reviews-header h2 { font-size: 1.8rem; } }
+        .reviews-header span { color: #388E3C; }
+        .reviews-header p { color: #6b7280; margin-bottom: 40px; }
+
+        .scroll-grid-viewport {
+            height: 600px; max-width: 1200px; margin: 0 auto;
+            overflow: hidden; position: relative;
+            background-color: rgb(151,193,169); border-radius: 16px;
+            border: 1px solid #e5e7eb;
+            box-shadow: 0 10px 25px -5px rgba(0,0,0,0.1);
+        }
+        @media (max-width: 768px) { .scroll-grid-viewport { height: 400px; } }
+
+        .fade-overlay {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            z-index: 2; pointer-events: none;
+            background: linear-gradient(to bottom, rgba(255,255,255,1) 0%, rgba(255,255,255,0) 15%, rgba(255,255,255,0) 85%, rgba(255,255,255,1) 100%);
+        }
+        .reviews-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 24px; padding: 20px; height: 100%; }
+        @media (max-width: 768px) { .reviews-grid { grid-template-columns: 1fr; } }
+        .scroll-column { position: relative; height: 100%; overflow: hidden; }
+        .scroll-content img { display: block; width: 100%; border-radius: 12px; margin-bottom: 24px; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1); border: 1px solid #f3f4f6; }
+
+        .move-up   { animation: scroll-up 40s linear infinite; }
+        .move-down { animation: scroll-down 45s linear infinite; }
+        .scroll-content:hover { animation-play-state: paused; }
+        @keyframes scroll-up   { 0% { transform: translateY(0); } 100% { transform: translateY(-50%); } }
+        @keyframes scroll-down { 0% { transform: translateY(-50%); } 100% { transform: translateY(0); } }
+
+        /* Course Scroll Banner */
+        .animate-scroll { display: flex; width: max-content; animation: scroll 30s linear infinite; }
+        .animate-scroll:hover { animation-play-state: paused; }
+        @keyframes scroll { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
+
+        /* Top Announcement Ticker */
+        @keyframes ticker { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
+        .animate-ticker { display: inline-flex; white-space: nowrap; animation: ticker 25s linear infinite; }
+        .animate-ticker:hover { animation-play-state: paused; }
+
+        .badge-multiply { mix-blend-mode: multiply; }
+
+        /* Custom Scrollbars */
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-thumb { background-color: #e5e7eb; border-radius: 3px; }
+
+        /* Popup Fade Animation */
+        @keyframes popupFadeIn {
+            from { opacity: 0; transform: scale(0.9); }
+            to   { opacity: 1; transform: scale(1); }
+        }
+    </style>
+</head>
+<body class="bg-primary-bg text-text-dark font-inter">
+
+<!-- Top Announcement Ticker -->
+<div class="bg-white border-b border-gray-200 py-2 overflow-hidden relative z-40">
+    <div class="animate-ticker">
+        <span class="text-sm md:text-base font-montserrat font-bold text-gray-800 mx-8 flex items-center">
+            🔥 Join the Next Batch – Limited Slots Available!
+        </span>
+        <span class="text-sm md:text-base font-montserrat font-bold text-gray-800 mx-8 flex items-center">
+            🔥 Join the Next Batch – Limited Slots Available!
+        </span>
+        <span class="text-sm md:text-base font-montserrat font-bold text-gray-800 mx-8 flex items-center">
+            🔥 Join the Next Batch – Limited Slots Available!
+        </span>
+        <span class="text-sm md:text-base font-montserrat font-bold text-gray-800 mx-8 flex items-center">
+            🔥 Join the Next Batch – Limited Slots Available!
+        </span>
+    </div>
+</div>
+
+<!-- Header Navigation -->
+<header class="sticky top-0 z-50 bg-white/95 backdrop-blur-sm shadow-md border-b border-gray-200">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex justify-between items-center h-24 md:h-36 transition-all duration-300">
+            <div class="flex-shrink-0 flex items-center cursor-pointer" onclick="showView('home')">
+                <img src="assets/images/logo-bg.png" alt="Zone Pro Traders Logo"
+                     class="h-16 md:h-28 w-auto mr-3 transition-all duration-300">
+                <span class="text-lg md:text-2xl font-montserrat font-extrabold text-text-heading leading-tight">
+                    ZONE <span class="text-accent-main block md:inline">PRO TRADER</span>
+                </span>
+            </div>
+
+            <!-- Desktop Navigation Links -->
+            <nav class="hidden md:flex space-x-6 items-center">
+                <a href="#hero" onclick="showView('home')" class="text-text-heading hover:text-accent-main transition duration-300 font-semibold">Home</a>
+                <a href="#announcements-section" onclick="showView('home')" class="text-text-heading hover:text-accent-main transition duration-300 font-semibold flex items-center gap-1">
+                    <i data-lucide="bell" class="w-4 h-4 text-accent-main"></i> Announcements
+                </a>
+                <a href="#tools" onclick="showView('home')" class="text-text-heading hover:text-accent-main transition duration-300 font-semibold">Tools</a>
+                <a href="#mentorship" onclick="showView('home')" class="text-text-heading hover:text-accent-main transition duration-300 font-semibold">Slots</a>
+                <a href="#reviews" onclick="showView('home')" class="text-text-heading hover:text-accent-main transition duration-300 font-semibold">Reviews</a>
+                <a href="pages/login.html" class="text-text-heading hover:text-accent-main transition duration-300 font-semibold">Login</a>
+                <a href="pages/subscription.html" class="bg-accent-main text-white px-6 py-2.5 rounded-full font-bold hover:bg-accent-dark transition duration-300 shadow-md hover:shadow-lg transform hover:-translate-y-0.5">Subscribe</a>
+            </nav>
+
+            <!-- Mobile Hamburger Button -->
+            <button id="mobile-menu-button" class="md:hidden text-text-heading p-2 rounded-md hover:bg-gray-100 transition duration-300">
+                <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                </svg>
+            </button>
+        </div>
+    </div>
+
+    <!-- Mobile Dropdown Menu -->
+    <div id="mobile-menu" class="md:hidden hidden bg-white shadow-xl absolute w-full left-0 border-t border-gray-100">
+        <div class="px-4 pt-2 pb-6 space-y-2">
+            <a href="#hero" onclick="showView('home')" class="block px-3 py-3 rounded-md text-base font-bold text-text-heading hover:bg-gray-50 border-b border-gray-100">Home</a>
+            <a href="#announcements-section" onclick="showView('home')" class="block px-3 py-3 rounded-md text-base font-bold text-text-heading hover:bg-gray-50 border-b border-gray-100 flex items-center justify-between">
+                <span>Announcements</span>
+                <span class="bg-green-100 text-accent-dark text-xs px-2 py-0.5 rounded-full font-bold">New</span>
+            </a>
+            <a href="#tools" onclick="showView('home')" class="block px-3 py-3 rounded-md text-base font-bold text-text-heading hover:bg-gray-50 border-b border-gray-100">Tools</a>
+            <a href="#reviews" onclick="showView('home')" class="block px-3 py-3 rounded-md text-base font-bold text-text-heading hover:bg-gray-50 border-b border-gray-100">Reviews</a>
+            <a href="#mentorship" onclick="showView('home')" class="block px-3 py-3 rounded-md text-base font-bold text-text-heading hover:bg-gray-50 border-b border-gray-100">Slots</a>
+            <a href="pages/login.html" class="block px-3 py-3 rounded-md text-base font-bold text-text-heading hover:bg-gray-50">Login | Signup</a>
+            <a href="pages/subscription.html" class="block w-full text-center bg-accent-main text-white py-3 rounded-lg font-bold hover:bg-accent-dark transition duration-300">Subscribe</a>
+        </div>
+    </div>
+</header>
+
+<main>
+
+    <!-- Hero Section -->
+    <section id="hero" class="hero-bg py-16 md:py-32 text-center rounded-b-xl shadow-2xl shadow-accent-main/10 text-white px-4">
+        <div class="max-w-4xl mx-auto">
+            <h1 class="text-4xl md:text-7xl font-montserrat font-black leading-tight mb-6 text-white drop-shadow-lg">
+                Zone Pro Trader <span class="text-accent-light block md:inline">Portal</span>
+            </h1>
+            <p class="text-base md:text-xl text-text-light mb-10 max-w-2xl mx-auto font-inter">
+                Everything you need for trading in one place — learn, use powerful tools, and trade smarter.
+            </p>
+            <a href="pages/subscription.html" class="inline-block bg-accent-main text-white text-lg font-bold px-10 py-4 rounded-full shadow-lg hover:bg-accent-dark hover:scale-105 transition-all duration-300">
+                Subscribe Now
+            </a>
+        </div>
+    </section>
+
+    <!-- Announcements Section (Integrated in Homepage) -->
+    <section id="announcements-section" class="py-12 md:py-20 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 mb-8">
+            <div class="flex items-center gap-3">
+                <div class="p-3 bg-green-50 rounded-2xl shadow-xs border border-green-100">
+                    <i data-lucide="bell" class="w-7 h-7 text-accent-main"></i>
+                </div>
+                <div>
+                    <h2 class="text-2xl md:text-3xl font-montserrat font-bold text-gray-900 tracking-tight">
+                        Latest <span class="text-accent-main">Announcements</span>
+                    </h2>
+                    <p class="text-sm text-gray-500 font-medium">Stay updated with the newest features, market timings & alerts</p>
+                </div>
+            </div>
+            <a href="https://t.me/YOUR_USERNAME" target="_blank" class="text-xs md:text-sm font-bold text-accent-dark bg-green-50 px-4 py-2 rounded-xl border border-green-200 hover:bg-green-100 transition-colors flex items-center gap-2">
+                <i data-lucide="send" class="w-4 h-4"></i> Join Telegram Channel
+            </a>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <!-- Feature Alert -->
+            <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 flex items-start gap-4 hover:shadow-md transition-shadow">
+                <div class="p-3 bg-green-50 rounded-xl flex-shrink-0">
+                    <i data-lucide="sparkles" class="w-6 h-6 text-accent-main"></i>
+                </div>
+                <div>
+                    <div class="flex items-center justify-between gap-2 mb-1">
+                        <h3 class="font-bold text-gray-900 text-base">Advanced Swing Scanner</h3>
+                        <span class="text-[11px] text-gray-400 font-mono">2h ago</span>
+                    </div>
+                    <p class="text-gray-600 text-sm leading-relaxed">Multi-day trend reversal and momentum breakout filter is live.</p>
+                </div>
+            </div>
+
+            <!-- Market Open Notice -->
+            <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 flex items-start gap-4 hover:shadow-md transition-shadow">
+                <div class="p-3 bg-green-50 rounded-xl flex-shrink-0">
+                    <i data-lucide="check-circle" class="w-6 h-6 text-accent-main"></i>
+                </div>
+                <div>
+                    <div class="flex items-center justify-between gap-2 mb-1">
+                        <h3 class="font-bold text-gray-900 text-base">Live Market Sessions</h3>
+                        <span class="text-[11px] text-gray-400 font-mono">Today</span>
+                    </div>
+                    <p class="text-gray-600 text-sm leading-relaxed">Daily live trade breakdown and options OI heatmap ready for market hours.</p>
+                </div>
+            </div>
+
+            <!-- Platform Maintenance -->
+            <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 flex items-start gap-4 hover:shadow-md transition-shadow">
+                <div class="p-3 bg-yellow-50 rounded-xl flex-shrink-0">
+                    <i data-lucide="shield-alert" class="w-6 h-6 text-yellow-600"></i>
+                </div>
+                <div>
+                    <div class="flex items-center justify-between gap-2 mb-1">
+                        <h3 class="font-bold text-gray-900 text-base">Scheduled Upgrades</h3>
+                        <span class="text-[11px] text-gray-400 font-mono">Sunday</span>
+                    </div>
+                    <p class="text-gray-600 text-sm leading-relaxed">Server optimization scheduled between 2:00 AM - 4:00 AM IST.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Tools Section -->
+    <section id="tools" class="py-12 md:py-24 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 bg-gray-50/50 rounded-3xl">
+        <h2 class="text-3xl md:text-5xl font-montserrat font-bold text-center mb-10 md:mb-16">
+            Your Trading <span class="text-[#388E3C]">Toolkit</span>
+        </h2>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+
+            <!-- Journal Reporting Card -->
+            <div class="bg-[#1e1e1e] p-6 md:p-8 rounded-2xl shadow-2xl card-hover transition duration-300">
+                <div class="h-44 bg-gray-800 rounded-xl mb-6 flex items-center justify-center overflow-hidden">
+                    <img src="assets/images/journal-reporting-tool.png" alt="Journal Reporting Dashboard" class="w-full h-full object-cover">
+                </div>
+                <h3 class="text-xl md:text-2xl font-montserrat font-bold text-[#f0f0f0] mb-3">Journal Reporting</h3>
+                <p class="text-[#a0a0a0] text-sm md:text-base">Log trades in seconds—no spreadsheets needed. Instantly track your wins, risk, and capital on one simple dashboard.</p>
+            </div>
+
+            <!-- Option Trading Tools / Swing Scanner Interactive Card -->
+            <div class="bg-[#1e1e1e] p-6 md:p-8 rounded-2xl shadow-2xl card-hover transition duration-300 relative min-h-[450px]">
+                <div id="ott-content" class="cursor-pointer h-full flex flex-col" onclick="showSwingScanner()">
+                    <div class="h-44 bg-gray-800 rounded-xl mb-6 flex items-center justify-center overflow-hidden">
+                        <img src="assets/images/ott.webp" alt="Option Trading Tools Heatmap" class="w-full h-full object-cover">
+                    </div>
+                    <h3 class="text-xl md:text-2xl font-montserrat font-bold text-[#f0f0f0] mb-3">Option Trading Tools</h3>
+                    <p class="text-[#a0a0a0] text-sm md:text-base mb-4">Stay on top of the options market with live updates for Nifty 50 and Bank Nifty. Heatmaps and sector charts included.</p>
+                    <span class="mt-auto inline-flex items-center text-xs font-bold text-accent-main hover:underline">Click to view Swing Scanner &rarr;</span>
+                </div>
+                <div id="swing-scanner-content" class="hidden h-full flex flex-col">
+                    <div class="h-40 bg-green-900/20 border border-green-500/30 rounded-xl mb-6 flex flex-col items-center justify-center text-center p-4">
+                        <svg class="w-12 h-12 text-[#388E3C] mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path>
+                        </svg>
+                        <span class="text-white font-bold">Swing Scanner Active</span>
+                    </div>
+                    <h3 class="text-xl md:text-2xl font-montserrat font-bold text-[#388E3C] mb-3">Swing Scanner</h3>
+                    <p class="text-[#f0f0f0] text-sm leading-relaxed mb-6">
+                        Our Advanced Swing Scanner is designed to identify high-probability trend reversals and momentum breakout stocks across 4000+ equities.
+                    </p>
+                    <a href="pages/swing-scanner.html" target="_blank" class="mt-auto block w-full text-center bg-[#388E3C] text-white py-3 rounded-xl font-bold hover:bg-[#2e7030] transition shadow-lg">
+                        Launch Scanner Website
+                    </a>
+                </div>
+            </div>
+
+            <!-- Investment Screener Card -->
+            <div class="bg-[#1e1e1e] p-6 md:p-8 rounded-2xl shadow-2xl card-hover transition duration-300">
+                <div class="h-44 bg-gray-800 rounded-xl mb-6 flex items-center justify-center overflow-hidden">
+                    <img src="assets/images/is.webp" alt="Investment Screener Interface" class="w-full h-full object-cover">
+                </div>
+                <h3 class="text-xl md:text-2xl font-montserrat font-bold text-[#f0f0f0] mb-3">Investment Screener</h3>
+                <p class="text-[#a0a0a0] text-sm md:text-base">Instantly scan over 4000 stocks to find exactly what you are looking for. Build your watchlist in seconds.</p>
+            </div>
+        </div>
+        
+        <div class="text-center mt-12">
+            <a href="#mentorship" class="inline-flex items-center space-x-2 bg-white text-[#388E3C] border border-gray-200 px-6 py-3 rounded-xl font-bold hover:bg-gray-100 hover:text-[#0a0a0a] transition duration-300 shadow-md">
+                Explore All Tools & Features
+            </a>
+        </div>
+    </section>
+
+    <!-- Meet Your Mentor Section -->
+    <section class="py-12 md:py-24 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center bg-section-bg rounded-xl">
+        <h2 class="text-3xl md:text-5xl font-montserrat font-bold mb-4 text-text-heading">
+            Meet Your <span class="text-accent-main">Mentor</span>
+        </h2>
+        <div class="flex flex-col lg:flex-row items-center lg:items-start lg:text-left mt-8 md:mt-12 bg-card-bg p-6 md:p-8 rounded-2xl shadow-2xl shadow-accent-main/10 border border-border-light">
+            <div class="w-full lg:w-1/3 mb-6 lg:mb-0 lg:mr-8 flex justify-center">
+                <img src="assets/images/mentor.jpg" alt="Mentor Image - Mr Karuppusamy" class="rounded-2xl object-cover shadow-xl border-4 border-accent-main/50 w-full max-w-[280px] md:max-w-[300px]">
+            </div>
+            <div class="w-full lg:w-2/3 flex flex-col items-center lg:items-start">
+                <div class="inline-flex items-center px-4 md:px-6 py-2 bg-white border-2 border-gray-400 rounded-md mb-4 shadow-sm">
+                    <span class="font-sans text-sm md:text-lg font-semibold tracking-wide text-black uppercase">
+                        Founder of ZONE PRO TRADER
+                    </span>
+                    <div class="flex items-center ml-2">
+                        <img src="assets/images/founder-badge.jpeg" alt="Founder Badge" class="w-8 h-8 md:w-10 md:h-10 object-contain badge-multiply">
+                    </div>
+                </div>
+                <h3 class="text-2xl md:text-3xl font-montserrat font-bold text-text-heading mb-4">Mr Karuppusamy</h3>
+                <p class="text-base md:text-lg text-text-muted mb-6 leading-relaxed text-center lg:text-left">
+                    Mr. Karuppusamy has many years of real stock market experience. He teaches easy methods that help many students earn money in trading. He explains everything step-by-step, so you never feel lost or confused.
+                </p>
+                <figure class="mb-6 border-l-4 border-accent-main pl-4 bg-gray-50 py-2 pr-4 rounded-r-lg w-full">
+                    <blockquote class="italic text-gray-700 text-base md:text-lg font-medium text-left">
+                        "If you don't find a way to make money while you sleep, you will work until you die."
+                    </blockquote>
+                    <figcaption class="text-accent-main font-bold text-sm mt-1 uppercase tracking-wider text-left">
+                        - Warren Buffett
+                    </figcaption>
+                </figure>
+            </div>
+        </div>
+    </section>
+
+    <!-- Mentorship Curriculum Program -->
+    <section id="mentorship" class="py-12 md:py-24 cta-bg text-center rounded-2xl mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 shadow-2xl shadow-accent-main/10">
+        <h2 class="text-3xl md:text-5xl font-montserrat font-black text-white mb-8 md:mb-10">
+            Join Our <span class="text-accent-main">Stock Market Mentorship</span> Program
+        </h2>
+        <p class="text-base md:text-lg text-text-muted mb-8 md:mb-12">Below are the topics you will learn in this course</p>
+        <div class="max-w-3xl mx-auto space-y-4">
+            <div class="bg-white/80 backdrop-blur-sm p-4 rounded-xl flex items-center shadow-lg border border-accent-main/30">
+                <span class="text-accent-main text-lg md:text-xl font-bold mr-4 w-8 h-8 flex-shrink-0 flex items-center justify-center border-2 border-accent-main rounded-full bg-white">1</span>
+                <p class="text-base md:text-lg text-text-heading font-medium text-left">Option Buying 8 Strategies (Basic to Advanced)</p>
+            </div>
+            <div class="bg-white/80 backdrop-blur-sm p-4 rounded-xl flex items-center shadow-lg border border-accent-main/30">
+                <span class="text-accent-main text-lg md:text-xl font-bold mr-4 w-8 h-8 flex-shrink-0 flex items-center justify-center border-2 border-accent-main rounded-full bg-white">2</span>
+                <p class="text-base md:text-lg text-text-heading font-medium text-left">Option Selling Monthly Income Strategy</p>
+            </div>
+            <div class="bg-white/80 backdrop-blur-sm p-4 rounded-xl flex items-center shadow-lg border border-accent-main/30">
+                <span class="text-accent-main text-lg md:text-xl font-bold mr-4 w-8 h-8 flex-shrink-0 flex items-center justify-center border-2 border-accent-main rounded-full bg-white">3</span>
+                <p class="text-base md:text-lg text-text-heading font-medium text-left">Multibagger &amp; Swing Trading Special Strategy</p>
+            </div>
+            <div class="bg-white/80 backdrop-blur-sm p-4 rounded-xl flex items-center shadow-lg border border-accent-main/30">
+                <span class="text-accent-main text-lg md:text-xl font-bold mr-4 w-8 h-8 flex-shrink-0 flex items-center justify-center border-2 border-accent-main rounded-full bg-white">4</span>
+                <p class="text-base md:text-lg text-text-heading font-medium text-left">Intraday, Commodity, IPOs</p>
+            </div>
+            <div class="bg-white/80 backdrop-blur-sm p-4 rounded-xl flex items-center shadow-lg border border-accent-main/30">
+                <span class="text-accent-main text-lg md:text-xl font-bold mr-4 w-8 h-8 flex-shrink-0 flex items-center justify-center border-2 border-accent-main rounded-full bg-white">5</span>
+                <p class="text-base md:text-lg text-text-heading font-medium text-left">Risk Management &amp; Psychology Blueprint</p>
+            </div>
+            <div class="bg-white/80 backdrop-blur-sm p-4 rounded-xl flex items-center shadow-lg border border-accent-main/30">
+                <span class="text-accent-main text-lg md:text-xl font-bold mr-4 w-8 h-8 flex-shrink-0 flex items-center justify-center border-2 border-accent-main rounded-full bg-white">6</span>
+                <p class="text-base md:text-lg text-text-heading font-medium text-left">Access to Student Portal (Tools &amp; Journals)</p>
+            </div>
+        </div>
+        <p class="text-xl md:text-2xl font-montserrat font-bold text-accent-main mt-10 md:mt-12 mb-4">Registration Ends Soon</p>
+        <a href="pages/subscription.html" class="inline-block bg-accent-main text-white px-8 py-3.5 rounded-xl font-bold text-lg hover:bg-accent-dark transition-all shadow-md active:scale-95">
+            Join Now
+        </a>
+    </section>
+
+    <!-- 3 Step Mantra Section -->
+    <section class="py-12 md:py-24 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+        <h2 class="text-3xl md:text-5xl font-montserrat font-bold mb-10 md:mb-16 text-text-heading">
+            3 Step Mantra Followed By <span class="text-accent-main">Us</span>
+        </h2>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-12 text-left">
+            <div class="p-6 rounded-2xl border border-border-light shadow-xl bg-card-bg card-hover transition duration-300">
+                <span class="text-xl font-bold text-accent-main block mb-2">Step 1:</span>
+                <h3 class="text-2xl font-montserrat font-bold mb-3 text-text-heading">Discipline</h3>
+                <p class="text-text-muted">"Profit comes and goes, but discipline makes you grow."</p>
+                <p class="text-text-muted mt-2">Trade with discipline, not emotion - the market doesn't care about your feelings, it only responds to your actions.</p>
+            </div>
+            <div class="p-6 rounded-2xl border border-border-light shadow-xl bg-card-bg card-hover transition duration-300">
+                <span class="text-xl font-bold text-accent-main block mb-2">Step 2:</span>
+                <h3 class="text-2xl font-montserrat font-bold mb-3 text-text-heading">Risk &amp; Money Management</h3>
+                <p class="text-text-muted">Every trader enters the market to earn rewards but if you don't know how to deal with risks in the market you cannot ever earn desired rewards.</p>
+            </div>
+            <div class="p-6 rounded-2xl border border-border-light shadow-xl bg-card-bg card-hover transition duration-300">
+                <span class="text-xl font-bold text-accent-main block mb-2">Step 3:</span>
+                <h3 class="text-2xl font-montserrat font-bold mb-3 text-text-heading">Own Research</h3>
+                <p class="text-text-muted">Don't just follow the crowd. Do your research and aim to buy low and sell high.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Why Unique Section -->
+    <section class="py-12 md:py-24 bg-[#1e1e1e] unique-bg">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <h2 class="text-3xl md:text-5xl font-montserrat font-bold mb-10 md:mb-16 text-[#f0f0f0]">
+                Why We Are <span class="text-[#00ff7f]">Unique?</span>
+            </h2>
+            <p class="text-base md:text-lg text-[#f0f0f0] max-w-4xl mx-auto mb-10 md:mb-16">
+                <strong class="text-white">ZONE PRO TRADER</strong> — We make trading education simple, structured, and relatable. With a syllabus built from scratch and tailored for all levels.
+            </p>
+            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 md:gap-8 text-left">
+                <div class="p-6 rounded-2xl bg-[#0a0a0a] shadow-2xl card-hover transition duration-300">
+                    <svg class="w-8 h-8 text-[#00ff7f] mb-3" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" fill="none"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect><line x1="8" y1="21" x2="16" y2="21"></line><line x1="12" y1="17" x2="12" y2="21"></line></svg>
+                    <h3 class="text-xl font-montserrat font-bold mb-2 text-white">STUDENTS PORTAL</h3>
+                    <p class="text-[#a0a0a0] text-sm">Proudly introducing a dedicated trading student portal from Tamil Nadu.</p>
+                </div>
+                <div class="p-6 rounded-2xl bg-[#0a0a0a] shadow-2xl card-hover transition duration-300">
+                    <svg class="w-8 h-8 text-[#00ff7f] mb-3" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" fill="none"><polygon points="23 7 16 12 23 17 23 7"></polygon><rect x="1" y="5" width="15" height="14" rx="2" ry="2"></rect></svg>
+                    <h3 class="text-xl font-montserrat font-bold mb-2 text-white">RECORDINGS</h3>
+                    <p class="text-[#a0a0a0] text-sm">Never miss a session, revisit every live class anytime, anywhere.</p>
+                </div>
+                <div class="p-6 rounded-2xl bg-[#0a0a0a] shadow-2xl card-hover transition duration-300">
+                    <svg class="w-8 h-8 text-[#00ff7f] mb-3" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" fill="none"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
+                    <h3 class="text-xl font-montserrat font-bold mb-2 text-white">LIFETIME DOUBT SOLVING</h3>
+                    <p class="text-[#a0a0a0] text-sm">Get guided one-on-one by professionals even after the course.</p>
+                </div>
+                <div class="p-6 rounded-2xl bg-[#0a0a0a] shadow-2xl card-hover transition duration-300">
+                    <svg class="w-8 h-8 text-[#00ff7f] mb-3" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" fill="none"><path d="M3 3v18h18"></path><path d="M18 17V9"></path><path d="M13 17v-5"></path><path d="M8 17v-3"></path></svg>
+                    <h3 class="text-xl font-montserrat font-bold mb-2 text-white">2 YEARS TRADING PLAN</h3>
+                    <p class="text-[#a0a0a0] text-sm">A proven 24-month roadmap designed to transform beginners.</p>
+                </div>
+                <div class="p-6 rounded-2xl bg-[#0a0a0a] shadow-2xl card-hover transition duration-300">
+                    <svg class="w-8 h-8 text-[#00ff7f] mb-3" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" fill="none"><path d="M3 7V5a2 2 0 0 1 2-2h2"></path><path d="M17 3h2a2 2 0 0 1 2 2v2"></path><path d="M21 17v2a2 2 0 0 1-2 2h-2"></path><path d="M7 21H5a2 2 0 0 1-2-2v-2"></path><rect x="7" y="7" width="10" height="10"></rect></svg>
+                    <h3 class="text-xl font-montserrat font-bold mb-2 text-white">SCANNER LINK</h3>
+                    <p class="text-[#a0a0a0] text-sm">Spot winning stocks effortlessly with our custom-built scanners.</p>
+                </div>
+                <div class="p-6 rounded-2xl bg-[#0a0a0a] shadow-2xl card-hover transition duration-300">
+                    <svg class="w-8 h-8 text-[#00ff7f] mb-3" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" fill="none"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+                    <h3 class="text-xl font-montserrat font-bold mb-2 text-white">MENTORSHIP PROGRAM</h3>
+                    <p class="text-[#a0a0a0] text-sm">Personal mentorship that elevates your skills from theory to mastery.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Who Can Join Section -->
+    <section class="py-12 md:py-24 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+        <h2 class="text-3xl md:text-5xl font-montserrat font-bold mb-10 md:mb-16 text-text-heading">
+            Who Can <span class="text-accent-main">Join?</span>
+        </h2>
+        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-6 md:gap-8">
+            <div class="group relative overflow-hidden rounded-2xl shadow-xl card-hover transition duration-300 h-[300px] md:h-[400px]">
+                <img src="assets/images/wp.jpg" alt="Working Professionals" class="w-full h-full object-cover transition duration-500 group-hover:scale-105">
+                <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-teal-900/90 via-teal-900/50 to-transparent p-6 flex items-end justify-center h-1/2">
+                    <p class="text-xl md:text-2xl font-montserrat font-bold text-white">Working Professionals</p>
+                </div>
+            </div>
+            <div class="group relative overflow-hidden rounded-2xl shadow-xl card-hover transition duration-300 h-[300px] md:h-[400px]">
+                <img src="assets/images/std.jpg" alt="Students" class="w-full h-full object-cover transition duration-500 group-hover:scale-105">
+                <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-teal-900/90 via-teal-900/50 to-transparent p-6 flex items-end justify-center h-1/2">
+                    <p class="text-xl md:text-2xl font-montserrat font-bold text-white">Students</p>
+                </div>
+            </div>
+            <div class="group relative overflow-hidden rounded-2xl shadow-xl card-hover transition duration-300 h-[300px] md:h-[400px]">
+                <img src="assets/images/hmm.jpg" alt="Homemakers" class="w-full h-full object-cover transition duration-500 group-hover:scale-105">
+                <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-teal-900/90 via-teal-900/50 to-transparent p-6 flex items-end justify-center h-1/2">
+                    <p class="text-xl md:text-2xl font-montserrat font-bold text-white">Homemakers</p>
+                </div>
+            </div>
+            <div class="group relative overflow-hidden rounded-2xl shadow-xl card-hover transition duration-300 h-[300px] md:h-[400px]">
+                <img src="assets/images/willing-to-achieve.jpg" alt="Anyone Who Will Achieve" class="w-full h-full object-cover transition duration-500 group-hover:scale-105">
+                <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-teal-900/90 via-teal-900/50 to-transparent p-6 flex items-end justify-center h-1/2">
+                    <p class="text-xl md:text-2xl font-montserrat font-bold text-white">Anyone Who Will Achieve</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Explore Courses Carousel -->
+    <section class="py-12 md:py-24 bg-section-bg courses-bg overflow-hidden">
+        <div class="w-full text-center">
+            <h2 class="text-3xl md:text-5xl font-montserrat font-black text-white mb-10 md:mb-16">
+                Explore Our <span class="text-accent-main">Courses</span>
+            </h2>
+            <div class="animate-scroll gap-4 md:gap-8 px-4">
+                <div class="bg-card-bg p-6 rounded-2xl shadow-2xl relative overflow-hidden card-hover border border-border-light w-[85vw] md:w-[350px] flex-shrink-0 flex flex-col">
+                    <span class="absolute top-4 right-4 bg-red-600 text-white text-xs font-bold px-3 py-1 rounded-full">40% OFF</span>
+                    <div class="h-40 md:h-48 bg-primary-bg rounded-xl mb-4 flex items-center justify-center overflow-hidden">
+                        <img src="assets/images/on-cls.jpg" alt="Online Course" class="w-full h-full object-cover rounded-lg">
+                    </div>
+                    <p class="text-text-muted mb-2"><span class="line-through">₹14,999</span> <span class="text-accent-main text-xl font-bold">₹9,999</span></p>
+                    <h3 class="text-xl font-montserrat font-bold mb-4 text-black">Online Course</h3>
+                    <a href="https://wa.me/919361241485?text=Hi,%20I%20am%20interested%20in%20Online%20Course" target="_blank" class="mt-auto block w-full bg-white text-[#0a0a0a] px-4 py-2 rounded-lg font-bold hover:bg-gray-300 transition duration-300 shadow-md">Whatsapp</a>
+                </div>
+                <div class="bg-card-bg p-6 rounded-2xl shadow-2xl relative overflow-hidden card-hover border border-border-light w-[85vw] md:w-[350px] flex-shrink-0 flex flex-col">
+                    <span class="absolute top-4 right-4 bg-red-600 text-white text-xs font-bold px-3 py-1 rounded-full">20% OFF</span>
+                    <div class="h-40 md:h-48 bg-primary-bg rounded-xl mb-4 flex items-center justify-center overflow-hidden">
+                        <img src="assets/images/of-cs.jpg" alt="Offline Course" class="w-full h-full object-cover rounded-lg">
+                    </div>
+                    <p class="text-text-muted mb-2"><span class="line-through">₹23,999</span> <span class="text-accent-main text-xl font-bold">₹19,999</span></p>
+                    <h3 class="text-xl font-montserrat font-bold mb-4 text-black">Offline Course</h3>
+                    <a href="https://wa.me/919361241485?text=Hi,%20I%20am%20interested%20in%20Offline%20Course" target="_blank" class="mt-auto block w-full bg-white text-[#0a0a0a] px-4 py-2 rounded-lg font-bold hover:bg-gray-300 transition duration-300 shadow-md">Whatsapp</a>
+                </div>
+                <div class="bg-card-bg p-6 rounded-2xl shadow-2xl relative overflow-hidden card-hover border border-border-light w-[85vw] md:w-[350px] flex-shrink-0 flex flex-col">
+                    <span class="absolute top-4 right-4 bg-red-600 text-white text-xs font-bold px-3 py-1 rounded-full">40% OFF</span>
+                    <div class="h-40 md:h-48 bg-primary-bg rounded-xl mb-4 flex items-center justify-center overflow-hidden">
+                        <img src="assets/images/opsc.webp" alt="Option Selling" class="w-full h-full object-cover rounded-lg">
+                    </div>
+                    <p class="text-text-muted mb-2"><span class="line-through">₹4,999</span> <span class="text-accent-main text-xl font-bold">₹2,999</span></p>
+                    <h3 class="text-xl font-montserrat font-bold mb-4 text-black">Option Selling</h3>
+                    <a href="https://wa.me/919361241485?text=Hi,%20I%20am%20interested%20in%20Option%20Selling" target="_blank" class="mt-auto block w-full bg-white text-[#0a0a0a] px-4 py-2 rounded-lg font-bold hover:bg-gray-300 transition duration-300 shadow-md">Whatsapp</a>
+                </div>
+                <div class="bg-card-bg p-6 rounded-2xl shadow-2xl relative overflow-hidden card-hover border border-border-light w-[85vw] md:w-[350px] flex-shrink-0 flex flex-col">
+                    <span class="absolute top-4 right-4 bg-red-600 text-white text-xs font-bold px-3 py-1 rounded-full">40% OFF</span>
+                    <div class="h-40 md:h-48 bg-primary-bg rounded-xl mb-4 flex items-center justify-center overflow-hidden">
+                        <img src="assets/images/is-st.jpg" alt="Investment & Swing" class="w-full h-full object-cover rounded-lg">
+                    </div>
+                    <p class="text-text-muted mb-2"><span class="line-through">₹7,999</span> <span class="text-accent-main text-xl font-bold">₹4,999</span></p>
+                    <h3 class="text-xl font-montserrat font-bold mb-4 text-black">Investment &amp; Swing Trading</h3>
+                    <a href="https://wa.me/919361241485?text=Hi,%20I%20am%20interested%20in%20Investment%20and%20Swing" target="_blank" class="mt-auto block w-full bg-white text-[#0a0a0a] px-4 py-2 rounded-lg font-bold hover:bg-gray-300 transition duration-300 shadow-md">Whatsapp</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Student Reviews Section -->
+    <section id="reviews" class="reviews-section">
+        <div class="reviews-container">
+            <div class="reviews-header">
+                <h2 class="text-3xl md:text-5xl">What Our <span>Students Say</span></h2>
+                <p>Helped many students to become financially free</p>
+            </div>
+            <div class="scroll-grid-viewport">
+                <div class="fade-overlay"></div>
+                <div class="reviews-grid">
+                    <div class="scroll-column">
+                        <div class="scroll-content move-up">
+                            <img src="assets/images/fb-1.jpg" alt="Review">
+                            <img src="assets/images/fb2.jpg" alt="Review">
+                            <img src="assets/images/fb-3.jpg" alt="Review">
+                            <img src="assets/images/fb-1.jpg" alt="Review">
+                            <img src="assets/images/fb2.jpg" alt="Review">
+                            <img src="assets/images/fb-3.jpg" alt="Review">
+                        </div>
+                    </div>
+                    <div class="scroll-column hidden md:block">
+                        <div class="scroll-content move-down">
+                            <img src="assets/images/fb-4.jpg" alt="Review">
+                            <img src="assets/images/fb-5.jpg" alt="Review">
+                            <img src="assets/images/fb-6.jpg" alt="Review">
+                            <img src="assets/images/fb-4.jpg" alt="Review">
+                            <img src="assets/images/fb-5.jpg" alt="Review">
+                            <img src="assets/images/fb-6.jpg" alt="Review">
+                        </div>
+                    </div>
+                    <div class="scroll-column hidden md:block">
+                        <div class="scroll-content move-up">
+                            <img src="assets/images/fb2.jpg" alt="Review">
+                            <img src="assets/images/fb-6.jpg" alt="Review">
+                            <img src="assets/images/fb-1.jpg" alt="Review">
+                            <img src="assets/images/fb2.jpg" alt="Review">
+                            <img src="assets/images/fb-6.jpg" alt="Review">
+                            <img src="assets/images/fb-1.jpg" alt="Review">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Frequently Asked Questions -->
+    <section class="py-12 md:py-24 bg-section-bg faq-bg">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+            <h2 class="text-3xl md:text-5xl font-montserrat font-bold text-center mb-10 md:mb-12 text-white">
+                Frequently Asked <span class="text-accent-main">Questions</span>
+            </h2>
+            <div class="space-y-4">
+                <details class="bg-card-bg p-4 rounded-xl shadow-xl group cursor-pointer border border-border-light">
+                    <summary class="flex justify-between items-center text-base md:text-lg font-semibold text-text-heading list-none">
+                        Is This Course Suitable for Beginners?
+                        <svg class="w-5 h-5 text-accent-main transition-transform duration-300 group-open:rotate-180 flex-shrink-0 ml-2" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" fill="none"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                    </summary>
+                    <p class="text-text-muted mt-3 pt-3 border-t border-border-light text-sm md:text-base">
+                        Yes, absolutely! The <strong>ZONE PRO TRADER</strong> curriculum is designed from scratch, making it perfect for absolute beginners with no prior stock market knowledge.
+                    </p>
+                </details>
+                <details class="bg-card-bg p-4 rounded-xl shadow-xl group cursor-pointer border border-border-light">
+                    <summary class="flex justify-between items-center text-base md:text-lg font-semibold text-text-heading list-none">
+                        Do I Need Any Prior Knowledge to Join This Course?
+                        <svg class="w-5 h-5 text-accent-main transition-transform duration-300 group-open:rotate-180 flex-shrink-0 ml-2" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" fill="none"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                    </summary>
+                    <p class="text-text-muted mt-3 pt-3 border-t border-border-light text-sm md:text-base">
+                        No prior knowledge is required. We cover everything from the basic concepts of the stock market to advanced trading strategies step-by-step.
+                    </p>
+                </details>
+            </div>
+            <div class="text-center mt-12">
+                <p class="text-[#a0a0a0]">Need more clarity? Chat with us directly.
+                    <a href="https://wa.me/+919361241485" target="_blank" class="text-[#00ff7f] hover:underline font-bold inline-flex items-center">
+                        WhatsApp
+                        <svg class="w-4 h-4 ml-1" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" fill="none"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
+                    </a>
+                </p>
+            </div>
+        </div>
+    </section>
+
+</main>
+
+<!-- Footer -->
+<footer class="bg-[#0a0a0a] py-12 border-t border-[#1e1e1e]">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+            <div>
+                <h3 class="text-xl font-montserrat font-bold text-white mb-4">ZONE <span class="text-[#00ff7f]">PRO TRADER</span></h3>
+                <p class="text-[#a0a0a0] text-sm">Your ultimate destination for stock market education and trading tools.</p>
+            </div>
+            <div>
+                <h4 class="text-lg font-semibold text-[#f0f0f0] mb-4">Quick Links</h4>
+                <ul class="space-y-2">
+                    <li><a href="#hero" class="text-[#a0a0a0] hover:text-[#00ff7f] transition duration-300 text-sm">Home</a></li>
+                    <li><a href="#announcements-section" class="text-[#a0a0a0] hover:text-[#00ff7f] transition duration-300 text-sm">Announcements</a></li>
+                    <li><a href="#tools" class="text-[#a0a0a0] hover:text-[#00ff7f] transition duration-300 text-sm">Tools</a></li>
+                    <li><a href="#mentorship" class="text-[#a0a0a0] hover:text-[#00ff7f] transition duration-300 text-sm">Mentorship</a></li>
+                    <li><a href="#reviews" class="text-[#a0a0a0] hover:text-[#00ff7f] transition duration-300 text-sm">Reviews</a></li>
+                </ul>
+            </div>
+            <div>
+                <h4 class="text-lg font-semibold text-[#f0f0f0] mb-4">Legal</h4>
+                <ul class="space-y-2">
+                    <li><a href="pages/privacy.html" class="text-[#a0a0a0] hover:text-[#00ff7f] transition duration-300 text-sm">Privacy Policy</a></li>
+                    <li><a href="pages/terms.html" class="text-[#a0a0a0] hover:text-[#00ff7f] transition duration-300 text-sm">Terms of Service</a></li>
+                    <li><a href="pages/refund.html" class="text-[#a0a0a0] hover:text-[#00ff7f] transition duration-300 text-sm">Refund Policy</a></li>
+                </ul>
+            </div>
+            <div>
+                <h4 class="text-lg font-semibold text-[#f0f0f0] mb-4">Follow Us</h4>
+                <div class="flex space-x-4">
+                    <a href="https://t.me/YOUR_USERNAME" target="_blank" class="text-[#a0a0a0] hover:text-[#00ff7f] transition duration-300">
+                        <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M21.94 4.53l-17.6 6.8c-1.2.5-1.2 1.2-.2 1.5l4.5 1.4 10.5-6.6c.5-.3 1-.1.6.2l-8.5 7.7v.01l-.3 4.7c.5 0 .7-.2.9-.5l2.2-2.2 4.6 3.4c.8.5 1.5.2 1.7-.8l3-14.2c.3-1.2-.5-1.8-1.3-1.4z"/></svg>
+                    </a>
+                    <a href="https://www.instagram.com/zone_pro_trader?igsh=NzJ3emFnNzloM3k3" class="text-[#a0a0a0] hover:text-[#00ff7f] transition duration-300">
+                        <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zM12 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+                    </a>
+                    <a href="https://youtube.com/@zoneprotrader?si=_1sru9rIsLXUdUyI" class="text-[#a0a0a0] hover:text-[#00ff7f] transition duration-300">
+                        <svg class="w-6 h-6" fill="currentColor" viewBox="0 0 24 24"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
+                    </a>
+                </div>
+            </div>
+        </div>
+        <div class="mt-8 pt-8 border-t border-[#1e1e1e] text-center">
+            <p class="text-[#a0a0a0] text-sm">&copy; 2025 ZoneProTrader Karuppusamy. All rights reserved.</p>
+        </div>
+    </div>
+</footer>
+
+<!-- WhatsApp Floating Button -->
+<a href="https://wa.me/+919361241485" target="_blank" class="whatsapp-float" title="Chat with us on WhatsApp">
+    <svg viewBox="0 0 32 32">
+        <path d="M16 0c-8.837 0-16 7.163-16 16 0 2.825 0.737 5.607 2.137 8.048l-2.137 7.952 7.933-2.127c2.42 1.37 5.173 2.127 8.067 2.127 8.837 0 16-7.163 16-16s-7.163-16-16-16zM16 29.467c-2.482 0-4.908-0.646-7.07-1.87l-0.507-0.292-4.713 1.262 1.262-4.669-0.292-0.508c-1.207-2.100-1.847-4.507-1.847-6.987 0-7.51 6.11-13.62 13.62-13.62s13.62 6.11 13.62 13.62-6.11 13.62-13.62 13.62zM21.305 19.26c-0.346-0.174-2.049-1.007-2.366-1.123-0.316-0.117-0.547-0.174-0.776 0.174s-0.892 1.123-1.094 1.347c-0.201 0.231-0.402 0.26-0.748 0.087-0.346-0.174-1.461-0.537-2.785-1.711-1.030-0.917-1.726-2.048-1.927-2.394s-0.022-0.534 0.152-0.707c0.156-0.155 0.346-0.402 0.518-0.603 0.174-0.201 0.231-0.346 0.346-0.575 0.117-0.231 0.058-0.432-0.028-0.603s-0.776-1.87-1.063-2.565c-0.28-0.672-0.56-0.58-0.776-0.591-0.201-0.010-0.432-0.012-0.663-0.012s-0.603 0.087-0.92 0.432c-0.316 0.346-1.206 1.179-1.206 2.873s1.235 3.333 1.406 3.561c0.174 0.231 2.413 3.68 5.847 5.159 0.817 0.354 1.454 0.565 1.951 0.764 0.817 0.312 1.561 0.267 2.149 0.162 0.655-0.097 2.049-0.708 2.337-1.347 0.289-0.638 0.289-1.179 0.201-1.291s-0.316-0.231-0.663-0.402z"></path>
+    </svg>
+    <span>Chat with us</span>
+</a>
+
+<!-- Offline Learn Popup Modal -->
+<div id="custom-popup" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background-color:rgba(0,0,0,0.6); z-index:99999; justify-content:center; align-items:center; backdrop-filter:blur(4px);">
+    <div style="position:relative; width:90%; max-width:450px; background-image:linear-gradient(rgba(255,255,255,0.95),rgba(255,255,255,0.30)), url('assets/images/grey-bg.jpg'); background-size:cover; background-position:center; padding:40px 30px; border-radius:20px; text-align:center; box-shadow:0 20px 60px rgba(0,0,0,0.2); animation:popupFadeIn 0.3s ease-out;">
+        <button onclick="closePopup()" style="position:absolute; top:15px; right:15px; background:rgba(255,255,255,0.8); border:none; color:#333; width:30px; height:30px; border-radius:50%; cursor:pointer; font-size:16px; line-height:30px; box-shadow:0 2px 5px rgba(0,0,0,0.1);">&#10005;</button>
+        <div style="display:flex; flex-direction:column; align-items:center;">
+            <img src="assets/images/logo-bg.png" alt="Zone Pro Trader" style="height:140px; margin-bottom:20px; object-fit:contain; display:block;">
+            <h2 style="color:#000; font-family:'Montserrat',sans-serif; font-weight:800; margin-bottom:12px; line-height:1.2; font-size:clamp(18px,4vw,24px);">
+                Want to learn offline?
+            </h2>
+            <p style="color:#555; font-family:sans-serif; line-height:1.6; margin-bottom:25px; max-width:90%; font-weight:500; font-size:clamp(13px,3vw,15px);">
+                Join our offline classes in Chennai and experience practical, face-to-face training.
+            </p>
+            <a href="https://wa.me/919361241485?text=Hi,%20I%20saw%20your%20popup%20and%20I'm%20interested%20in%20Offline%20Classes" target="_blank" style="display:block; width:100%; background-color:#25D366; color:white; font-family:sans-serif; font-weight:700; padding:14px 0; border-radius:10px; text-decoration:none; font-size:16px; box-shadow:0 4px 10px rgba(37,211,102,0.3);">
+                WhatsApp Us For More Info!
+            </a>
+        </div>
+    </div>
+</div>
+
+<!-- Inline JavaScript Logic -->
+<script>
+    // Initialize Lucide Icons & Mobile Menu
+    document.addEventListener('DOMContentLoaded', function() {
+        if (typeof lucide !== 'undefined') {
+            lucide.createIcons();
+        }
+
+        // Mobile Menu Toggle
+        var mobileMenuButton = document.getElementById('mobile-menu-button');
+        var mobileMenu = document.getElementById('mobile-menu');
+        if (mobileMenuButton && mobileMenu) {
+            mobileMenuButton.addEventListener('click', function() {
+                mobileMenu.classList.toggle('hidden');
+            });
+            mobileMenu.querySelectorAll('a').forEach(function(link) {
+                link.addEventListener('click', function() {
+                    setTimeout(function() { mobileMenu.classList.add('hidden'); }, 100);
+                });
+            });
+        }
+    });
+
+    // Offline Popup Modal Logic
+    window.addEventListener('load', function() {
+        setTimeout(function() {
+            var popup = document.getElementById('custom-popup');
+            if (popup) popup.style.display = 'flex';
+        }, 1000);
+    });
+
+    function closePopup() {
+        var popup = document.getElementById('custom-popup');
+        if (popup) popup.style.display = 'none';
+    }
+
+    var popupElem = document.getElementById('custom-popup');
+    if (popupElem) {
+        popupElem.addEventListener('click', function(e) {
+            if (e.target === this) closePopup();
+        });
+    }
+
+    // Interactive Swing Scanner Card Toggle
+    function showSwingScanner() {
+        var ott = document.getElementById('ott-content');
+        var swing = document.getElementById('swing-scanner-content');
+        if (ott && swing) {
+            ott.classList.add('hidden');
+            swing.classList.remove('hidden');
+        }
+    }
+</script>
+
+</body>
+</html>

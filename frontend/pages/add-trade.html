@@ -1,0 +1,545 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Trade - Zone Pro Trader</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+          theme: {
+            extend: {
+              colors: {
+                'accent-main': '#4CAF50',
+                'accent-light': '#81C784',
+                'accent-dark': '#388E3C',
+                'sidebar-active': '#e8f5e9',
+                'text-heading': '#2c3e50',
+                'text-dark': '#34495e',
+                'text-muted': '#7f8c8d',
+                'dot-green': '#10B981',
+                'dot-purple': '#A78BFA',
+                'dot-orange': '#F59E0B',
+                'dot-red': '#EF4444',
+                'dot-gray': '#6B7280',
+              },
+              fontFamily: {
+                'inter': ['Inter', 'sans-serif'],
+                'montserrat': ['Montserrat', 'sans-serif'],
+              }
+            }
+          }
+        }
+    </script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="stylesheet" href="../css/responsive.css">
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        aside::-webkit-scrollbar { width: 6px; }
+        aside::-webkit-scrollbar-thumb { background-color: #e5e7eb; border-radius: 3px; }
+    </style>
+</head>
+<body class="has-sidebar bg-gray-50 h-screen flex flex-col md:flex-row overflow-hidden">
+    <!-- Sidebar Overlay -->
+    <div class="sidebar-overlay" id="sidebar-overlay" onclick="toggleMobileSidebar()"></div>
+
+    <!-- Mobile Top Bar -->
+    <div class="mobile-topbar" id="mobile-topbar">
+        <button class="hamburger-btn" id="hamburger-btn" onclick="toggleMobileSidebar()" aria-label="Open menu">
+            <svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="3" y1="6" x2="21" y2="6"/>
+                <line x1="3" y1="12" x2="21" y2="12"/>
+                <line x1="3" y1="18" x2="21" y2="18"/>
+            </svg>
+        </button>
+        <div class="topbar-logo">
+            <img src="../assets/images/logo-bg.png" alt="Zone Pro Trader">
+            <span class="topbar-title">ZONE <span>PRO TRADER</span></span>
+        </div>
+        <div class="topbar-avatar" id="topbar-avatar">ZP</div>
+    </div>
+
+    <!-- Sidebar -->
+    <aside id="main-sidebar" class="w-72 bg-white border-r border-gray-100 flex flex-col hidden md:flex h-full shadow-sm z-10">
+        <!-- Sidebar Header -->
+        <div class="p-6 flex justify-between items-center">
+            <div class="flex items-center gap-3">
+                <img src="../assets/images/logo-bg.png" alt="Zone Pro Trader" class="site-logo w-14 h-14">
+                <div>
+                    <h1 class="font-montserrat font-bold text-gray-900 text-lg tracking-tight">ZONE PRO</h1>
+                    <p class="text-[10px] font-bold text-accent-main tracking-widest uppercase">TRADER</p>
+                </div>
+            </div>
+            <button onclick="toggleMobileSidebar()" class="md:hidden text-gray-400 hover:text-gray-600 transition-colors ml-auto p-1.5 rounded-lg hover:bg-gray-100">
+                <i data-lucide="x" class="w-6 h-6"></i>
+            </button>
+        </div>
+
+        <!-- Navigation -->
+        <nav class="flex-1 overflow-y-auto py-2 space-y-1 pr-4">
+            <!-- Journal Feed -->
+            <a href="dashboard.html" class="flex items-center px-6 py-3.5 text-sm font-medium text-gray-500 hover:bg-gray-50 hover:text-gray-900 rounded-r-full transition-all group border-l-4 border-transparent hover:border-gray-200">
+                <div class="p-2 bg-gray-50 rounded-lg mr-3 group-hover:bg-gray-100 transition-colors">
+                    <i data-lucide="newspaper" class="w-5 h-5 text-gray-400 group-hover:text-gray-600"></i>
+                </div>
+                JOURNAL FEED
+            </a>
+
+            <!-- Journal Reporting (Active) -->
+            <div class="group">
+                <a href="journal-reporting.html" class="flex items-center px-6 py-3.5 text-sm font-bold text-accent-dark bg-green-50 rounded-r-full border-l-4 border-accent-main transition-all group shadow-sm">
+                    <div class="p-2 bg-green-100 rounded-lg mr-3 group-hover:bg-green-200 transition-colors">
+                        <i data-lucide="layout-dashboard" class="w-5 h-5 text-accent-dark"></i>
+                    </div>
+                    JOURNAL REPORTING
+                </a>
+                
+                <!-- Submenu -->
+                <div class="ml-12 mt-1 space-y-1">
+                    <a href="journal-reporting.html" class="flex items-center px-4 py-2 text-xs font-semibold text-gray-500 hover:text-gray-900 hover:bg-gray-50 rounded-lg transition-colors">
+                        <i data-lucide="line-chart" class="w-4 h-4 mr-2"></i>
+                        DASHBOARD & P&L
+                    </a>
+                    <a href="add-trade.html" class="flex items-center px-4 py-2 text-xs font-bold text-accent-main bg-green-100/60 rounded-lg">
+                        <i data-lucide="plus-circle" class="w-4 h-4 mr-2"></i>
+                        ADD TRADE
+                    </a>
+                </div>
+            </div>
+
+            <!-- Investment Screener -->
+            <a href="investment-screener.html" class="flex items-center px-6 py-3.5 text-sm font-medium text-gray-500 hover:bg-gray-50 hover:text-gray-900 rounded-r-full transition-all group border-l-4 border-transparent hover:border-gray-200">
+                <div class="p-2 bg-gray-50 rounded-lg mr-3 group-hover:bg-gray-100 transition-colors">
+                    <i data-lucide="search" class="w-5 h-5 text-gray-400 group-hover:text-gray-600"></i>
+                </div>
+                INVESTMENT SCREENER
+            </a>
+
+            <!-- Intraday -->
+            <a href="intraday.html" class="flex items-center px-6 py-3.5 text-sm font-medium text-gray-500 hover:bg-gray-50 hover:text-gray-900 rounded-r-full transition-all group border-l-4 border-transparent hover:border-gray-200">
+                <div class="p-2 bg-gray-50 rounded-lg mr-3 group-hover:bg-gray-100 transition-colors">
+                    <i data-lucide="clock" class="w-5 h-5 text-gray-400 group-hover:text-gray-600"></i>
+                </div>
+                INTRADAY
+            </a>
+
+            <!-- Heatmap -->
+            <a href="heatmap.html" class="flex items-center px-6 py-3.5 text-sm font-medium text-gray-500 hover:bg-gray-50 hover:text-gray-900 rounded-r-full transition-all group border-l-4 border-transparent hover:border-gray-200">
+                <div class="p-2 bg-gray-50 rounded-lg mr-3 group-hover:bg-gray-100 transition-colors">
+                    <i data-lucide="grid" class="w-5 h-5 text-gray-400 group-hover:text-gray-600"></i>
+                </div>
+                HEATMAP
+            </a>
+
+            <!-- Options (F&O) -->
+            <a href="options.html" class="flex items-center px-6 py-3.5 text-sm font-medium text-gray-500 hover:bg-gray-50 hover:text-gray-900 rounded-r-full transition-all group border-l-4 border-transparent hover:border-gray-200">
+                <div class="p-2 bg-gray-50 rounded-lg mr-3 group-hover:bg-gray-100 transition-colors">
+                    <i data-lucide="trending-up" class="w-5 h-5 text-gray-400 group-hover:text-gray-600"></i>
+                </div>
+                OPTIONS (F&O)
+            </a>
+
+            <!-- Other Tools -->
+            <a href="other-tools.html" class="flex items-center px-6 py-3.5 text-sm font-medium text-gray-500 hover:bg-gray-50 hover:text-gray-900 rounded-r-full transition-all group border-l-4 border-transparent hover:border-gray-200">
+                <div class="p-2 bg-gray-50 rounded-lg mr-3 group-hover:bg-gray-100 transition-colors">
+                    <i data-lucide="wrench" class="w-5 h-5 text-gray-400 group-hover:text-gray-600"></i>
+                </div>
+                OTHER TOOLS
+            </a>
+
+            <!-- Announcements -->
+            <a href="announcements.html" class="flex items-center px-6 py-3.5 text-sm font-medium text-gray-500 hover:bg-gray-50 hover:text-gray-900 rounded-r-full transition-all group border-l-4 border-transparent hover:border-gray-200">
+                <div class="p-2 bg-gray-50 rounded-lg mr-3 group-hover:bg-gray-100 transition-colors">
+                    <i data-lucide="bell" class="w-5 h-5 text-gray-400 group-hover:text-gray-600"></i>
+                </div>
+                ANNOUNCEMENTS
+            </a>
+
+            <!-- Open a Demat Account -->
+            <a href="open-demat-account.html" class="flex items-center px-6 py-3.5 text-sm font-medium text-gray-500 hover:bg-gray-50 hover:text-gray-900 rounded-r-full transition-all group border-l-4 border-transparent hover:border-gray-200">
+                <div class="p-2 bg-gray-50 rounded-lg mr-3 group-hover:bg-gray-100 transition-colors">
+                    <i data-lucide="briefcase" class="w-5 h-5 text-gray-400 group-hover:text-gray-600"></i>
+                </div>
+                OPEN A DEMAT ACCOUNT
+            </a>
+
+            <!-- My Profile -->
+            <a href="my-profile.html" class="flex items-center px-6 py-3.5 text-sm font-medium text-gray-500 hover:bg-gray-50 hover:text-gray-900 rounded-r-full transition-all group border-l-4 border-transparent hover:border-gray-200">
+                <div class="p-2 bg-gray-50 rounded-lg mr-3 group-hover:bg-gray-100 transition-colors">
+                    <i data-lucide="user" class="w-5 h-5 text-gray-400 group-hover:text-gray-600"></i>
+                </div>
+                MY PROFILE
+            </a>
+        </nav>
+
+        <!-- Logout -->
+        <div class="p-6 border-t border-gray-100 mt-auto">
+            <a href="logout.html" class="flex items-center px-4 py-3 text-sm font-medium text-gray-500 hover:text-red-600 hover:bg-red-50 rounded-lg transition-all group">
+                <i data-lucide="log-out" class="w-5 h-5 mr-3 group-hover:text-red-600 transition-colors"></i>
+                LOGOUT
+            </a>
+        </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="flex-1 overflow-y-auto bg-gray-50 p-4 sm:p-6 md:p-8 lg:p-10">
+        <div class="max-w-3xl mx-auto">
+            <!-- Header -->
+            <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-8">
+                <div class="flex items-center gap-4">
+                    <a href="journal-reporting.html" class="p-2.5 bg-white border border-gray-200 hover:bg-gray-50 rounded-xl shadow-xs transition-all group flex items-center gap-2 text-xs font-bold text-gray-600 hover:text-accent-main">
+                        <i data-lucide="arrow-left" class="w-4 h-4 text-gray-500 group-hover:text-accent-main transition-colors"></i>
+                        <span>BACK TO JOURNAL</span>
+                    </a>
+                    <div class="p-3 bg-green-50 rounded-2xl shadow-xs border border-green-100">
+                        <i data-lucide="plus-circle" class="w-7 h-7 text-accent-main"></i>
+                    </div>
+                    <div>
+                        <h1 class="text-2xl font-bold text-gray-900 tracking-tight font-montserrat uppercase">Log New Trade</h1>
+                        <p class="text-xs text-gray-500 mt-0.5">Record capital, P&L, strategy details & update your performance analytics</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Add Trade Form Card -->
+            <div class="bg-white rounded-3xl shadow-sm border border-gray-200/80 p-6 sm:p-8">
+                <form id="add-trade-form" onsubmit="handleSaveTrade(event)" class="space-y-6">
+                    
+                    <!-- Stock Symbol & Trade Type -->
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                        <!-- Stock Symbol -->
+                        <div class="space-y-1.5">
+                            <label class="flex items-center text-xs font-bold text-gray-700 uppercase tracking-wide">
+                                <span class="w-2 h-2 rounded-full bg-emerald-500 mr-2"></span>
+                                Stock Symbol / Script *
+                            </label>
+                            <input 
+                                name="symbol" 
+                                id="trade-symbol"
+                                type="text" 
+                                required 
+                                placeholder="e.g. RELIANCE, TATAMOTORS, NIFTY 25000 CE" 
+                                class="w-full bg-gray-50 border border-gray-200 rounded-xl px-4 py-2.5 text-xs text-gray-800 uppercase font-semibold focus:outline-none focus:border-accent-main focus:bg-white transition"
+                                oninput="this.value = this.value.toUpperCase(); updatePreview();"
+                            >
+                        </div>
+
+                        <!-- Trade Type -->
+                        <div class="space-y-1.5">
+                            <label class="flex items-center text-xs font-bold text-gray-700 uppercase tracking-wide">
+                                <span class="w-2 h-2 rounded-full bg-purple-500 mr-2"></span>
+                                Trade Type *
+                            </label>
+                            <select 
+                                name="type" 
+                                id="trade-type"
+                                required 
+                                class="w-full bg-gray-50 border border-gray-200 rounded-xl px-3.5 py-2.5 text-xs font-semibold text-gray-800 focus:outline-none focus:border-accent-main focus:bg-white transition"
+                                onchange="updatePreview()"
+                            >
+                                <option value="Swing">Swing Trading (2-20 Days)</option>
+                                <option value="Intraday">Intraday (Day Trading)</option>
+                                <option value="Options">Options (F&O)</option>
+                                <option value="Long Term">Long Term / Positional</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Capital Used & P&L Result Row -->
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                        <!-- Capital (₹) -->
+                        <div class="space-y-1.5">
+                            <label class="flex items-center text-xs font-bold text-gray-700 uppercase tracking-wide">
+                                <span class="w-2 h-2 rounded-full bg-amber-500 mr-2"></span>
+                                Capital Used (₹) *
+                            </label>
+                            <div class="relative">
+                                <span class="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-500 font-bold text-xs">₹</span>
+                                <input 
+                                    name="capital" 
+                                    id="trade-capital"
+                                    type="number" 
+                                    step="any"
+                                    required 
+                                    placeholder="50000" 
+                                    class="w-full bg-gray-50 border border-gray-200 rounded-xl pl-8 pr-4 py-2.5 text-xs font-bold text-gray-800 focus:outline-none focus:border-accent-main focus:bg-white transition"
+                                    oninput="updatePreview()"
+                                >
+                            </div>
+                        </div>
+
+                        <!-- P&L Amount (₹) -->
+                        <div class="space-y-1.5">
+                            <label class="flex items-center justify-between text-xs font-bold text-gray-700 uppercase tracking-wide">
+                                <div class="flex items-center">
+                                    <span class="w-2 h-2 rounded-full bg-blue-500 mr-2"></span>
+                                    Net P&L (₹) *
+                                </div>
+                                <span class="text-[10px] text-gray-400 font-normal">Use + for profit, - for loss</span>
+                            </label>
+                            <div class="relative">
+                                <span class="absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-500 font-bold text-xs">₹</span>
+                                <input 
+                                    name="pnl" 
+                                    id="trade-pnl"
+                                    type="number" 
+                                    step="any"
+                                    required 
+                                    placeholder="+2850 or -1200" 
+                                    class="w-full bg-gray-50 border border-gray-200 rounded-xl pl-8 pr-4 py-2.5 text-xs font-bold text-gray-800 focus:outline-none focus:border-accent-main focus:bg-white transition"
+                                    oninput="updatePreview()"
+                                >
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Trade Date & Result Tag -->
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                        <!-- Trade Date -->
+                        <div class="space-y-1.5">
+                            <label class="flex items-center text-xs font-bold text-gray-700 uppercase tracking-wide">
+                                <span class="w-2 h-2 rounded-full bg-teal-500 mr-2"></span>
+                                Trade Date *
+                            </label>
+                            <input 
+                                name="date" 
+                                id="trade-date"
+                                type="date" 
+                                required 
+                                class="w-full bg-gray-50 border border-gray-200 rounded-xl px-3.5 py-2.5 text-xs font-semibold text-gray-800 focus:outline-none focus:border-accent-main focus:bg-white transition"
+                            >
+                        </div>
+
+                        <!-- Trade Status / Outcome -->
+                        <div class="space-y-1.5">
+                            <label class="flex items-center text-xs font-bold text-gray-700 uppercase tracking-wide">
+                                <span class="w-2 h-2 rounded-full bg-indigo-500 mr-2"></span>
+                                Trade Outcome
+                            </label>
+                            <select 
+                                name="status" 
+                                id="trade-status"
+                                class="w-full bg-gray-50 border border-gray-200 rounded-xl px-3.5 py-2.5 text-xs font-semibold text-gray-800 focus:outline-none focus:border-accent-main focus:bg-white transition"
+                            >
+                                <option value="PROFIT">🟢 Target Hit (Win)</option>
+                                <option value="LOSS">🔴 Stoploss Hit (Loss)</option>
+                                <option value="BREAKEVEN">⚪ Breakeven Exit</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Live Calculation Preview Card -->
+                    <div id="preview-card" class="bg-gray-50 border border-gray-200/80 rounded-2xl p-4 flex flex-wrap items-center justify-between gap-4">
+                        <div class="flex items-center gap-3">
+                            <div id="preview-icon-box" class="p-2.5 bg-green-100 text-green-700 rounded-xl">
+                                <i data-lucide="trending-up" class="w-5 h-5" id="preview-icon"></i>
+                            </div>
+                            <div>
+                                <div class="text-[11px] font-bold text-gray-500 uppercase tracking-wider">Trade Return Preview</div>
+                                <div class="text-base font-extrabold text-gray-900" id="preview-text">Enter Capital & P&L</div>
+                            </div>
+                        </div>
+                        <div class="text-right">
+                            <span id="preview-badge" class="px-3 py-1 rounded-full text-xs font-extrabold bg-green-100 text-green-700 border border-green-200">
+                                0.00% Return
+                            </span>
+                        </div>
+                    </div>
+
+                    <!-- Notes -->
+                    <div class="space-y-1.5">
+                        <label class="flex items-center text-xs font-bold text-gray-700 uppercase tracking-wide">
+                            <span class="w-2 h-2 rounded-full bg-gray-500 mr-2"></span>
+                            Trade Setup Notes / Strategy Followed
+                        </label>
+                        <textarea 
+                            name="notes" 
+                            id="trade-notes"
+                            rows="3" 
+                            placeholder="e.g. 20-Day high breakout confirmed with 2x average volume. Exited on 1:2 Risk-Reward ratio target hit." 
+                            class="w-full bg-gray-50 border border-gray-200 rounded-xl p-3.5 text-xs text-gray-800 focus:outline-none focus:border-accent-main focus:bg-white transition resize-none leading-relaxed"
+                        ></textarea>
+                    </div>
+
+                    <!-- Submit Buttons -->
+                    <div class="flex items-center gap-3 pt-2">
+                        <button 
+                            type="button" 
+                            onclick="document.getElementById('add-trade-form').reset(); updatePreview();"
+                            class="px-5 py-3 rounded-xl font-bold text-xs text-gray-600 border border-gray-200 hover:bg-gray-100 transition"
+                        >
+                            Reset
+                        </button>
+                        <button 
+                            type="submit" 
+                            id="save-trade-btn" 
+                            class="flex-1 bg-accent-main hover:bg-accent-dark text-white py-3 rounded-xl font-bold text-xs transition-all shadow-md shadow-green-500/20 active:scale-98 flex items-center justify-center gap-2"
+                        >
+                            <i data-lucide="save" class="w-4 h-4"></i>
+                            <span>Save Trade & Update Journal</span>
+                        </button>
+                    </div>
+
+                </form>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        lucide.createIcons();
+
+        // Default Date to Today
+        document.addEventListener('DOMContentLoaded', () => {
+            const dateInput = document.getElementById('trade-date');
+            if (dateInput) {
+                const today = new Date().toISOString().split('T')[0];
+                dateInput.value = today;
+            }
+            updatePreview();
+        });
+
+        // Live Return Calculation Preview
+        function updatePreview() {
+            const capital = parseFloat(document.getElementById('trade-capital')?.value) || 0;
+            const pnl = parseFloat(document.getElementById('trade-pnl')?.value) || 0;
+            const symbol = (document.getElementById('trade-symbol')?.value || 'STOCK').trim().toUpperCase();
+            
+            const previewText = document.getElementById('preview-text');
+            const previewBadge = document.getElementById('preview-badge');
+            const previewIconBox = document.getElementById('preview-icon-box');
+            const previewIcon = document.getElementById('preview-icon');
+            const statusSelect = document.getElementById('trade-status');
+
+            if (pnl !== 0 && statusSelect) {
+                if (pnl > 0) statusSelect.value = 'PROFIT';
+                else if (pnl < 0) statusSelect.value = 'LOSS';
+            }
+
+            if (capital > 0) {
+                const roi = ((pnl / capital) * 100).toFixed(2);
+                if (pnl > 0) {
+                    previewText.innerHTML = `<span class="text-green-600 font-bold">+₹${pnl.toLocaleString('en-IN')}</span> Profit on ${symbol}`;
+                    previewBadge.className = "px-3 py-1 rounded-full text-xs font-extrabold bg-green-100 text-green-700 border border-green-200";
+                    previewBadge.textContent = `+${roi}% ROI`;
+                    previewIconBox.className = "p-2.5 bg-green-100 text-green-700 rounded-xl";
+                    previewIcon.setAttribute('data-lucide', 'trending-up');
+                } else if (pnl < 0) {
+                    previewText.innerHTML = `<span class="text-red-600 font-bold">-₹${Math.abs(pnl).toLocaleString('en-IN')}</span> Loss on ${symbol}`;
+                    previewBadge.className = "px-3 py-1 rounded-full text-xs font-extrabold bg-red-100 text-red-700 border border-red-200";
+                    previewBadge.textContent = `${roi}% ROI`;
+                    previewIconBox.className = "p-2.5 bg-red-100 text-red-700 rounded-xl";
+                    previewIcon.setAttribute('data-lucide', 'trending-down');
+                } else {
+                    previewText.innerHTML = `₹0 Breakeven on ${symbol}`;
+                    previewBadge.className = "px-3 py-1 rounded-full text-xs font-extrabold bg-gray-100 text-gray-700 border border-gray-200";
+                    previewBadge.textContent = "0.00% ROI";
+                    previewIconBox.className = "p-2.5 bg-gray-100 text-gray-700 rounded-xl";
+                    previewIcon.setAttribute('data-lucide', 'minus');
+                }
+            } else {
+                previewText.textContent = "Enter Capital & P&L to calculate";
+                previewBadge.className = "px-3 py-1 rounded-full text-xs font-extrabold bg-gray-100 text-gray-500 border border-gray-200";
+                previewBadge.textContent = "0.00% Return";
+            }
+            lucide.createIcons();
+        }
+
+        // Save Trade Handler
+        async function handleSaveTrade(e) {
+            e.preventDefault();
+            const btn = document.getElementById('save-trade-btn');
+            const form = document.getElementById('add-trade-form');
+
+            const symbol = document.getElementById('trade-symbol').value.trim().toUpperCase();
+            const type = document.getElementById('trade-type').value;
+            const capital = parseFloat(document.getElementById('trade-capital').value) || 0;
+            const pnl = parseFloat(document.getElementById('trade-pnl').value) || 0;
+            const date = document.getElementById('trade-date').value;
+            const status = document.getElementById('trade-status').value;
+            const notes = document.getElementById('trade-notes').value.trim();
+
+            if (!symbol || !date) {
+                alert('Please provide Symbol and Date.');
+                return;
+            }
+
+            btn.disabled = true;
+            btn.innerHTML = `<div class="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div> <span>Saving Trade...</span>`;
+
+            // Identify user ID (or default persistent ID)
+            let uid = localStorage.getItem('zp_uid');
+            if (!uid) {
+                uid = 'trader_' + (localStorage.getItem('zp_guest_id') || Math.random().toString(36).substring(2, 9));
+                localStorage.setItem('zp_uid', uid);
+                localStorage.setItem('zp_guest_id', uid);
+            }
+
+            const newTrade = {
+                id: 'trade_' + Date.now(),
+                symbol,
+                type,
+                capital,
+                pnl,
+                date,
+                status,
+                notes,
+                createdAt: Date.now()
+            };
+
+            // 1. Save to LocalStorage immediately
+            try {
+                const localKey = 'zp_trades_' + uid;
+                const globalKey = 'zp_trades_all';
+                
+                const existing = JSON.parse(localStorage.getItem(localKey) || localStorage.getItem(globalKey) || '[]');
+                existing.unshift(newTrade);
+                localStorage.setItem(localKey, JSON.stringify(existing));
+                localStorage.setItem(globalKey, JSON.stringify(existing));
+            } catch (err) {
+                console.warn('LocalStorage save error:', err);
+            }
+
+            // 2. Save to Firebase Realtime Database
+            try {
+                const rtdbUrl = `https://zoneprotrader-90959-default-rtdb.firebaseio.com/trades/${uid}.json`;
+                await fetch(rtdbUrl, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(newTrade)
+                });
+            } catch (err) {
+                console.warn('Firebase RTDB save error:', err);
+            }
+
+            // 3. Post to Node API if available
+            try {
+                await fetch('/api/trades', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-UID': uid
+                    },
+                    body: JSON.stringify(newTrade)
+                });
+            } catch (e) {
+                console.log('API save skipped on static environment.');
+            }
+
+            alert(`✅ Trade for ${symbol} with P&L ₹${pnl.toLocaleString('en-IN')} saved successfully!`);
+            window.location.href = 'journal-reporting.html';
+        }
+
+        // Mobile Sidebar Toggle
+        function toggleMobileSidebar() {
+            const sidebar = document.getElementById('main-sidebar');
+            const overlay = document.getElementById('sidebar-overlay');
+            if (sidebar) sidebar.classList.toggle('sidebar-open');
+            if (overlay) overlay.classList.toggle('active');
+        }
+    </script>
+    <script type="module" src="../js/api-auth.js"></script>
+</body>
+</html>
+

@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Open a Demat Account - Zone Pro Trader</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+          theme: {
+            extend: {
+              colors: {
+                'accent-main': '#4CAF50',
+                'accent-light': '#81C784',
+                'accent-dark': '#388E3C',
+                'sidebar-active': '#e8f5e9',
+                'text-heading': '#2c3e50',
+                'text-dark': '#34495e',
+                'text-muted': '#7f8c8d',
+              },
+              fontFamily: {
+                'inter': ['Inter', 'sans-serif'],
+                'montserrat': ['Montserrat', 'sans-serif'],
+              }
+            }
+          }
+        }
+    </script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        aside::-webkit-scrollbar { width: 6px; }
+        aside::-webkit-scrollbar-thumb { background-color: #e5e7eb; border-radius: 3px; }
+    </style>
+<link rel="stylesheet" href="../css/responsive.css">
+</head>
+<body class="has-sidebar bg-gray-50 h-screen flex overflow-hidden">
+    <!-- Sidebar Overlay -->
+    <div class="sidebar-overlay" id="sidebar-overlay"></div>
+
+    <!-- Mobile Top Bar -->
+    <div class="mobile-topbar" id="mobile-topbar">
+        <button class="hamburger-btn" id="hamburger-btn" aria-label="Open menu">
+            <svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="3" y1="6" x2="21" y2="6"/>
+                <line x1="3" y1="12" x2="21" y2="12"/>
+                <line x1="3" y1="18" x2="21" y2="18"/>
+            </svg>
+        </button>
+        <div class="topbar-logo">
+            <img src="../assets/images/logo-bg.png" alt="Zone Pro Trader">
+            <span class="topbar-title">ZONE <span>PRO TRADER</span></span>
+        </div>
+        <div class="topbar-avatar" id="topbar-avatar">ZP</div>
+    </div>
+
+
+    <!-- Toast Notification -->
+    <div id="toast" class="fixed bottom-6 right-6 z-50 bg-green-600 text-white px-4 py-2.5 rounded-xl shadow-2xl text-sm font-medium opacity-0 pointer-events-none transform translate-y-2 flex items-center gap-2 transition-all duration-300">
+        <i data-lucide="check-circle" class="w-4 h-4 text-white"></i>
+        <span id="toast-msg">Referral link copied to clipboard!</span>
+    </div>
+
+    <!-- Sidebar -->
+    <aside class="w-72 bg-white border-r border-gray-100 flex flex-col hidden md:flex h-full shadow-sm z-10">
+        <!-- Sidebar Header -->
+        <div class="p-6 flex justify-between items-center">
+            <div class="flex items-center gap-3">
+                <img src="../assets/images/logo-bg.png" alt="Zone Pro Trader Bull" class="w-12 h-12 object-contain rounded-xl shadow-lg shadow-green-200">
+                <div>
+                    <h1 class="font-montserrat font-bold text-gray-900 text-lg tracking-tight">ZONE PRO</h1>
+                    <p class="text-[10px] font-bold text-accent-main tracking-widest uppercase">TRADER</p>
+                </div>
+            </div>
+        
+            <button class="sidebar-close-btn" id="sidebar-close-btn" aria-label="Close menu">
+                <svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <line x1="18" y1="6" x2="6" y2="18"/>
+                    <line x1="6" y1="6" x2="18" y2="18"/>
+                </svg>
+            </button>
+        </div>
+
+        <!-- Navigation -->
+        <nav class="flex-1 overflow-y-auto py-2 space-y-1 pr-4">
+            <!-- Journal Feed -->
+            <a href="dashboard.html" class="flex items-center px-6 py-3.5 text-sm font-medium text-gray-500 hover:bg-gray-50 hover:text-gray-900 rounded-r-full transition-all group border-l-4 border-transparent hover:border-gray-200">
+                <div class="p-2 bg-gray-50 rounded-lg mr-3 group-hover:bg-gray-100 transition-colors">
+                    <i data-lucide="newspaper" class="w-5 h-5 text-gray-400 group-hover:text-gray-600"></i>
+                </div>
+                JOURNAL FEED
+            </a>
+
+            <!-- Journal Reporting -->
+            <a href="journal-reporting.html" class="flex items-center px-6 py-3.5 text-sm font-medium text-gray-500 hover:bg-gray-50 hover:text-gray-900 rounded-r-full transition-all group border-l-4 border-transparent hover:border-gray-200">
+                <div class="p-2 bg-gray-50 rounded-lg mr-3 group-hover:bg-gray-100 transition-colors">
+                    <i data-lucide="layout-dashboard" class="w-5 h-5 text-gray-400 group-hover:text-gray-600"></i>
+                </div>
+                JOURNAL REPORTING
+            </a>
+
+            <!-- Investment Screener -->
+            <a href="investment-screener.html" class="flex items-center px-6 py-3.5 text-sm font-medium text-gray-500 hover:bg-gray-50 hover:text-gray-900 rounded-r-full transition-all group border-l-4 border-transparent hover:border-gray-200">
+                <div class="p-2 bg-gray-50 rounded-lg mr-3 group-hover:bg-gray-100 transition-colors">
+                    <i data-lucide="search" class="w-5 h-5 text-gray-400 group-hover:text-gray-600"></i>
+                </div>
+                INVESTMENT SCREENER
+            </a>
+
+            <!-- Intraday -->
+            <a href="intraday.html" class="flex items-center px-6 py-3.5 text-sm font-medium text-gray-500 hover:bg-gray-50 hover:text-gray-900 rounded-r-full transition-all group border-l-4 border-transparent hover:border-gray-200">
+                <div class="p-2 bg-gray-50 rounded-lg mr-3 group-hover:bg-gray-100 transition-colors">
+                    <i data-lucide="clock" class="w-5 h-5 text-gray-400 group-hover:text-gray-600"></i>
+                </div>
+                INTRADAY
+            </a>
+
+            <!-- Heatmap -->
+            <a href="heatmap.html" class="flex items-center px-6 py-3.5 text-sm font-medium text-gray-500 hover:bg-gray-50 hover:text-gray-900 rounded-r-full transition-all group border-l-4 border-transparent hover:border-gray-200">
+                <div class="p-2 bg-gray-50 rounded-lg mr-3 group-hover:bg-gray-100 transition-colors">
+                    <i data-lucide="grid" class="w-5 h-5 text-gray-400 group-hover:text-gray-600"></i>
+                </div>
+                HEATMAP
+            </a>
+
+            <!-- Options (F&O) -->
+            <a href="options.html" class="flex items-center px-6 py-3.5 text-sm font-medium text-gray-500 hover:bg-gray-50 hover:text-gray-900 rounded-r-full transition-all group border-l-4 border-transparent hover:border-gray-200">
+                <div class="p-2 bg-gray-50 rounded-lg mr-3 group-hover:bg-gray-100 transition-colors">
+                    <i data-lucide="trending-up" class="w-5 h-5 text-gray-400 group-hover:text-gray-600"></i>
+                </div>
+                OPTIONS (F&O)
+            </a>
+
+            <!-- Other Tools -->
+            <a href="other-tools.html" class="flex items-center px-6 py-3.5 text-sm font-medium text-gray-500 hover:bg-gray-50 hover:text-gray-900 rounded-r-full transition-all group border-l-4 border-transparent hover:border-gray-200">
+                <div class="p-2 bg-gray-50 rounded-lg mr-3 group-hover:bg-gray-100 transition-colors">
+                    <i data-lucide="wrench" class="w-5 h-5 text-gray-400 group-hover:text-gray-600"></i>
+                </div>
+                OTHER TOOLS
+            </a>
+
+            <!-- Announcements -->
+            <a href="announcements.html" class="flex items-center px-6 py-3.5 text-sm font-medium text-gray-500 hover:bg-gray-50 hover:text-gray-900 rounded-r-full transition-all group border-l-4 border-transparent hover:border-gray-200">
+                <div class="p-2 bg-gray-50 rounded-lg mr-3 group-hover:bg-gray-100 transition-colors">
+                    <i data-lucide="megaphone" class="w-5 h-5 text-gray-400 group-hover:text-gray-600"></i>
+                </div>
+                ANNOUNCEMENTS
+            </a>
+
+            <!-- Open a Demat Account (Active) -->
+            <a href="#" class="flex items-center px-6 py-3.5 text-sm font-bold text-accent-dark bg-green-50 rounded-r-full border-l-4 border-accent-main transition-all group shadow-sm">
+                <div class="p-2 bg-green-100 rounded-lg mr-3 group-hover:bg-green-200 transition-colors">
+                    <i data-lucide="briefcase" class="w-5 h-5 text-accent-dark"></i>
+                </div>
+                OPEN A DEMAT ACCOUNT
+            </a>
+
+            <!-- My Profile -->
+            <a href="my-profile.html" class="flex items-center px-6 py-3.5 text-sm font-medium text-gray-500 hover:bg-gray-50 hover:text-gray-900 rounded-r-full transition-all group border-l-4 border-transparent hover:border-gray-200">
+                <div class="p-2 bg-gray-50 rounded-lg mr-3 group-hover:bg-gray-100 transition-colors">
+                    <i data-lucide="user" class="w-5 h-5 text-gray-400 group-hover:text-gray-600"></i>
+                </div>
+                MY PROFILE
+            </a>
+        </nav>
+
+        <!-- Logout -->
+        <div class="p-6 border-t border-gray-100 mt-auto">
+            <a href="logout.html" class="flex items-center px-4 py-3 text-sm font-medium text-gray-500 hover:text-red-600 hover:bg-red-50 rounded-lg transition-all group">
+                <i data-lucide="log-out" class="w-5 h-5 mr-3 group-hover:text-red-600 transition-colors"></i>
+                LOGOUT
+            </a>
+        </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="flex-1 overflow-y-auto bg-gray-50 p-6 md:p-10 flex flex-col">
+        <!-- Header -->
+        <div class="flex items-center gap-4 mb-8">
+            <div class="p-4 bg-green-50 rounded-2xl shadow-sm border border-green-100">
+                <i data-lucide="briefcase" class="w-8 h-8 text-accent-main"></i>
+            </div>
+            <div>
+                <h1 class="text-3xl font-bold text-gray-900 tracking-tight uppercase">OPEN A DEMAT ACCOUNT</h1>
+                <p class="text-gray-500 mt-1 font-medium">Create your official Demat & Trading account with fast paperless KYC</p>
+            </div>
+        </div>
+
+        <!-- Content Area -->
+        <div class="max-w-6xl w-full mx-auto space-y-8 pb-10">
+            <!-- Hero Referral Card -->
+            <div class="bg-gradient-to-br from-[#0d1c14] via-[#102a1b] to-[#0a180f] rounded-3xl p-4 sm:p-6 md:p-8 lg:p-12 text-white shadow-xl relative overflow-hidden border border-green-900/40">
+                <!-- Background Glow Effect -->
+                <div class="absolute -right-16 -top-16 w-80 h-80 bg-green-500/20 rounded-full blur-3xl pointer-events-none"></div>
+                <div class="absolute -left-16 -bottom-16 w-80 h-80 bg-emerald-500/10 rounded-full blur-3xl pointer-events-none"></div>
+
+                <div class="relative z-10 flex flex-col lg:flex-row items-start lg:items-center justify-between gap-8">
+                    <div class="max-w-2xl space-y-4">
+                        <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-green-500/20 text-green-300 text-xs font-bold border border-green-500/30 uppercase tracking-wider">
+                            <i data-lucide="sparkles" class="w-3.5 h-3.5 text-green-400"></i>
+                            Official Zone Pro Trader Partner
+                        </div>
+                        <h2 class="text-3xl md:text-4xl font-extrabold tracking-tight leading-tight">
+                            Start Trading Today with <span class="text-accent-light">Zero Account Opening Fee</span>
+                        </h2>
+                        <p class="text-gray-300 text-sm md:text-base leading-relaxed">
+                            Open your Demat & Trading account using our exclusive referral link to get instant paperless onboarding, low brokerage rates, and direct compatibility with Zone Pro Trader tools.
+                        </p>
+
+                        <!-- Key Benefits Tags -->
+                        <div class="flex flex-wrap gap-2.5 pt-2">
+                            <div class="flex items-center gap-1.5 px-3 py-1 bg-white/10 rounded-lg text-xs font-semibold text-gray-200">
+                                <i data-lucide="check" class="w-3.5 h-3.5 text-green-400"></i>
+                                100% Paperless KYC
+                            </div>
+                            <div class="flex items-center gap-1.5 px-3 py-1 bg-white/10 rounded-lg text-xs font-semibold text-gray-200">
+                                <i data-lucide="check" class="w-3.5 h-3.5 text-green-400"></i>
+                                5-Minute Aadhaar eSign
+                            </div>
+                            <div class="flex items-center gap-1.5 px-3 py-1 bg-white/10 rounded-lg text-xs font-semibold text-gray-200">
+                                <i data-lucide="check" class="w-3.5 h-3.5 text-green-400"></i>
+                                Zero AMC for 1st Year
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- CTA Action Box -->
+                    <div class="w-full lg:w-80 bg-white/10 backdrop-blur-md rounded-2xl p-6 border border-white/10 flex flex-col gap-4 text-center">
+                        <div class="text-xs text-gray-300 uppercase font-semibold tracking-wider">Exclusive Referral Link</div>
+                        <a 
+                            href="https://gwkyc.in/1/GXTNAMZ" 
+                            target="_blank" 
+                            rel="noopener noreferrer" 
+                            class="w-full py-3.5 px-6 bg-accent-main hover:bg-accent-dark text-white rounded-xl font-bold text-sm transition shadow-lg shadow-green-900/50 flex items-center justify-center gap-2 group"
+                        >
+                            <span>Open Account Now</span>
+                            <i data-lucide="arrow-right" class="w-4 h-4 group-hover:translate-x-1 transition-transform"></i>
+                        </a>
+
+                        <!-- Copy Link Box -->
+                        <div class="relative mt-1">
+                            <div class="flex items-center bg-black/40 border border-white/10 rounded-xl px-3 py-2 text-xs font-mono text-gray-300 overflow-hidden">
+                                <span class="truncate text-left flex-1 select-all">https://gwkyc.in/1/GXTNAMZ</span>
+                                <button 
+                                    onclick="copyReferralLink()" 
+                                    class="ml-2 text-green-400 hover:text-green-300 font-sans font-bold flex items-center gap-1 shrink-0"
+                                    title="Copy referral link"
+                                >
+                                    <i data-lucide="copy" class="w-3.5 h-3.5"></i>
+                                    <span>Copy</span>
+                                </button>
+                            </div>
+                        </div>
+                        <p class="text-[11px] text-gray-400">Takes less than 5 mins with Aadhaar-linked mobile OTP</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 3-Step Simple Process -->
+            <div class="bg-white rounded-3xl p-4 sm:p-6 md:p-8 border border-gray-100 shadow-sm">
+                <div class="text-center max-w-xl mx-auto mb-8">
+                    <h3 class="text-2xl font-bold text-gray-900 font-montserrat">How to Open Your Account in 3 Easy Steps</h3>
+                    <p class="text-xs text-gray-500 mt-1">Complete your digital onboarding quickly from any device</p>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <!-- Step 1 -->
+                    <div class="p-6 rounded-2xl bg-gray-50 border border-gray-100 flex flex-col items-center text-center relative group hover:border-green-200 hover:bg-green-50/20 transition-all">
+                        <div class="w-12 h-12 rounded-2xl bg-green-100 text-accent-dark flex items-center justify-center font-bold text-lg mb-4 shadow-sm group-hover:scale-110 transition-transform">
+                            1
+                        </div>
+                        <h4 class="text-base font-bold text-gray-800 mb-1">Click Referral Link</h4>
+                        <p class="text-xs text-gray-500 leading-relaxed">
+                            Click on the referral link <a href="https://gwkyc.in/1/GXTNAMZ" target="_blank" class="text-accent-dark font-semibold hover:underline">gwkyc.in/1/GXTNAMZ</a> and enter your mobile number.
+                        </p>
+                    </div>
+
+                    <!-- Step 2 -->
+                    <div class="p-6 rounded-2xl bg-gray-50 border border-gray-100 flex flex-col items-center text-center relative group hover:border-green-200 hover:bg-green-50/20 transition-all">
+                        <div class="w-12 h-12 rounded-2xl bg-green-100 text-accent-dark flex items-center justify-center font-bold text-lg mb-4 shadow-sm group-hover:scale-110 transition-transform">
+                            2
+                        </div>
+                        <h4 class="text-base font-bold text-gray-800 mb-1">Complete e-KYC</h4>
+                        <p class="text-xs text-gray-500 leading-relaxed">
+                            Verify your PAN details, link your bank account, and complete Aadhaar OTP eSign verification in 5 minutes.
+                        </p>
+                    </div>
+
+                    <!-- Step 3 -->
+                    <div class="p-6 rounded-2xl bg-gray-50 border border-gray-100 flex flex-col items-center text-center relative group hover:border-green-200 hover:bg-green-50/20 transition-all">
+                        <div class="w-12 h-12 rounded-2xl bg-green-100 text-accent-dark flex items-center justify-center font-bold text-lg mb-4 shadow-sm group-hover:scale-110 transition-transform">
+                            3
+                        </div>
+                        <h4 class="text-base font-bold text-gray-800 mb-1">Start Trading</h4>
+                        <p class="text-xs text-gray-500 leading-relaxed">
+                            Receive your client trading credentials and start logging profitable trades with Zone Pro Trader!
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Features Grid -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <div class="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm flex flex-col items-start gap-3">
+                    <div class="p-3 bg-blue-50 text-blue-600 rounded-xl">
+                        <i data-lucide="shield-check" class="w-6 h-6"></i>
+                    </div>
+                    <h4 class="font-bold text-gray-900 text-sm">SEBI Regulated</h4>
+                    <p class="text-xs text-gray-500 leading-relaxed">Trade securely through top-tier authorized exchange brokers backed by CDSL/NSDL depository safety.</p>
+                </div>
+
+                <div class="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm flex flex-col items-start gap-3">
+                    <div class="p-3 bg-green-50 text-accent-main rounded-xl">
+                        <i data-lucide="zap" class="w-6 h-6"></i>
+                    </div>
+                    <h4 class="font-bold text-gray-900 text-sm">Ultra-Low Brokerage</h4>
+                    <p class="text-xs text-gray-500 leading-relaxed">Flat low brokerage rates on Intraday, Futures & Options, and zero brokerage on long-term equity delivery.</p>
+                </div>
+
+                <div class="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm flex flex-col items-start gap-3">
+                    <div class="p-3 bg-purple-50 text-purple-600 rounded-xl">
+                        <i data-lucide="bar-chart-2" class="w-6 h-6"></i>
+                    </div>
+                    <h4 class="font-bold text-gray-900 text-sm">Zone Pro Compatible</h4>
+                    <p class="text-xs text-gray-500 leading-relaxed">Directly sync trade entries with your Journal Reporting, Swing Scanners, and Intraday setups.</p>
+                </div>
+
+                <div class="bg-white p-6 rounded-2xl border border-gray-100 shadow-sm flex flex-col items-start gap-3">
+                    <div class="p-3 bg-amber-50 text-amber-600 rounded-xl">
+                        <i data-lucide="headphones" class="w-6 h-6"></i>
+                    </div>
+                    <h4 class="font-bold text-gray-900 text-sm">Priority Support</h4>
+                    <p class="text-xs text-gray-500 leading-relaxed">Dedicated onboarding support to resolve account opening queries and trading assistance.</p>
+                </div>
+            </div>
+
+            <!-- Bottom Direct Action Banner -->
+            <div class="bg-white rounded-3xl p-4 sm:p-6 md:p-8 border border-green-200 shadow-md flex flex-col md:flex-row items-center justify-between gap-6 bg-gradient-to-r from-green-50/50 via-white to-white">
+                <div class="flex items-center gap-4">
+                    <div class="p-3.5 bg-green-100 text-accent-dark rounded-2xl">
+                        <i data-lucide="check-circle-2" class="w-8 h-8"></i>
+                    </div>
+                    <div>
+                        <h4 class="text-lg font-bold text-gray-900">Ready to unlock your trading journey?</h4>
+                        <p class="text-xs text-gray-500">Sign up with referral code <span class="font-bold text-accent-dark font-mono">GXTNAMZ</span> for exclusive perks.</p>
+                    </div>
+                </div>
+                <a 
+                    href="https://gwkyc.in/1/GXTNAMZ" 
+                    target="_blank" 
+                    rel="noopener noreferrer" 
+                    class="px-8 py-3.5 bg-accent-main hover:bg-accent-dark text-white rounded-xl font-bold text-sm shadow-md shadow-green-600/20 transition-all hover:scale-105 active:scale-95 shrink-0"
+                >
+                    Open Demat Account ↗
+                </a>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        function copyReferralLink() {
+            const url = "https://gwkyc.in/1/GXTNAMZ";
+            navigator.clipboard.writeText(url).then(() => {
+                showToast("Referral link copied to clipboard!");
+            }).catch(err => {
+                console.error("Copy failed:", err);
+            });
+        }
+
+        function showToast(msg) {
+            const toast = document.getElementById('toast');
+            const toastMsg = document.getElementById('toast-msg');
+            if (toastMsg) toastMsg.textContent = msg;
+            toast.classList.remove('opacity-0', 'pointer-events-none', 'translate-y-2');
+            toast.classList.add('opacity-100', 'translate-y-0');
+            setTimeout(() => {
+                toast.classList.remove('opacity-100', 'translate-y-0');
+                toast.classList.add('opacity-0', 'pointer-events-none', 'translate-y-2');
+            }, 2500);
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            lucide.createIcons();
+        });
+    </script>
+
+    <script>
+    /* ── Mobile Sidebar Toggle ── */
+    (function(){
+        var aside = document.querySelector('aside');
+        var overlay = document.getElementById('sidebar-overlay');
+        var openBtn = document.getElementById('hamburger-btn');
+        var closeBtn = document.getElementById('sidebar-close-btn');
+        var uid = localStorage.getItem('zp_uid') || '';
+        var av = document.getElementById('topbar-avatar');
+        if(av && uid){ av.textContent = uid.substring(0,2).toUpperCase(); }
+        function openSidebar(){
+            aside && aside.classList.add('sidebar-open');
+            overlay && overlay.classList.add('active');
+            document.body.style.overflow='hidden';
+        }
+        function closeSidebar(){
+            aside && aside.classList.remove('sidebar-open');
+            overlay && overlay.classList.remove('active');
+            document.body.style.overflow='';
+        }
+        openBtn && openBtn.addEventListener('click', openSidebar);
+        closeBtn && closeBtn.addEventListener('click', closeSidebar);
+        overlay && overlay.addEventListener('click', closeSidebar);
+        aside && aside.querySelectorAll('a').forEach(function(a){
+            a.addEventListener('click', function(){ if(window.innerWidth<768) closeSidebar(); });
+        });
+    })();
+    </script>
+</body>
+</html>

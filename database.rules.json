@@ -1,0 +1,10 @@
+{
+  "rules": {
+    "registered_users": { ".read": false, ".write": false },
+    ".read": false,
+    ".write": false,
+    "trades":       { ".read": true, ".write": true },
+    "journal_feed": { ".read": true, ".write": true },
+    "announcements": { ".read": true, ".write": true }
+  }
+}

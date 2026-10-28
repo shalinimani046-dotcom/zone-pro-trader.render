@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>50/30/20 Budget Calculator | Zone Pro Trader</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Montserrat:wght@700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../css/style.css">
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <!-- Add Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.0.0"></script>
+<link rel="stylesheet" href="../css/responsive.css">
+</head>
+<body class="has-sidebar bg-[#F9FAFB] font-inter">
+    <!-- Sidebar Overlay -->
+    <div class="sidebar-overlay" id="sidebar-overlay"></div>
+
+    <!-- Mobile Top Bar -->
+    <div class="mobile-topbar" id="mobile-topbar">
+        <button class="hamburger-btn" id="hamburger-btn" aria-label="Open menu">
+            <svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="3" y1="6" x2="21" y2="6"/>
+                <line x1="3" y1="12" x2="21" y2="12"/>
+                <line x1="3" y1="18" x2="21" y2="18"/>
+            </svg>
+        </button>
+        <div class="topbar-logo">
+            <img src="../assets/images/logo-bg.png" alt="Zone Pro Trader">
+            <span class="topbar-title">ZONE <span>PRO TRADER</span></span>
+        </div>
+        <div class="topbar-avatar" id="topbar-avatar">ZP</div>
+    </div>
+
+    <!-- Navbar -->
+    <nav class="bg-white border-b border-gray-100 py-4 px-6 sticky top-0 z-50 shadow-sm">
+        <div class="max-w-7xl mx-auto flex justify-between items-center">
+            <a href="../index.html" class="flex items-center gap-3">
+                <img src="../assets/images/logo-bg.png" alt="Zone Pro Trader" class="site-logo w-12 h-12">
+                <span class="text-xl font-montserrat font-extrabold text-gray-900">ZONE <span class="text-accent-main">PRO TRADER</span></span>
+            </a>
+            <div class="flex items-center gap-6">
+                <a href="../index.html" class="text-gray-600 hover:text-accent-main font-medium transition-colors">Home</a>
+            </div>
+        </div>
+    </nav>
+
+    <main class="max-w-6xl mx-auto px-4 py-12">
+        <div class="text-center mb-12">
+            <h1 class="text-3xl md:text-4xl font-montserrat font-bold text-gray-900 mb-4">Monthly 50/30/20 Budget Calculator</h1>
+            <p class="text-gray-500 max-w-2xl mx-auto">Calculate your personalized budget based on your monthly after-tax income with this free 50/30/20 budget calculator.</p>
+        </div>
+
+        <div class="grid md:grid-cols-2 gap-8 items-start">
+            <!-- Input Card -->
+            <div class="bg-[#EFEFEF] p-8 rounded-xl shadow-sm border border-gray-200">
+                <h3 class="text-lg font-semibold text-gray-800 mb-6">Income detail:</h3>
+                
+                <div class="mb-8">
+                    <label class="block text-sm font-medium text-gray-600 mb-2">Enter Your Monthly Income</label>
+                    <div class="relative">
+                        <span class="absolute left-3 top-1/2 -translate-y-1/2 text-gray-500 font-bold">₹</span>
+                        <input type="number" id="monthly_income" placeholder="0" oninput="calculateBudget()" class="w-full bg-white border-2 border-gray-300 rounded-lg py-3 pl-8 pr-4 focus:outline-none focus:border-black text-gray-900 font-bold text-lg transition-all">
+                    </div>
+                </div>
+
+                <h3 class="text-lg font-semibold text-gray-800 mb-6 border-t border-gray-300 pt-6">Budget Allocation:</h3>
+                
+                <div class="space-y-6">
+                    <div>
+                        <p class="text-sm font-medium text-gray-600 mb-1">Necessities (50%)</p>
+                        <p class="text-3xl font-black text-blue-600" id="necessities">₹0</p>
+                    </div>
+                    <div>
+                        <p class="text-sm font-medium text-gray-600 mb-1">Wants (30%)</p>
+                        <p class="text-3xl font-black text-yellow-500" id="wants">₹0</p>
+                    </div>
+                    <div>
+                        <p class="text-sm font-medium text-gray-600 mb-1">Savings (20%)</p>
+                        <p class="text-3xl font-black text-emerald-500" id="savings">₹0</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Result Card -->
+            <div class="bg-white p-8 rounded-xl shadow-lg border border-gray-100 min-h-[450px] flex flex-col items-center">
+                <h2 class="text-xl font-bold text-gray-800 mb-10">Your Monthly 50/30/20 Budget</h2>
+                
+                <div class="relative w-full max-w-[340px] aspect-square flex items-center justify-center">
+                    <canvas id="budgetChart"></canvas>
+                    <div id="chart_placeholder" class="absolute inset-0 flex flex-col items-center justify-center text-center p-6 bg-white z-10 transition-opacity duration-300">
+                        <div class="w-16 h-16 bg-gray-50 rounded-full flex items-center justify-center mb-4">
+                            <i data-lucide="pie-chart" class="w-8 h-8 text-gray-300"></i>
+                        </div>
+                        <p class="text-gray-400 font-medium max-w-[200px]">Enter your income to see your budget visualization</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Information Section -->
+        <div class="border-t border-gray-100 pt-16 mb-16">
+            <h2 class="text-2xl font-montserrat font-bold text-gray-900 mb-6">What is a 50/30/20 Budget Calculator?</h2>
+            <div class="space-y-6 text-gray-600 leading-relaxed text-lg">
+                <p>
+                    A 50/30/20 Budget Calculator is a simple yet powerful financial tool based on the popular "50/30/20 rule" for personal money management. This strategy helps you divide your after-tax income into three distinct categories: <span class="font-bold text-gray-900">Needs</span>, <span class="font-bold text-gray-900">Wants</span>, and <span class="font-bold text-gray-900">Savings/Debt Repayment</span>.
+                </p>
+                <p>
+                    By allocating 50% of your income to necessities (rent, groceries, utilities), 30% to lifestyle choices (entertainment, dining out), and 20% to your financial future (savings, investments), you create a balanced approach to spending and saving. This calculator instantly computes these amounts, providing a clear visual representation through a pie chart to help you stay on track with your financial goals and achieve long-term stability.
+                </p>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        let budgetChart = null;
+
+        function initChart() {
+            const ctx = document.getElementById('budgetChart').getContext('2d');
+            
+            // Register datalabels plugin
+            Chart.register(ChartDataLabels);
+
+            budgetChart = new Chart(ctx, {
+                type: 'pie',
+                data: {
+                    labels: ['Necessities (50%)', 'Wants (30%)', 'Savings (20%)'],
+                    datasets: [{
+                        data: [50, 30, 20],
+                        backgroundColor: [
+                            '#0084ff', // Blue for 50%
+                            '#ffb320', // Yellow for 30%
+                            '#00c292'  // Emerald for 20%
+                        ],
+                        borderWidth: 2,
+                        borderColor: '#ffffff'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: false
+                        },
+                        tooltip: {
+                            enabled: true,
+                            callbacks: {
+                                label: function(context) {
+                                    const income = parseFloat(document.getElementById('monthly_income').value) || 0;
+                                    const value = (income * context.raw / 100).toLocaleString('en-IN');
+                                    return ` ₹${value} (${context.raw}%)`;
+                                }
+                            }
+                        },
+                        datalabels: {
+                            color: '#ffffff',
+                            font: {
+                                weight: 'bold',
+                                size: 14
+                            },
+                            formatter: (value) => value + '%'
+                        }
+                    }
+                }
+            });
+        }
+
+        function calculateBudget() {
+            const income = parseFloat(document.getElementById('monthly_income').value) || 0;
+            
+            const n = income * 0.5;
+            const w = income * 0.3;
+            const s = income * 0.2;
+
+            document.getElementById('necessities').innerText = "₹" + Math.round(n).toLocaleString('en-IN');
+            document.getElementById('wants').innerText = "₹" + Math.round(w).toLocaleString('en-IN');
+            document.getElementById('savings').innerText = "₹" + Math.round(s).toLocaleString('en-IN');
+
+            // Show/Hide chart placeholder
+            const placeholder = document.getElementById('chart_placeholder');
+            if (income > 0) {
+                placeholder.classList.add('hidden');
+            } else {
+                placeholder.classList.remove('hidden');
+            }
+
+            if (!budgetChart) {
+                initChart();
+            } else {
+                budgetChart.update();
+            }
+        }
+
+        // Initialize empty chart display
+        window.onload = () => {
+            initChart();
+            lucide.createIcons();
+        };
+    </script>
+</body>
+</html>
